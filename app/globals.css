@@ -101,10 +101,10 @@ body {
   pointer-events: none;
 }
 
-[data-cursor='custom'],
-[data-cursor='custom'] a,
-[data-cursor='custom'] button,
-[data-cursor='custom'] [data-cursor] {
+[data-cursor-mode='on'],
+[data-cursor-mode='on'] a,
+[data-cursor-mode='on'] button,
+[data-cursor-mode='on'] [data-cursor] {
   cursor: none;
 }
 

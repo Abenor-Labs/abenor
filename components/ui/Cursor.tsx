@@ -28,7 +28,10 @@ export function Cursor() {
     const l = label.current
     if (!d || !r || !l) return
 
-    document.documentElement.dataset.cursor = 'custom'
+    // NB: deliberately not `data-cursor` — that is the per-element opt-in
+    // attribute, and closest() would walk up and match the root flag, giving
+    // every hover the label "custom".
+    document.documentElement.dataset.cursorMode = 'on'
 
     let x = innerWidth / 2
     let y = innerHeight / 2
@@ -43,17 +46,20 @@ export function Cursor() {
     }
 
     const tick = () => {
-      rx += (x - rx) * 0.16
-      ry += (y - ry) * 0.16
+      // tight enough that the ring reads as attached to the pointer; any
+      // slower and it looks like a second, broken cursor
+      rx += (x - rx) * 0.28
+      ry += (y - ry) * 0.28
       r.style.transform = `translate3d(${rx}px, ${ry}px, 0)`
       raf = requestAnimationFrame(tick)
     }
 
     const onOver = (e: Event) => {
       const el = (e.target as HTMLElement)?.closest<HTMLElement>('[data-cursor], a, button')
-      if (!el) return
-      l.textContent = el.dataset.cursor ?? ''
-      r.dataset.state = el.dataset.cursor ? 'label' : 'hover'
+      if (!el || el === document.documentElement) return
+      const text = el.dataset.cursor ?? ''
+      l.textContent = text
+      r.dataset.state = text ? 'label' : 'hover'
     }
 
     const onOut = (e: Event) => {
@@ -64,7 +70,7 @@ export function Cursor() {
     // a keyboard user has no use for this
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Tab') {
-        delete document.documentElement.dataset.cursor
+        delete document.documentElement.dataset.cursorMode
         cleanup()
       }
     }
@@ -84,7 +90,7 @@ export function Cursor() {
     raf = requestAnimationFrame(tick)
 
     return () => {
-      delete document.documentElement.dataset.cursor
+      delete document.documentElement.dataset.cursorMode
       cleanup()
     }
   }, [])

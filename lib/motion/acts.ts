@@ -56,7 +56,7 @@ const DEFS: ActDef[] = [
   },
   {
     id: 'build',
-    vh: 205,
+    vh: 185,
     label: 'How it works',
     camera: { position: [4.5, 0.4, 12.5], lookAt: [3, 0, -4], fov: 40 },
   },
