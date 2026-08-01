@@ -1,0 +1,128 @@
+@import 'tailwindcss';
+@import '../styles/tokens.css';
+
+/* ── reset / base ────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Lenis owns scrolling; never let the browser also smooth it */
+  scroll-behavior: auto;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--color-molten);
+  color: var(--color-paper);
+}
+
+/* ── focus: visible, and never suppressed by the custom cursor ── */
+:focus-visible {
+  outline: 2px solid var(--color-molten);
+  outline-offset: 3px;
+}
+
+/* ── layout helpers ──────────────────────────────────────── */
+.wrap {
+  width: 100%;
+  max-width: var(--max);
+  margin-inline: auto;
+  padding-inline: var(--gut);
+}
+
+/* ── paper grain: the light-theme equivalent of the dark noise ── */
+.grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.32;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .05 0 0 0 0 .05 0 0 0 0 .04 0 0 0 .08 0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+
+/* ══ Canvas handover ══════════════════════════════════════
+   The DOM wordmark ships in the server HTML and is what the
+   visitor sees first — it is the LCP element. Once the 3D
+   layer has painted a frame it flags the document, and the
+   DOM mark hands its optical space to the particle mark.
+   No JS, no WebGL, or a slow device: the DOM mark simply
+   stays. Nothing is ever missing.
+   ═══════════════════════════════════════════════════════ */
+.wordmark-fallback {
+  transition: opacity 700ms var(--ease-out-expo);
+}
+
+[data-canvas='ready'] .wordmark-fallback {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* keep the readable mark; the particle version never animates in */
+  [data-canvas='ready'] .wordmark-fallback {
+    opacity: 1;
+  }
+}
+
+/* ── reveal primitives, driven by GSAP ───────────────────── */
+.rv {
+  display: block;
+  overflow: hidden;
+}
+
+.rv > * {
+  display: block;
+  transform: translateY(102%);
+  will-change: transform;
+}
+
+.fadeup {
+  opacity: 0;
+  transform: translateY(32px);
+  will-change: transform, opacity;
+}
+
+/* ══ Reduced motion ═══════════════════════════════════════
+   The camera timeline locks and every scene holds its rest
+   state. Nothing becomes unreachable — this is a hard
+   requirement from the spec, not a nicety.
+   ═══════════════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .rv > *,
+  .fadeup {
+    transform: none !important;
+    opacity: 1 !important;
+  }
+}

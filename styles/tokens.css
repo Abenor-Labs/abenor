@@ -1,0 +1,43 @@
+/* ══════════════════════════════════════════════════════════
+   ABENOR — design tokens
+   Single source of truth. The DOM layer reads these as CSS
+   vars; the 3D layer reads the same hex values via
+   lib/motion/palette.ts. Change here, change everywhere.
+   ══════════════════════════════════════════════════════════ */
+
+@theme {
+  /* surfaces */
+  --color-paper: #f2f0ea;
+  --color-paper-2: #e8e5dd;
+  --color-paper-3: #dedad0;
+
+  /* ink */
+  --color-ink: #0a0a0c;
+  --color-ink-2: #55534e;
+  --color-ink-3: #8a877f;
+
+  /* structure */
+  --color-rule: #d5d1c6;
+  --color-rule-2: #c4bfb1;
+
+  /* accent */
+  --color-molten: #ff4d0f;
+  --color-molten-soft: #ff8a52;
+  --color-ice: #1b3bff;
+
+  /* type */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+
+  /* motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* layout */
+  --spacing-gut: clamp(18px, 4vw, 64px);
+}
+
+:root {
+  --gut: clamp(18px, 4vw, 64px);
+  --max: 1460px;
+}
