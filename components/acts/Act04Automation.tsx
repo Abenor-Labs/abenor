@@ -1,4 +1,5 @@
 import { ActSection } from '@/components/ui/ActSection'
+import { FlowGraph } from '@/components/ui/FlowGraph'
 
 /**
  * Act 04 — Automation.
@@ -51,6 +52,18 @@ export function Act04Automation() {
               </li>
             ))}
           </ul>
+        </div>
+
+        <div className="mt-[clamp(28px,4vw,56px)]">
+          <FlowGraph />
+          <div className="mt-3 flex flex-wrap justify-between gap-4">
+            <p className="text-ink-3 font-mono text-[10px] tracking-[0.18em] uppercase">
+              Drag any node — the connections and the traffic re-route live
+            </p>
+            <p className="text-ink-3 font-mono text-[10px] tracking-[0.18em] uppercase">
+              An enquiry-to-CRM flow, roughly as we would build it
+            </p>
+          </div>
         </div>
       </div>
     </ActSection>

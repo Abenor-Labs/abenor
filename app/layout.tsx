@@ -60,6 +60,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${bricolage.variable} ${plexMono.variable}`}>
       <body className="grain">
+        <a
+          href="#problems"
+          className="bg-molten text-paper sr-only font-mono text-[12px] tracking-[0.16em] uppercase focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-3"
+        >
+          Skip to content
+        </a>
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

@@ -4,6 +4,7 @@ import { Suspense, useEffect, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { CameraRig } from './CameraRig'
 import { TitleParticles } from './scenes/TitleParticles'
+import { Monoliths } from './scenes/Monoliths'
 
 /**
  * Flags the document once the canvas has actually painted, which is the
@@ -62,6 +63,8 @@ export function StageInner() {
         <directionalLight position={[4, 6, 8]} intensity={1.4} />
         <Suspense fallback={null}>
           <TitleParticles />
+          {/* the room is atmosphere only — skipped on small screens where it costs frames */}
+          {!small && <Monoliths />}
         </Suspense>
         <CanvasReady />
       </Canvas>

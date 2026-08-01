@@ -31,8 +31,8 @@ export const ACTS: Act[] = [
   { id: 'title', start: 0.0, end: 0.13, vh: 100, label: 'Title' },
   { id: 'position', start: 0.13, end: 0.25, vh: 90, label: 'Studio' },
   { id: 'problems', start: 0.25, end: 0.45, vh: 170, label: 'Problems' },
-  { id: 'automation', start: 0.45, end: 0.6, vh: 130, label: 'Automation' },
-  { id: 'build', start: 0.6, end: 0.76, vh: 130, label: 'How it works' },
+  { id: 'automation', start: 0.45, end: 0.6, vh: 175, label: 'Automation' },
+  { id: 'build', start: 0.6, end: 0.76, vh: 165, label: 'How it works' },
   { id: 'terms', start: 0.76, end: 0.9, vh: 130, label: 'Terms' },
   { id: 'close', start: 0.9, end: 1.0, vh: 90, label: 'Contact' },
 ]

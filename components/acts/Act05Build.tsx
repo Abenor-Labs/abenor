@@ -1,4 +1,5 @@
 import { ActSection } from '@/components/ui/ActSection'
+import { BuildMorph } from '@/components/ui/BuildMorph'
 
 const STEPS = [
   {
@@ -44,6 +45,12 @@ export function Act05Build() {
             Four things, in <em className="text-molten not-italic">this order</em>
           </h2>
         </div>
+
+        <BuildMorph />
+
+        <p className="text-ink-3 mt-3 mb-[clamp(30px,5vw,64px)] font-mono text-[10px] tracking-[0.18em] uppercase">
+          Scroll — the same page, from grey boxes to shipped
+        </p>
 
         <ol className="grid gap-px md:grid-cols-4">
           {STEPS.map((s) => (
