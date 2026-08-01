@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABENOR — Design Directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#06060A; color:#F0EEE9; font-family:'IBM Plex Mono',monospace; line-height:1.6;
+  padding:clamp(24px,5vw,72px); -webkit-font-smoothing:antialiased}
+h1{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(28px,5vw,54px);
+  letter-spacing:-.04em; margin-bottom:10px}
+.sub{color:#848A9C; font-size:13px; margin-bottom:clamp(28px,5vw,52px); max-width:64ch}
+.grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:20px}
+a.card{display:block; text-decoration:none; color:inherit; border:1px solid #1E202B; padding:28px; background:#0C0D12; transition:.3s}
+a.card:hover{border-color:#FF5E1A; background:#11121A; transform:translateY(-4px)}
+.n{font-size:10.5px; letter-spacing:.2em; color:#848A9C; text-transform:uppercase}
+.card h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:28px; letter-spacing:-.03em; margin:10px 0 8px}
+.card .rate{font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:#FF5E1A; margin-bottom:14px}
+.card p{font-size:12.5px; color:#848A9C}
+ul{margin:14px 0 0 0; list-style:none; font-size:12px; color:#848A9C}
+ul li{padding:4px 0 4px 16px; position:relative}
+ul li::before{content:'—'; position:absolute; left:0; color:#FF5E1A}
+.note{margin-top:clamp(30px,5vw,52px); border-left:2px solid #FF5E1A; padding-left:18px; font-size:12.5px; color:#848A9C; max-width:74ch}
+.note b{color:#F0EEE9; font-weight:500}
+.note + .note{margin-top:20px; border-color:#5B7BFF}
+</style>
+</head>
+<body>
+<h1>ABENOR — Design Directions</h1>
+<p class="sub">Two live builds. Same brand, same content, different level of execution. Open both and compare.</p>
+
+<div class="grid">
+  <a class="card" href="04-advanced.html">
+    <span class="n">Direction 04</span>
+    <h2>Kinetic</h2>
+    <div class="rate">Rated 8 / 10</div>
+    <p>Dark technical build. WebGL noise-field hero, preloader curtain, blend-mode cursor, smooth scroll, pinned horizontal process, capability matrix, inverted engagement band, FAQ.</p>
+    <ul>
+      <li>WebGL shader background</li>
+      <li>Pinned horizontal scroll</li>
+      <li>3D tilt work cards</li>
+      <li>Scroll-scrubbed statement</li>
+    </ul>
+  </a>
+
+  <a class="card" href="05-proof.html" style="border-color:#FF5E1A">
+    <span class="n" style="color:#FF5E1A">Direction 05 — newest</span>
+    <h2>Proof</h2>
+    <div class="rate">Aiming past 8</div>
+    <p>Same aesthetic, but the page stops describing the services and starts demonstrating them. Every claim has a working artefact next to it.</p>
+    <ul>
+      <li><b style="color:#F0EEE9">Particle wordmark</b> — ABENOR built from ~7k sampled points, repels your cursor, disperses on scroll</li>
+      <li><b style="color:#F0EEE9">Draggable workflow graph</b> — n8n-shaped nodes, live bezier re-routing, animated packets. Proof of the automation service</li>
+      <li><b style="color:#F0EEE9">Build transformer</b> — pinned scene morphing wireframe → design → build → live. Shows the process instead of listing it</li>
+      <li><b style="color:#F0EEE9">Working phone panel</b> — real scroll, real tabs. Proof of the mobile service</li>
+      <li>RGB-split glitch on service headings</li>
+      <li>Live IST studio clock + availability</li>
+      <li>Contextual cursor labels (Drag / Open / Try / View)</li>
+    </ul>
+  </a>
+</div>
+
+<div class="note">
+  <b>Not yet verified in a browser.</b> Playwright MCP never connected this session, so neither build has been screenshot-tested. Open them and report anything broken.
+</div>
+
+<div class="note">
+  <b>Still needed from you:</b> real project case studies · contact email or form destination · logo file (both use a type-set wordmark) · confirm the tech stack in the ticker · confirm studio timezone (05 assumes IST) · confirm the FAQ answers match your actual policy on pricing, code ownership and handover.
+</div>
+</body>
+</html>
