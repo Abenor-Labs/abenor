@@ -43,7 +43,7 @@ reference build the studio shows to win work, and good enough that other startup
 | Framework | **Next.js 15, App Router** | RSC, file routing, image optimisation, API route for contact. Deploys to Vercel, where the LinkedIn URL already points. The site doubles as a reference build in the studio's own sell stack. |
 | Motion | **GSAP + ScrollTrigger + Lenis + React Three Fiber** | GSAP drives the scroll timeline; R3F provides real 3D scenes. This is the tier the brief ("watching a video", "masterpiece") requires. |
 | Content | **MDX in-repo, zod-validated frontmatter** | No external service, no cost, version-controlled. Migratable to a CMS later without touching the front end. |
-| Scope | **Home + `/work/[slug]` case studies** | Smallest scope that still reads as a real studio and gives each project its own SEO surface. |
+| Scope | **Home + `/work` index + `/work/[slug]` case studies** | Smallest scope that still reads as a real studio and gives each project its own SEO surface. The `/work` index is a plain, 3D-free list — it exists because `/work/[slug]` needs a parent route, and costs almost nothing. Contact is a section on home, not a page. |
 | Styling | **Tailwind v4 + CSS custom properties** | Tokens live in CSS vars so the 3D layer and the DOM layer read from one source. |
 | Hosting | **Vercel** | Matches the existing LinkedIn URL; fixes the 404 in place. |
 
