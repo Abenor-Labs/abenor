@@ -164,7 +164,7 @@ export function FlowGraph() {
     <div
       ref={wrap}
       aria-hidden="true"
-      className="border-rule bg-paper relative h-[clamp(400px,50vw,540px)] touch-none overflow-hidden border"
+      className="border-rule bg-paper raised relative h-[clamp(400px,50vw,540px)] touch-none overflow-hidden border"
       style={{
         backgroundImage:
           'linear-gradient(var(--color-rule) 1px, transparent 1px), linear-gradient(90deg, var(--color-rule) 1px, transparent 1px)',

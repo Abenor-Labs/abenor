@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Bricolage_Grotesque, IBM_Plex_Mono } from 'next/font/google'
 import { LenisProvider } from '@/lib/scroll/LenisProvider'
+import { Preloader } from '@/components/ui/Preloader'
+import { Cursor } from '@/components/ui/Cursor'
 import './globals.css'
 
 /**
@@ -66,6 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           Skip to content
         </a>
+        <Preloader />
+        <Cursor />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

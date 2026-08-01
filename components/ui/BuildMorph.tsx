@@ -54,12 +54,12 @@ export function BuildMorph() {
   }, [])
 
   return (
-    <div ref={root} className="relative min-h-[210vh]">
+    <div ref={root} className="relative min-h-[165vh]">
       <div className="sticky top-[14vh]">
         <div className="flex flex-col gap-5 md:flex-row md:items-start md:gap-10">
           <div
             aria-hidden="true"
-            className="border-rule bg-paper relative h-[52vh] w-full max-w-[calc(52vh*1.6)] overflow-hidden border md:mx-0"
+            className="border-rule bg-paper raised-lg relative h-[52vh] w-full max-w-[calc(52vh*1.6)] overflow-hidden border md:mx-0"
           >
             {/* 01 wireframe */}
             <div data-layer className="absolute inset-0 flex flex-col gap-3 p-[clamp(12px,2vw,24px)]">

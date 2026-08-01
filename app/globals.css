@@ -88,6 +88,171 @@ body {
   }
 }
 
+/* ══ Custom cursor ════════════════════════════════════════
+   difference blending means one element reads correctly on
+   paper, on ink panels and over the accent, with no
+   per-section logic. Only hides the native cursor once the
+   custom one is actually running.
+   ═══════════════════════════════════════════════════════ */
+.cursor-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+}
+
+[data-cursor='custom'],
+[data-cursor='custom'] a,
+[data-cursor='custom'] button,
+[data-cursor='custom'] [data-cursor] {
+  cursor: none;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: #fff;
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1px solid #fff;
+  transition:
+    width 320ms var(--ease-out-expo),
+    height 320ms var(--ease-out-expo),
+    margin 320ms var(--ease-out-expo),
+    background-color 320ms var(--ease-out-expo);
+}
+
+.cursor-ring[data-state='hover'] {
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cursor-ring[data-state='label'] {
+  width: 92px;
+  height: 92px;
+  margin: -46px 0 0 -46px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.cursor-label {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 250ms ease;
+}
+
+.cursor-ring[data-state='label'] .cursor-label {
+  opacity: 1;
+}
+
+@media (hover: none), (prefers-reduced-motion: reduce) {
+  .cursor-layer {
+    display: none;
+  }
+}
+
+/* ══ Light-theme depth ════════════════════════════════════
+   The dark build got its drama from glow. On paper that has
+   to come from weight and shadow instead, or everything
+   reads as flat beige.
+   ═══════════════════════════════════════════════════════ */
+.raised {
+  box-shadow:
+    0 1px 2px rgba(10, 10, 12, 0.04),
+    0 8px 24px -12px rgba(10, 10, 12, 0.14);
+}
+
+.raised-lg {
+  box-shadow:
+    0 1px 2px rgba(10, 10, 12, 0.05),
+    0 24px 60px -24px rgba(10, 10, 12, 0.22);
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes beat {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.78);
+  }
+}
+
+/* ══ Chromatic split on hover ═════════════════════════════
+   Two offset copies of the heading in the accent and the
+   secondary, screened together. On paper this reads as an
+   ink misregistration rather than a screen glitch, which
+   suits the theme better than an RGB shift would.
+   ═══════════════════════════════════════════════════════ */
+.split-h {
+  position: relative;
+}
+
+.split-h::before,
+.split-h::after {
+  content: attr(data-t);
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms ease;
+}
+
+.split-h::before {
+  color: var(--color-molten);
+  transform: translate(-2px, -1px);
+}
+
+.split-h::after {
+  color: var(--color-ice);
+  transform: translate(2px, 1px);
+}
+
+.group:hover .split-h::before,
+.group:hover .split-h::after {
+  opacity: 0.55;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-h::before,
+  .split-h::after {
+    display: none;
+  }
+}
+
 /* ── reveal primitives, driven by GSAP ───────────────────── */
 .rv {
   display: block;

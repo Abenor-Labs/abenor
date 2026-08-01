@@ -1,4 +1,5 @@
 import { ActSection } from '@/components/ui/ActSection'
+import { Magnetic } from '@/components/ui/Cursor'
 
 const CONTACT = 'hello@abenor.com'
 
@@ -13,7 +14,7 @@ export function Act07Close() {
   return (
     <ActSection id="close" align="center" className="pb-[clamp(40px,7vw,90px)]">
       <div className="wrap">
-        <div className="border-rule bg-paper-2/40 border px-[clamp(20px,4vw,60px)] py-[clamp(44px,8vw,110px)] text-center backdrop-blur-[2px]">
+        <div className="border-rule bg-paper-2/60 raised-lg border px-[clamp(20px,4vw,60px)] py-[clamp(44px,8vw,110px)] text-center backdrop-blur-[2px]">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ 05 ] — Taking work now
           </span>
@@ -35,12 +36,17 @@ export function Act07Close() {
             No charge, no call required, no pitch deck.
           </p>
 
-          <a
-            href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
-            className="bg-molten text-paper border-molten hover:text-molten mt-8 inline-flex items-center gap-3 border px-9 py-[18px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5 hover:bg-transparent"
-          >
-            {CONTACT} <span aria-hidden="true">→</span>
-          </a>
+          <div className="mt-8">
+            <Magnetic>
+              <a
+                href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
+                data-cursor="Send"
+                className="bg-molten text-paper border-molten hover:text-molten raised inline-flex items-center gap-3 border px-9 py-[18px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5 hover:bg-transparent"
+              >
+                {CONTACT} <span aria-hidden="true">→</span>
+              </a>
+            </Magnetic>
+          </div>
 
           <p className="text-molten border-molten/50 mt-6 inline-block border border-dashed px-2 py-1 font-mono text-[9.5px] tracking-[0.18em] uppercase">
             Placeholder address — confirm the real one
