@@ -2,9 +2,10 @@ import { Stage } from '@/components/canvas/Stage'
 import { Nav } from '@/components/ui/Nav'
 import { Act01Title } from '@/components/acts/Act01Title'
 import { Act02Position } from '@/components/acts/Act02Position'
-import { Act03Capabilities } from '@/components/acts/Act03Capabilities'
-import { ActPlaceholder } from '@/components/acts/ActPlaceholder'
-import { Act06Proof } from '@/components/acts/Act06Proof'
+import { Act03Problems } from '@/components/acts/Act03Problems'
+import { Act04Automation } from '@/components/acts/Act04Automation'
+import { Act05Build } from '@/components/acts/Act05Build'
+import { Act06Terms } from '@/components/acts/Act06Terms'
 import { Act07Close } from '@/components/acts/Act07Close'
 
 /**
@@ -15,8 +16,9 @@ import { Act07Close } from '@/components/acts/Act07Close'
  * in lib/motion/acts.ts. Adding an act means declaring it there and mounting
  * it here; the camera picks it up automatically.
  *
- * Acts 04 and 05 are held open by placeholders so the camera timeline stays
- * correctly proportioned while their scenes are built.
+ * Structure is problem-first on purpose: nobody searches for "end-to-end web
+ * development", they search for the thing that is broken. Acts 03 to 06 lead
+ * with the symptom and let the service follow.
  */
 export default function HomePage() {
   return (
@@ -27,23 +29,10 @@ export default function HomePage() {
       <main>
         <Act01Title />
         <Act02Position />
-        <Act03Capabilities />
-
-        <ActPlaceholder
-          id="automation"
-          index="02"
-          title="Automation"
-          note="Scene in build — the draggable n8n graph moves into the shared 3D space here."
-        />
-
-        <ActPlaceholder
-          id="build"
-          index="03"
-          title="The build"
-          note="Scene in build — wireframe resolves to design, to built, to live, as the camera dollies in."
-        />
-
-        <Act06Proof />
+        <Act03Problems />
+        <Act04Automation />
+        <Act05Build />
+        <Act06Terms />
         <Act07Close />
       </main>
     </>

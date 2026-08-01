@@ -5,8 +5,9 @@ import { gsap, ScrollTrigger, SplitText } from '@/lib/scroll/gsap'
 import { prefersReducedMotion } from '@/lib/scroll/progress'
 import { ActSection } from '@/components/ui/ActSection'
 
-const LINE = 'Anyone can ship a screenshot. We are judged on what is still standing in the second year.'
-const ACCENT = /standing|second|year/i
+const LINE =
+  'We are new. So you get the people who actually build it on the call, and a straight answer when you do not need us at all.'
+const ACCENT = /new|straight|answer/i
 
 /**
  * Act 02 — Position.

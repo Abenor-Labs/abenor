@@ -26,26 +26,26 @@ const SITE = 'https://abenor.vercel.app'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: 'Abenor — Digital craftsmanship',
+    default: 'Abenor — We build the software that stops the copy-pasting',
     template: '%s — Abenor',
   },
   description:
-    'Abenor is a software studio. Web design, end-to-end websites, n8n automation, iOS and Android apps, and custom software — designed, built and shipped by one team.',
+    'Right now someone in your business is copying data between two tabs. Abenor is a software studio that automates it away — n8n workflows, websites, iOS and Android apps, and the internal tools that replace the spreadsheet holding everything together.',
   keywords: [
+    'n8n automation agency',
+    'workflow automation',
+    'internal tools development',
     'software studio',
-    'web design',
-    'n8n automation',
-    'iOS app development',
-    'Android app development',
-    'custom software',
+    'web development',
+    'iOS and Android apps',
   ],
   openGraph: {
     type: 'website',
     url: SITE,
     siteName: 'Abenor',
-    title: 'Abenor — Digital craftsmanship',
+    title: 'Abenor — We build the software that stops the copy-pasting',
     description:
-      'Web design, end-to-end websites, n8n automation, mobile apps and custom software. One team, concept to production.',
+      'Send us one job somebody does by hand every week. Within two working days we will tell you whether it can be automated, and what it would take.',
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },

@@ -1,10 +1,13 @@
 import { ActSection } from '@/components/ui/ActSection'
 
+const CONTACT = 'hello@abenor.com'
+
 /**
- * Act 07 — Close.
+ * Act 07 — Contact.
  *
- * The camera pulls out wide, the wordmark reassembles behind, and the only
- * job left on screen is to make contact obvious.
+ * One specific, checkable offer beats "get in touch". A stranger can act on
+ * this in under a minute and it costs them nothing, which is the only kind of
+ * ask a studio with no back catalogue has earned.
  */
 export function Act07Close() {
   return (
@@ -12,30 +15,35 @@ export function Act07Close() {
       <div className="wrap">
         <div className="border-rule bg-paper-2/40 border px-[clamp(20px,4vw,60px)] py-[clamp(44px,8vw,110px)] text-center backdrop-blur-[2px]">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
-            [ 07 ] — Open for work
+            [ 05 ] — Taking work now
           </span>
 
           <h2
-            className="font-display mt-4 leading-[0.95] font-extrabold tracking-[-0.04em]"
+            className="font-display mx-auto mt-4 max-w-[16ch] leading-[0.98] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
-            Bring us something <em className="text-molten not-italic">hard</em>.
+            Send us one thing that <em className="text-molten not-italic">wastes an afternoon</em>.
           </h2>
 
-          <p className="text-ink-2 mx-auto mt-4 max-w-[46ch] text-[14.5px]">
-            Send the problem, not the specification. We will tell you straight whether we are the
-            right studio to build it.
+          <p className="text-ink mx-auto mt-6 max-w-[50ch] text-[15px] leading-[1.72]">
+            Describe one job somebody on your team does by hand every week. Within two working days
+            we will tell you whether it can be automated, roughly what it would take, and if the
+            honest answer is &ldquo;not worth it&rdquo;, we will tell you that instead.
+          </p>
+
+          <p className="text-ink-2 mx-auto mt-3 max-w-[50ch] text-[14px]">
+            No charge, no call required, no pitch deck.
           </p>
 
           <a
-            href="mailto:hello@abenor.com"
-            className="bg-molten text-paper border-molten mt-7 inline-flex items-center gap-3 border px-9 py-[18px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:bg-transparent hover:gap-5 hover:text-molten"
+            href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
+            className="bg-molten text-paper border-molten hover:text-molten mt-8 inline-flex items-center gap-3 border px-9 py-[18px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5 hover:bg-transparent"
           >
-            Start a build <span aria-hidden="true">→</span>
+            {CONTACT} <span aria-hidden="true">→</span>
           </a>
 
-          <p className="text-molten mt-6 inline-block border border-dashed border-molten/50 px-2 py-1 font-mono text-[9.5px] tracking-[0.18em] uppercase">
-            Placeholder — confirm the real contact address
+          <p className="text-molten border-molten/50 mt-6 inline-block border border-dashed px-2 py-1 font-mono text-[9.5px] tracking-[0.18em] uppercase">
+            Placeholder address — confirm the real one
           </p>
         </div>
       </div>
@@ -43,7 +51,7 @@ export function Act07Close() {
       <footer className="wrap mt-[clamp(40px,6vw,80px)]">
         <div className="border-rule text-ink-3 flex flex-wrap items-center justify-between gap-4 border-t pt-6 font-mono text-[10.5px] tracking-[0.22em] uppercase">
           <span>Abenor</span>
-          <span>The next generation of digital craftsmanship</span>
+          <span>Software studio · started 2026</span>
           <span>© 2026</span>
         </div>
       </footer>

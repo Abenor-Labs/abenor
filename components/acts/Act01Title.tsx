@@ -23,23 +23,23 @@ export function Act01Title() {
         </div>
 
         <p
-          className="font-display border-rule text-ink mt-[clamp(20px,3vw,38px)] max-w-[22ch] border-t pt-[clamp(16px,2.2vw,26px)] leading-[1.28] font-normal"
+          className="font-display border-rule text-ink mt-[clamp(20px,3vw,38px)] max-w-[26ch] border-t pt-[clamp(16px,2.2vw,26px)] leading-[1.28] font-normal"
           style={{ fontSize: 'clamp(17px, 2.3vw, 30px)' }}
         >
-          We design and build the software a business actually{' '}
-          <strong className="text-molten font-semibold">runs on.</strong>
+          Right now, someone in your business is copying data between two tabs.{' '}
+          <strong className="text-molten font-semibold">We build the software that stops that.</strong>
         </p>
       </div>
 
       <div className="wrap mt-[clamp(20px,3vw,40px)]">
         <dl className="text-ink-2 flex flex-wrap gap-x-10 gap-y-2 font-mono text-[10.5px] tracking-[0.22em] uppercase">
           <div className="flex gap-2">
-            <dt className="text-ink-3">Surfaces</dt>
-            <dd className="text-ink">Web · iOS · Android</dd>
+            <dt className="text-ink-3">We build</dt>
+            <dd className="text-ink">Automations · Websites · Apps · Internal tools</dd>
           </div>
           <div className="flex gap-2">
             <dt className="text-ink-3">Studio</dt>
-            <dd className="text-ink">Est. 2026</dd>
+            <dd className="text-ink">Started 2026</dd>
           </div>
         </dl>
       </div>
