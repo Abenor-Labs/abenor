@@ -19,7 +19,7 @@ export default function OpengraphImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#f2f0ea',
+          background: '#07070a',
           padding: 72,
           fontFamily: 'sans-serif',
         }}
@@ -31,7 +31,7 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 6,
             textTransform: 'uppercase',
-            color: '#55534e',
+            color: '#83889a',
           }}
         >
           <span>Abenor</span>
@@ -45,7 +45,7 @@ export default function OpengraphImage() {
               lineHeight: 1.05,
               letterSpacing: -2.5,
               fontWeight: 800,
-              color: '#0a0a0c',
+              color: '#efede8',
               maxWidth: 940,
               display: 'flex',
             }}
@@ -58,7 +58,7 @@ export default function OpengraphImage() {
               fontSize: 40,
               fontWeight: 800,
               letterSpacing: -1.2,
-              color: '#ff4d0f',
+              color: '#ff5e1a',
               display: 'flex',
             }}
           >
@@ -67,8 +67,8 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-          <div style={{ width: 74, height: 5, background: '#ff4d0f', display: 'flex' }} />
-          <span style={{ fontSize: 22, letterSpacing: 3, color: '#55534e' }}>
+          <div style={{ width: 74, height: 5, background: '#ff5e1a', display: 'flex' }} />
+          <span style={{ fontSize: 22, letterSpacing: 3, color: '#83889a' }}>
             abenor.vercel.app
           </span>
         </div>

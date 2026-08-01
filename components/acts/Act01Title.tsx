@@ -10,7 +10,17 @@ import { ActSection } from '@/components/ui/ActSection'
  */
 export function Act01Title() {
   return (
-    <ActSection id="title" className="pb-[clamp(28px,5vw,64px)]">
+    <ActSection id="title" className="overflow-hidden pb-[clamp(28px,5vw,64px)]">
+      {/* keeps the copy legible over the flow field without flattening it */}
+      <span
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-[1]"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(7,7,10,0.62) 0%, rgba(7,7,10,0) 34%, rgba(7,7,10,0.93) 100%)',
+        }}
+      />
+
       <div className="wrap">
         <h1 className="sr-only">Abenor — a software studio</h1>
 

@@ -64,7 +64,7 @@ export function TitleParticles() {
               (Math.random() - 0.5) * 5,
               (Math.random() - 0.5) * 7,
             )
-            siz.push(Math.random() < 0.08 ? 3.2 : 1.9)
+            siz.push(Math.random() < 0.08 ? 2.0 : 1.25)
             hot.push(Math.random() < 0.09 ? 1 : 0)
           }
         }
@@ -176,10 +176,12 @@ const VERT = /* glsl */ `
     // scroll dispersal
     p += aRand * uDisperse;
 
-    // cursor repulsion, falls off smoothly
+    // cursor repulsion — a tight swirl, not a crater.
+    // radius is in world units and the mark is 7.2 wide, so anything much
+    // above 0.5 punches a hole through whole letters.
     vec2 d = p.xy - uMouse;
     float dist = length(d);
-    float force = smoothstep(1.5, 0.0, dist) * 0.85;
+    float force = smoothstep(0.46, 0.0, dist) * 0.3;
     p.xy += normalize(d + 1e-5) * force;
 
     vFade = 1.0 - uDisperse * 0.85;

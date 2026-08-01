@@ -40,7 +40,8 @@ const PROBLEMS = [
       'iOS and Android, built and taken through store review, then handed over with the release process written down so your next developer is not reverse-engineering it.',
     chips: ['iOS', 'Android', 'Store submission'],
     peek: 'Built for\nApp Review',
-    tint: 'linear-gradient(135deg, #0a0a0c, #55534e)',
+    tint: 'linear-gradient(135deg, #efede8, #9c9a94)',
+    fg: '#07070a',
   },
   {
     n: '004',
@@ -112,9 +113,10 @@ export function Act03Problems() {
         {PROBLEMS.map((p, i) => (
           <span
             key={p.n}
-            className="font-display absolute inset-0 grid place-items-center p-4 text-center leading-[1.15] font-extrabold tracking-[-0.02em] whitespace-pre-line text-white"
+            className="font-display absolute inset-0 grid place-items-center p-4 text-center leading-[1.15] font-extrabold tracking-[-0.02em] whitespace-pre-line"
             style={{
               background: p.tint,
+              color: 'fg' in p ? (p.fg as string) : '#07070a',
               opacity: active === i ? 1 : 0,
               transition: 'opacity 260ms ease',
               fontSize: 'clamp(14px, 1.5vw, 21px)',

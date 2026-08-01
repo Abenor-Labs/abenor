@@ -48,14 +48,14 @@ export function PhonePanel() {
 
   return (
     <div
-      className="raised-lg relative aspect-[9/19] w-[clamp(240px,28vw,296px)] shrink-0 overflow-hidden rounded-[40px] border-[9px] border-[#17181f] bg-[#17181f]"
+      className="raised-lg border-rule-2 relative aspect-[9/19] w-[clamp(240px,28vw,296px)] shrink-0 overflow-hidden rounded-[40px] border-[9px] bg-[#181a22]"
       data-cursor="Try"
     >
       <span
         aria-hidden="true"
-        className="absolute top-[9px] left-1/2 z-10 h-5 w-20 -translate-x-1/2 rounded-xl bg-[#17181f]"
+        className="absolute top-[9px] left-1/2 z-10 h-5 w-20 -translate-x-1/2 rounded-xl bg-[#181a22]"
       />
-      <div className="bg-paper absolute inset-0 flex flex-col">
+      <div className="bg-paper-2 absolute inset-0 flex flex-col">
         <div className="text-ink-3 flex justify-between px-4 pt-8 pb-2 font-mono text-[9px] tracking-[0.2em] uppercase">
           <span>9:41</span>
           <span>Abenor</span>
