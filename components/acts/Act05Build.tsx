@@ -32,7 +32,7 @@ const STEPS = [
  */
 export function Act05Build() {
   return (
-    <ActSection id="build" align="center">
+    <ActSection id="build" align="start" className="pt-[clamp(80px,12vh,160px)]">
       <div className="wrap">
         <div className="border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
@@ -48,11 +48,7 @@ export function Act05Build() {
 
         <BuildMorph />
 
-        <p className="text-ink-3 mt-3 mb-[clamp(30px,5vw,64px)] font-mono text-[10px] tracking-[0.18em] uppercase">
-          Scroll — the same page, from grey boxes to shipped
-        </p>
-
-        <ol className="grid gap-px md:grid-cols-4">
+        <ol className="mt-[clamp(40px,7vw,90px)] grid gap-px md:grid-cols-4">
           {STEPS.map((s) => (
             <li
               key={s.k}
