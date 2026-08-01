@@ -74,18 +74,46 @@ export function ShaderBackdrop() {
         gl_FragColor = vec4(col, 1.0);
       }`
 
-    const sh = (type: number, src: string) => {
+    /**
+     * Compile with the status actually checked.
+     *
+     * Silently ignoring this is how a broken program ends up bound: the draw
+     * then does nothing, the canvas keeps whatever the compositor gave it,
+     * and the page renders a colour nobody chose.
+     */
+    const fail = (why: string) => {
+      console.error('[ShaderBackdrop] ' + why)
+      cv.style.background = 'linear-gradient(160deg, #12131a, #07070a)'
+    }
+
+    const sh = (type: number, src: string, name: string) => {
       const s = gl.createShader(type)!
       gl.shaderSource(s, src)
       gl.compileShader(s)
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+        fail(name + ' shader failed: ' + gl.getShaderInfoLog(s))
+        return null
+      }
       return s
     }
 
+    const vs = sh(gl.VERTEX_SHADER, VS, 'vertex')
+    const fs = sh(gl.FRAGMENT_SHADER, FS, 'fragment')
+    if (!vs || !fs) return
+
     const prog = gl.createProgram()!
-    gl.attachShader(prog, sh(gl.VERTEX_SHADER, VS))
-    gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FS))
+    gl.attachShader(prog, vs)
+    gl.attachShader(prog, fs)
     gl.linkProgram(prog)
+    if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) {
+      fail('link failed: ' + gl.getProgramInfoLog(prog))
+      return
+    }
     gl.useProgram(prog)
+
+    // never composite over an uninitialised buffer
+    gl.clearColor(0.027, 0.027, 0.039, 1)
+    gl.clear(gl.COLOR_BUFFER_BIT)
 
     const buf = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, buf)

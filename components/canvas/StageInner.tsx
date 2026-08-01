@@ -56,6 +56,9 @@ export function StageInner() {
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         camera={{ position: [0, 0, 7.5], fov: 42, near: 0.1, far: 200 }}
         style={{ background: 'transparent' }}
+        /* be explicit: this canvas only ever contributes the particles, so it
+           must clear to fully transparent and never tint what is behind it */
+        onCreated={({ gl }) => gl.setClearColor(0x000000, 0)}
       >
         <CameraRig />
         <ambientLight intensity={1.1} />

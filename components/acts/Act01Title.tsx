@@ -11,13 +11,21 @@ import { ActSection } from '@/components/ui/ActSection'
 export function Act01Title() {
   return (
     <ActSection id="title" className="overflow-hidden pb-[clamp(28px,5vw,64px)]">
-      {/* keeps the copy legible over the flow field without flattening it */}
+      {/*
+        Legibility veil over the flow field.
+
+        Deliberately NOT full-strength at the top and bottom only: this sits
+        inside the section's stacking context, above both canvases, so if a
+        canvas ever misbehaves this is the layer that decides what the hero
+        looks like. It therefore has to be dark on its own, not merely a tint
+        that assumes something dark underneath.
+      */}
       <span
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 -z-[1]"
         style={{
           background:
-            'linear-gradient(180deg, rgba(7,7,10,0.62) 0%, rgba(7,7,10,0) 34%, rgba(7,7,10,0.93) 100%)',
+            'linear-gradient(180deg, rgba(7,7,10,0.78) 0%, rgba(7,7,10,0.30) 38%, rgba(7,7,10,0.96) 100%)',
         }}
       />
 
