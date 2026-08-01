@@ -22,7 +22,7 @@ const PROBLEMS = [
       'We map what actually moves between your tools, then wire it together in n8n with alerting on top — so a broken sync tells you, instead of a customer telling you.',
     chips: ['n8n', 'Integrations', 'Alerting'],
     peek: 'Nobody re-types\nanything',
-    tint: 'linear-gradient(135deg, #ff4d0f, #ff8a52)',
+    tint: 'linear-gradient(135deg, #ff5e1a, #ffae6b)',
   },
   {
     n: '002',
@@ -31,7 +31,7 @@ const PROBLEMS = [
       'We take the whole thing: design, build, deploy, DNS. One repository, one team, one number to call when it goes down at 11pm.',
     chips: ['Next.js', 'CMS', 'Hosting'],
     peek: 'Sketch → DNS,\none team',
-    tint: 'linear-gradient(135deg, #1b3bff, #93a4ff)',
+    tint: 'linear-gradient(135deg, #5b7bff, #93a4ff)',
   },
   {
     n: '003',

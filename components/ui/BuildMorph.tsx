@@ -141,7 +141,7 @@ export function BuildMorph() {
             className="absolute inset-0 flex flex-col justify-end p-[clamp(16px,2.6vw,34px)] opacity-0"
             style={{
               background:
-                'radial-gradient(ellipse 60% 80% at 18% 8%, rgba(255,77,15,0.22), transparent 60%), radial-gradient(ellipse 60% 80% at 86% 92%, rgba(27,59,255,0.16), transparent 60%), var(--color-paper-2)',
+                'radial-gradient(ellipse 60% 80% at 18% 8%, rgba(255,94,26,0.26), transparent 60%), radial-gradient(ellipse 60% 80% at 86% 92%, rgba(91,123,255,0.18), transparent 60%), var(--color-paper-2)',
             }}
           >
             <span

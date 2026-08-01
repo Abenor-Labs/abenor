@@ -36,7 +36,7 @@ export function StatusBar() {
           <i
             aria-hidden="true"
             className="bg-molten inline-block h-[7px] w-[7px] rounded-full"
-            style={{ boxShadow: '0 0 0 3px rgba(255,77,15,0.18)', animation: 'beat 2s ease-in-out infinite' }}
+            style={{ boxShadow: '0 0 0 3px rgba(255,94,26,0.18)', animation: 'beat 2s ease-in-out infinite' }}
           />
           Taking work now
         </span>
