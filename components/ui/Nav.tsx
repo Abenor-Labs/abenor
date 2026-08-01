@@ -32,6 +32,21 @@ export function Nav() {
         style={{ width: `${progress * 100}%` }}
       />
 
+      {/*
+        The nav is fixed over a page that scrolls forever, so without a scrim
+        every heading passes straight through it. A paper fade reads cleaner
+        here than a hard bar — it keeps the header feeling weightless while
+        still guaranteeing the links stay legible over any act.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none fixed inset-x-0 top-0 z-30 h-[110px]"
+        style={{
+          background:
+            'linear-gradient(180deg, var(--color-paper) 0%, color-mix(in srgb, var(--color-paper) 82%, transparent) 55%, transparent 100%)',
+        }}
+      />
+
       <nav className="fixed inset-x-0 top-0 z-40">
         <div className="wrap flex items-center justify-between gap-5 py-5">
           <a href="#title" className="font-display text-ink text-[18px] font-extrabold tracking-[0.2em]">

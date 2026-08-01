@@ -28,7 +28,8 @@ export function ActSection({
       id={id}
       data-act={id}
       style={{ minHeight: `${act.vh}vh` }}
-      className={`relative z-10 flex flex-col ${justify} ${className}`}
+      /* scroll-mt clears the fixed header when a nav link jumps here */
+      className={`relative z-10 flex scroll-mt-24 flex-col ${justify} ${className}`}
     >
       {children}
     </section>
