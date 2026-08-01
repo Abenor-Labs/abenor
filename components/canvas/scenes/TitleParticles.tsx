@@ -6,8 +6,21 @@ import * as THREE from 'three'
 import { PALETTE } from '@/lib/motion/palette'
 import { useActProgress } from '../useActProgress'
 
-/** World width the wordmark spans. Camera keys assume this. */
-const WORLD_W = 7.2
+/**
+ * How wide the mark sits in the frame, as a fraction of what the hero camera
+ * can see. The camera is at z=7.5 with a 42° fov (lib/motion/acts.ts), so the
+ * visible width is derived from that rather than hardcoded — otherwise the
+ * mark is only correct at one window size.
+ */
+const FILL = 0.9
+const HERO_Z = 7.5
+const HERO_FOV = 42
+
+function heroWorldWidth(): number {
+  const visibleH = 2 * HERO_Z * Math.tan((HERO_FOV / 2) * (Math.PI / 180))
+  const aspect = window.innerWidth / Math.max(1, window.innerHeight)
+  return visibleH * aspect * FILL
+}
 
 /**
  * Sampling step in offscreen pixels.
@@ -31,6 +44,7 @@ const STEP = 4
 export function TitleParticles() {
   const [geo, setGeo] = useState<THREE.BufferGeometry | null>(null)
   const mat = useRef<THREE.ShaderMaterial>(null)
+  const worldW = useRef(7.2)
   const act = useActProgress('title', 0.1)
   const { viewport } = useThree()
   const mouse = useRef(new THREE.Vector2(-99, -99))
@@ -41,19 +55,28 @@ export function TitleParticles() {
     const build = () => {
       if (cancelled) return
 
-      const W = 1200
-      const H = 380
+      const FONT = 260
       const cv = document.createElement('canvas')
-      cv.width = W
-      cv.height = H
       const ctx = cv.getContext('2d', { willReadFrequently: true })
       if (!ctx) return
 
-      ctx.fillStyle = '#fff'
-      ctx.textAlign = 'center'
-      ctx.textBaseline = 'middle'
-      ctx.font = `800 250px "Bricolage Grotesque", sans-serif`
-      ctx.letterSpacing = '-12px'
+      const applyFont = () => {
+        ctx.font = `800 ${FONT}px "Bricolage Grotesque", sans-serif`
+        ctx.letterSpacing = '-13px'
+        ctx.fillStyle = '#fff'
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+      }
+
+      // Size the canvas to the ink, not the other way round. Padding here
+      // becomes dead space inside WORLD_W and silently shrinks the mark.
+      applyFont()
+      const measured = ctx.measureText('ABENOR').width
+      const W = Math.max(400, Math.ceil(measured) + 6)
+      const H = Math.ceil(FONT * 1.02)
+      cv.width = W
+      cv.height = H
+      applyFont() // resizing a canvas resets its 2D context
       ctx.fillText('ABENOR', W / 2, H / 2)
 
       const data = ctx.getImageData(0, 0, W, H).data
@@ -62,7 +85,9 @@ export function TitleParticles() {
       const siz: number[] = []
       const hot: number[] = []
 
-      const scale = WORLD_W / W
+      worldW.current = heroWorldWidth()
+      const scale = worldW.current / W
+      const spread = worldW.current / 7.2 // dispersal keeps its proportion at any width
 
       for (let y = 0; y < H; y += STEP) {
         for (let x = 0; x < W; x += STEP) {
@@ -71,9 +96,9 @@ export function TitleParticles() {
             // inconsistent dot size once perspective is applied
             pos.push((x - W / 2) * scale, -(y - H / 2) * scale, 0)
             rnd.push(
-              (Math.random() - 0.5) * 9,
-              (Math.random() - 0.5) * 5,
-              (Math.random() - 0.5) * 7,
+              (Math.random() - 0.5) * 9 * spread,
+              (Math.random() - 0.5) * 5 * spread,
+              (Math.random() - 0.5) * 7 * spread,
             )
             siz.push(Math.random() < 0.07 ? 1.7 : 1.05)
             hot.push(Math.random() < 0.055 ? 1 : 0)
@@ -119,6 +144,7 @@ export function TitleParticles() {
       uInk: { value: new THREE.Color(PALETTE.ink) },
       uHot: { value: new THREE.Color(PALETTE.molten) },
       uDpr: { value: 1 },
+      uRadius: { value: 0.46 },
     }),
     [],
   )
@@ -129,6 +155,7 @@ export function TitleParticles() {
     u.uDisperse.value = act.current
     u.uTime.value += delta
     u.uDpr.value = Math.min(state.gl.getPixelRatio(), 2)
+    u.uRadius.value = worldW.current * 0.064
     ;(u.uMouse.value as THREE.Vector2).lerp(mouse.current, 0.12)
   })
 
@@ -157,6 +184,7 @@ const VERT = /* glsl */ `
   uniform float uTime;
   uniform vec2  uMouse;
   uniform float uDpr;
+  uniform float uRadius;
 
   varying float vHot;
   varying float vFade;
@@ -173,12 +201,12 @@ const VERT = /* glsl */ `
     // scroll dispersal
     p += aRand * uDisperse;
 
-    // cursor repulsion — a tight swirl, not a crater.
-    // radius is in world units and the mark is 7.2 wide, so anything much
-    // above 0.5 punches a hole through whole letters.
+    // cursor repulsion — a tight swirl, not a crater. The radius arrives as a
+    // uniform because it has to stay proportional to the mark, which is now
+    // sized from the viewport.
     vec2 d = p.xy - uMouse;
     float dist = length(d);
-    float force = smoothstep(0.46, 0.0, dist) * 0.3;
+    float force = smoothstep(uRadius, 0.0, dist) * (uRadius * 0.65);
     p.xy += normalize(d + 1e-5) * force;
 
     vFade = 1.0 - uDisperse * 0.85;
