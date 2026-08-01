@@ -8,7 +8,17 @@ import { useActProgress } from '../useActProgress'
 
 /** World width the wordmark spans. Camera keys assume this. */
 const WORLD_W = 7.2
-const MAX_POINTS = 9000
+
+/**
+ * Sampling step in offscreen pixels.
+ *
+ * The offscreen canvas is ~1:1 with the rendered width, so this is the dot
+ * pitch you actually see. Density is controlled HERE and only here — an
+ * earlier version sampled at step 3 and then decimated to a point budget,
+ * which threw away every k-th sample and destroyed the grid, leaving clumps
+ * and speckle instead of letterforms. Coarser sampling, never decimation.
+ */
+const STEP = 4
 
 /**
  * ABENOR, sampled from real rendered glyphs.
@@ -53,42 +63,29 @@ export function TitleParticles() {
       const hot: number[] = []
 
       const scale = WORLD_W / W
-      const step = 3
 
-      for (let y = 0; y < H; y += step) {
-        for (let x = 0; x < W; x += step) {
+      for (let y = 0; y < H; y += STEP) {
+        for (let x = 0; x < W; x += STEP) {
           if (data[(y * W + x) * 4 + 3] > 140) {
-            pos.push((x - W / 2) * scale, -(y - H / 2) * scale, (Math.random() - 0.5) * 0.06)
+            // exact grid position, no z jitter — depth variation reads as
+            // inconsistent dot size once perspective is applied
+            pos.push((x - W / 2) * scale, -(y - H / 2) * scale, 0)
             rnd.push(
               (Math.random() - 0.5) * 9,
               (Math.random() - 0.5) * 5,
               (Math.random() - 0.5) * 7,
             )
-            siz.push(Math.random() < 0.08 ? 2.0 : 1.25)
-            hot.push(Math.random() < 0.09 ? 1 : 0)
+            siz.push(Math.random() < 0.07 ? 1.7 : 1.05)
+            hot.push(Math.random() < 0.055 ? 1 : 0)
           }
         }
       }
 
-      // decimate evenly rather than truncating, so the mark stays legible
-      let P = pos, R = rnd, S = siz, Hh = hot
-      const count = siz.length
-      if (count > MAX_POINTS) {
-        const k = count / MAX_POINTS
-        P = []; R = []; S = []; Hh = []
-        for (let i = 0; i < MAX_POINTS; i++) {
-          const j = Math.floor(i * k)
-          P.push(pos[j * 3], pos[j * 3 + 1], pos[j * 3 + 2])
-          R.push(rnd[j * 3], rnd[j * 3 + 1], rnd[j * 3 + 2])
-          S.push(siz[j]); Hh.push(hot[j])
-        }
-      }
-
       const g = new THREE.BufferGeometry()
-      g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3))
-      g.setAttribute('aRand', new THREE.Float32BufferAttribute(R, 3))
-      g.setAttribute('aSize', new THREE.Float32BufferAttribute(S, 1))
-      g.setAttribute('aHot', new THREE.Float32BufferAttribute(Hh, 1))
+      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
+      g.setAttribute('aRand', new THREE.Float32BufferAttribute(rnd, 3))
+      g.setAttribute('aSize', new THREE.Float32BufferAttribute(siz, 1))
+      g.setAttribute('aHot', new THREE.Float32BufferAttribute(hot, 1))
       setGeo(g)
     }
 
@@ -169,9 +166,9 @@ const VERT = /* glsl */ `
 
     vec3 p = position;
 
-    // idle drift so the mark breathes before any scrolling happens
-    p.x += sin(uTime * 0.5 + position.y * 2.0) * 0.012;
-    p.y += cos(uTime * 0.4 + position.x * 2.0) * 0.012;
+    // idle drift so the mark breathes — small enough that the grid holds
+    p.x += sin(uTime * 0.5 + position.y * 2.0) * 0.005;
+    p.y += cos(uTime * 0.4 + position.x * 2.0) * 0.005;
 
     // scroll dispersal
     p += aRand * uDisperse;
@@ -188,7 +185,8 @@ const VERT = /* glsl */ `
 
     vec4 mv = modelViewMatrix * vec4(p, 1.0);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = aSize * uDpr * (14.0 / -mv.z);
+    // ~2px at rest: dots should sit inside the 4px pitch, not merge into it
+    gl_PointSize = aSize * uDpr * (11.0 / -mv.z);
   }
 `
 
