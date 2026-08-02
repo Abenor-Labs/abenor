@@ -12,7 +12,7 @@ export function Act05Build() {
   return (
     <ActSection id="build" align="start" className="pt-[clamp(80px,12vh,160px)]">
       <div className="wrap">
-        <div className="border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
+        <div className="fadeup border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ <b className="text-molten font-medium">03</b> ] What actually happens
           </span>

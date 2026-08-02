@@ -2,6 +2,7 @@ import { Stage } from '@/components/canvas/Stage'
 import { Nav } from '@/components/ui/Nav'
 import { StatusBar } from '@/components/ui/StatusBar'
 import { Ticker } from '@/components/ui/Ticker'
+import { ScrollReveals } from '@/components/ui/ScrollReveals'
 import { Act01Title } from '@/components/acts/Act01Title'
 import { Act02Position } from '@/components/acts/Act02Position'
 import { Act03Problems } from '@/components/acts/Act03Problems'
@@ -10,19 +11,13 @@ import { Act05Build } from '@/components/acts/Act05Build'
 import { Act06Terms } from '@/components/acts/Act06Terms'
 import { Act07Close } from '@/components/acts/Act07Close'
 
-const STACK = [
-  'TypeScript',
-  'React',
-  'Next.js',
-  'Node',
-  'Postgres',
-  'Supabase',
-  'n8n',
-  'Swift',
-  'Kotlin',
-  'React Native',
-  'Tailwind',
-  'Vercel',
+const PRINCIPLES = [
+  'Ship weekly',
+  'You own the code',
+  'Real answers, not decks',
+  'One team, start to finish',
+  'If it breaks at 11pm, call us',
+  'Handover docs on every project',
 ]
 
 /**
@@ -42,6 +37,7 @@ export default function HomePage() {
       <Stage />
       <Nav />
 
+      <ScrollReveals />
       <main>
         <Act01Title />
         <StatusBar />
@@ -49,7 +45,7 @@ export default function HomePage() {
         <Act03Problems />
         <Act04Automation />
         <Act05Build />
-        <Ticker items={STACK} label="What we build with" />
+        <Ticker items={PRINCIPLES} />
         <Act06Terms />
         <Act07Close />
       </main>

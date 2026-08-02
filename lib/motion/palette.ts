@@ -2,19 +2,19 @@
  * The 3D layer cannot read CSS custom properties, so the palette is
  * mirrored here. These MUST stay in sync with styles/tokens.css.
  *
- * Same role names as the CSS: `paper` is the base surface, `ink` is the
- * foreground on top of it. The palette is dark.
+ * Same role names as the CSS: `paper` is the base surface (warm cream),
+ * `ink` is the foreground on top of it (near-black). Light palette.
  */
 export const PALETTE = {
-  paper: '#07070a',
-  paper2: '#0d0e12',
-  paper3: '#12131a',
-  ink: '#efede8',
-  ink2: '#83889a',
-  rule: '#1f212b',
-  molten: '#ff5e1a',
-  moltenSoft: '#ffae6b',
-  ice: '#5b7bff',
+  paper: '#F8F6F1',
+  paper2: '#EFEDE8',
+  paper3: '#E4E2DC',
+  ink: '#0A0B0F',
+  ink2: '#5A5E6D',
+  rule: '#D4D2CC',
+  molten: '#E8470A',
+  moltenSoft: '#FF8C40',
+  ice: '#2B4FD0',
 } as const
 
 export type PaletteKey = keyof typeof PALETTE

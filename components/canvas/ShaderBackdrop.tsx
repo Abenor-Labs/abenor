@@ -25,7 +25,7 @@ export function ShaderBackdrop() {
       cv.getContext('experimental-webgl')) as WebGLRenderingContext | null
 
     if (!gl) {
-      cv.style.background = 'linear-gradient(160deg, #12131a, #07070a)'
+      cv.style.background = 'linear-gradient(160deg, #F8F6F1, #EFEDE8)'
       return
     }
 
@@ -63,13 +63,16 @@ export function ShaderBackdrop() {
                       fbm(uv * 1.6 + 3.0 * q + vec2(8.3, 2.8) - t * 1.1));
         float f = fbm(uv * 1.6 + 3.4 * r);
 
-        vec3 col = mix(vec3(0.027, 0.027, 0.039), vec3(0.05, 0.056, 0.082), clamp(f * f * 3.2, 0.0, 1.0));
-        col = mix(col, vec3(1.0, 0.369, 0.102), clamp(pow(max(r.x, 0.0), 2.4) * 1.4 + pull * 0.07, 0.0, 0.72));
-        col = mix(col, vec3(0.357, 0.482, 1.0), clamp(pow(max(q.y, 0.0), 3.4) * 0.8, 0.0, 0.30));
-        col += vec3(1.0, 0.369, 0.102) * pow(clamp(f, 0.0, 1.0), 7.0) * 0.45;
+        vec3 cream  = vec3(0.973, 0.965, 0.945);
+        vec3 shadow = vec3(0.925, 0.916, 0.895);
+        vec3 col = mix(cream, shadow, clamp(f * f * 3.0, 0.0, 1.0));
 
-        col *= clamp(1.0 - 0.7 * length(uv * vec2(0.6, 1.0)), 0.0, 1.0);
-        col += (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.026;
+        col = mix(col, vec3(0.99, 0.82, 0.60), clamp(pow(max(r.x, 0.0), 2.2) * 1.1 + pull * 0.05, 0.0, 0.38));
+        col = mix(col, vec3(0.80, 0.85, 1.0), clamp(pow(max(q.y, 0.0), 3.0) * 0.7, 0.0, 0.22));
+        col += vec3(0.035, 0.012, -0.015) * pow(clamp(f, 0.0, 1.0), 6.0) * 0.5;
+
+        col *= clamp(1.0 - 0.10 * length(uv * vec2(0.6, 1.0)), 0.0, 1.0);
+        col += (fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453) - 0.5) * 0.014;
 
         gl_FragColor = vec4(col, 1.0);
       }`
@@ -83,7 +86,7 @@ export function ShaderBackdrop() {
      */
     const fail = (why: string) => {
       console.error('[ShaderBackdrop] ' + why)
-      cv.style.background = 'linear-gradient(160deg, #12131a, #07070a)'
+      cv.style.background = 'linear-gradient(160deg, #F8F6F1, #EFEDE8)'
     }
 
     const sh = (type: number, src: string, name: string) => {
@@ -111,8 +114,7 @@ export function ShaderBackdrop() {
     }
     gl.useProgram(prog)
 
-    // never composite over an uninitialised buffer
-    gl.clearColor(0.027, 0.027, 0.039, 1)
+    gl.clearColor(0.973, 0.965, 0.945, 1)
     gl.clear(gl.COLOR_BUFFER_BIT)
 
     const buf = gl.createBuffer()

@@ -1,9 +1,20 @@
 'use client'
 
-import { Suspense, useEffect, useState } from 'react'
+import { Component, Suspense, useEffect, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { CameraRig } from './CameraRig'
 import { TitleParticles } from './scenes/TitleParticles'
+
+class CanvasErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
+  state = { failed: false }
+  static getDerivedStateFromError() {
+    return { failed: true }
+  }
+  render() {
+    return this.state.failed ? null : this.props.children
+  }
+}
 
 /**
  * Flags the document once the canvas has actually painted, which is the
@@ -63,9 +74,11 @@ export function StageInner() {
         <CameraRig />
         <ambientLight intensity={1.1} />
         <directionalLight position={[4, 6, 8]} intensity={1.4} />
-        <Suspense fallback={null}>
-          <TitleParticles />
-        </Suspense>
+        <CanvasErrorBoundary>
+          <Suspense fallback={null}>
+            <TitleParticles />
+          </Suspense>
+        </CanvasErrorBoundary>
         <CanvasReady />
       </Canvas>
     </div>

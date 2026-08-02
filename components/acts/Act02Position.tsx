@@ -6,8 +6,8 @@ import { prefersReducedMotion } from '@/lib/scroll/progress'
 import { ActSection } from '@/components/ui/ActSection'
 
 const LINE =
-  'We are new. So you get the people who actually build it on the call, and a straight answer when you do not need us at all.'
-const ACCENT = /new|straight|answer/i
+  'Ask a question on Monday. The person who answers is the same person writing the code.'
+const ACCENT = /question|answers|code/i
 
 /**
  * Act 02 — Position.

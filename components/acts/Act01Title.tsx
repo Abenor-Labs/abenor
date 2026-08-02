@@ -25,7 +25,7 @@ export function Act01Title() {
         className="pointer-events-none absolute inset-0 -z-[1]"
         style={{
           background:
-            'linear-gradient(180deg, rgba(7,7,10,0.78) 0%, rgba(7,7,10,0.30) 38%, rgba(7,7,10,0.96) 100%)',
+            'linear-gradient(180deg, rgba(248,246,241,0.65) 0%, rgba(248,246,241,0) 28%, rgba(248,246,241,0) 60%, rgba(248,246,241,0.88) 100%)',
         }}
       />
 
@@ -52,12 +52,12 @@ export function Act01Title() {
       <div className="wrap mt-[clamp(20px,3vw,40px)]">
         <dl className="text-ink-2 flex flex-wrap gap-x-10 gap-y-2 font-mono text-[10.5px] tracking-[0.22em] uppercase">
           <div className="flex gap-2">
-            <dt className="text-ink-3">We build</dt>
-            <dd className="text-ink">Automations · Websites · Apps · Internal tools</dd>
+            <dt className="text-ink-3">Stack</dt>
+            <dd className="text-ink">TypeScript · React · Next.js · Python</dd>
           </div>
           <div className="flex gap-2">
-            <dt className="text-ink-3">Studio</dt>
-            <dd className="text-ink">Started 2026</dd>
+            <dt className="text-ink-3">Delivery</dt>
+            <dd className="text-ink">Weekly builds · Your repo · Full handover</dd>
           </div>
         </dl>
       </div>

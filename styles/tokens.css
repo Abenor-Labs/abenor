@@ -1,36 +1,34 @@
 /* ══════════════════════════════════════════════════════════
-   ABENOR — design tokens
+   ABENOR — design tokens (light theme)
 
    Single source of truth. The DOM layer reads these as CSS
    vars; the 3D layer reads the same values via
    lib/motion/palette.ts. Change here, change everywhere.
 
-   NOTE ON NAMING: the palette is dark. `paper` means the
-   base surface and `ink` means the foreground on top of it —
-   they are role names, not colour descriptions. Flipping the
-   theme means editing these values only, which is exactly
-   why every component references roles instead of hexes.
+   `paper` = base surface (warm cream), `ink` = foreground
+   text (near-black). Every component references roles, so
+   switching the palette means editing THIS file only.
    ══════════════════════════════════════════════════════════ */
 
 @theme {
-  /* surfaces — darkest to lightest */
-  --color-paper: #07070a;
-  --color-paper-2: #0d0e12;
-  --color-paper-3: #12131a;
+  /* surfaces — lightest to darkest */
+  --color-paper: #F8F6F1;
+  --color-paper-2: #EFEDE8;
+  --color-paper-3: #E4E2DC;
 
   /* foreground */
-  --color-ink: #efede8;
-  --color-ink-2: #83889a;
-  --color-ink-3: #5a5f70;
+  --color-ink: #0A0B0F;
+  --color-ink-2: #5A5E6D;
+  --color-ink-3: #6E7180;
 
   /* structure */
-  --color-rule: #1f212b;
-  --color-rule-2: #2b2e3c;
+  --color-rule: #D4D2CC;
+  --color-rule-2: #C0BEB8;
 
-  /* accent */
-  --color-molten: #ff5e1a;
-  --color-molten-soft: #ffae6b;
-  --color-ice: #5b7bff;
+  /* accent — deepened for legibility on light */
+  --color-molten: #E8470A;
+  --color-molten-soft: #FF8C40;
+  --color-ice: #2B4FD0;
 
   /* type */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -47,5 +45,5 @@
 :root {
   --gut: clamp(18px, 4vw, 64px);
   --max: 1460px;
-  color-scheme: dark;
+  color-scheme: light;
 }

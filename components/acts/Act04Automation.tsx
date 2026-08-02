@@ -21,7 +21,7 @@ export function Act04Automation() {
   return (
     <ActSection id="automation" align="center">
       <div className="wrap">
-        <div className="border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
+        <div className="fadeup border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ <b className="text-molten font-medium">02</b> ] Start here
           </span>
@@ -35,18 +35,17 @@ export function Act04Automation() {
 
         <div className="flex flex-col gap-[clamp(28px,5vw,72px)] lg:flex-row lg:items-start">
           <div className="flex-1">
-            <p className="text-ink max-w-[46ch] text-[15px] leading-[1.72]">
+            <p className="fadeup text-ink max-w-[46ch] text-[15px] leading-[1.72]">
               Automation is the fastest work to prove. There is no six-week design phase and no
               taste argument — either the thing that ate your Tuesday afternoons runs by itself
               now, or it does not.
             </p>
-            <p className="text-ink-2 mt-4 max-w-[46ch] text-[15px] leading-[1.72]">
-              So that is where we would rather start. Give us one workflow that wastes real hours
-              every week. You will know inside a fortnight whether we are worth more of your money,
-              and you will not have bet a website on the answer.
+            <p className="fadeup text-ink-2 mt-4 max-w-[46ch] text-[15px] leading-[1.72]">
+              Give us one workflow that wastes real hours every week. You will know within two weeks
+              whether we are worth more of your time.
             </p>
 
-            <ul className="border-rule mt-8 border-t">
+            <ul className="fadeup border-rule mt-8 border-t">
               {CHANGES.map(([a, b]) => (
                 <li key={a} className="border-rule border-b py-[clamp(14px,2vw,20px)]">
                   <span className="font-display block text-[clamp(15px,1.8vw,20px)] leading-[1.2] font-semibold tracking-[-0.02em]">
@@ -60,9 +59,6 @@ export function Act04Automation() {
 
           <div className="flex flex-col items-center gap-4 lg:items-start">
             <PhonePanel />
-            <p className="text-ink-3 max-w-[26ch] text-center font-mono text-[10px] tracking-[0.18em] uppercase lg:text-left">
-              Scroll it, switch the tabs — the same discipline we ship to the stores
-            </p>
           </div>
         </div>
 

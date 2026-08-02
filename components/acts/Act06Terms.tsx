@@ -26,7 +26,7 @@ export function Act06Terms() {
   return (
     <ActSection id="terms" align="center">
       <div className="wrap">
-        <div className="border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
+        <div className="fadeup border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ <b className="text-molten font-medium">04</b> ] Straight up
           </span>
@@ -38,14 +38,14 @@ export function Act06Terms() {
           </h2>
         </div>
 
-        <p className="text-ink mb-[clamp(28px,4vw,52px)] max-w-[52ch] text-[15px] leading-[1.72]">
+        <p className="fadeup text-ink mb-[clamp(28px,4vw,52px)] max-w-[52ch] text-[15px] leading-[1.72]">
           We started in 2026. There is no work section on this site because we are not going to
           fill one with stock screenshots and someone else&rsquo;s case studies. What we can show
           you is our judgement — starting with the work we turn down.
         </p>
 
-        <div className="grid gap-px md:grid-cols-2">
-          <div className="border-rule bg-paper-2/40 border p-[clamp(22px,3vw,38px)]">
+        <div className="fadeup grid gap-px md:grid-cols-2">
+          <div className="border-rule bg-paper-2 border p-[clamp(22px,3vw,38px)]">
             <h3 className="font-display text-molten text-[13px] font-semibold tracking-[0.16em] uppercase">
               Yes
             </h3>

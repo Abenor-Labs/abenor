@@ -206,7 +206,7 @@ export function FlowGraph() {
           onPointerMove={onMove(i)}
           onPointerUp={onUp}
           onPointerCancel={onUp}
-          className="border-rule-2 bg-paper hover:border-molten absolute top-0 left-0 w-[clamp(128px,15vw,178px)] cursor-grab touch-none border px-3 py-2.5 shadow-[0_1px_0_rgba(10,10,12,0.04)] transition-[border-color,box-shadow] duration-200 select-none active:cursor-grabbing"
+          className="border-rule-2 bg-paper hover:border-molten absolute top-0 left-0 w-[clamp(128px,15vw,178px)] cursor-grab touch-none border px-3 py-2.5 shadow-[0_2px_8px_-2px_rgba(0,0,0,0.08)] transition-[border-color,box-shadow] duration-200 select-none active:cursor-grabbing"
           style={{ opacity: ready ? 1 : 0 }}
         >
           <span className="text-ink-3 flex items-center gap-1.5 font-mono text-[8.5px] tracking-[0.2em] uppercase">

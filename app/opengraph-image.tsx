@@ -4,11 +4,6 @@ export const alt = 'Abenor — we build the software that stops the copy-pasting
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
 
-/**
- * Generated at build time so a shared link is never a bare URL.
- * Deliberately no webfont fetch — the system stack renders fine at this size
- * and a network call here is a build-time failure waiting to happen.
- */
 export default function OpengraphImage() {
   return new ImageResponse(
     (
@@ -19,7 +14,7 @@ export default function OpengraphImage() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
-          background: '#07070a',
+          background: '#F8F6F1',
           padding: 72,
           fontFamily: 'sans-serif',
         }}
@@ -31,7 +26,7 @@ export default function OpengraphImage() {
             fontSize: 22,
             letterSpacing: 6,
             textTransform: 'uppercase',
-            color: '#83889a',
+            color: '#6E7180',
           }}
         >
           <span>Abenor</span>
@@ -45,7 +40,7 @@ export default function OpengraphImage() {
               lineHeight: 1.05,
               letterSpacing: -2.5,
               fontWeight: 800,
-              color: '#efede8',
+              color: '#0A0B0F',
               maxWidth: 940,
               display: 'flex',
             }}
@@ -58,7 +53,7 @@ export default function OpengraphImage() {
               fontSize: 40,
               fontWeight: 800,
               letterSpacing: -1.2,
-              color: '#ff5e1a',
+              color: '#E8470A',
               display: 'flex',
             }}
           >
@@ -67,8 +62,8 @@ export default function OpengraphImage() {
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
-          <div style={{ width: 74, height: 5, background: '#ff5e1a', display: 'flex' }} />
-          <span style={{ fontSize: 22, letterSpacing: 3, color: '#83889a' }}>
+          <div style={{ width: 74, height: 5, background: '#E8470A', display: 'flex' }} />
+          <span style={{ fontSize: 22, letterSpacing: 3, color: '#8E919E' }}>
             abenor.vercel.app
           </span>
         </div>

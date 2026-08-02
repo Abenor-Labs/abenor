@@ -6,12 +6,6 @@ import * as THREE from 'three'
 import { PALETTE } from '@/lib/motion/palette'
 import { useActProgress } from '../useActProgress'
 
-/**
- * How wide the mark sits in the frame, as a fraction of what the hero camera
- * can see. The camera is at z=7.5 with a 42° fov (lib/motion/acts.ts), so the
- * visible width is derived from that rather than hardcoded — otherwise the
- * mark is only correct at one window size.
- */
 const FILL = 0.9
 const HERO_Z = 7.5
 const HERO_FOV = 42
@@ -22,27 +16,25 @@ function heroWorldWidth(): number {
   return visibleH * aspect * FILL
 }
 
-/**
- * Sampling step in offscreen pixels.
- *
- * The offscreen canvas is ~1:1 with the rendered width, so this is the dot
- * pitch you actually see. Density is controlled HERE and only here — an
- * earlier version sampled at step 3 and then decimated to a point budget,
- * which threw away every k-th sample and destroyed the grid, leaving clumps
- * and speckle instead of letterforms. Coarser sampling, never decimation.
- */
 const STEP = 4
+const MAX_PARTICLES = 7000
+const SPRING = 0.055
+const DAMPING = 0.86
+const REP_RADIUS_FRAC = 0.09
+const REP_STRENGTH_FRAC = 0.0027
 
-/**
- * ABENOR, sampled from real rendered glyphs.
- *
- * The word is drawn once to an offscreen 2D canvas, its opaque pixels become
- * point positions, and a shader handles dispersal and cursor repulsion on the
- * GPU. Sampling the real font (rather than approximating letterforms) is what
- * keeps the mark on-brand at every size.
- */
+interface ParticleState {
+  geo: THREE.BufferGeometry
+  homePos: Float32Array
+  randOff: Float32Array
+  curPos: Float32Array
+  velX: Float32Array
+  velY: Float32Array
+  count: number
+}
+
 export function TitleParticles() {
-  const [geo, setGeo] = useState<THREE.BufferGeometry | null>(null)
+  const [ps, setPs] = useState<ParticleState | null>(null)
   const mat = useRef<THREE.ShaderMaterial>(null)
   const worldW = useRef(7.2)
   const act = useActProgress('title', 0.1)
@@ -68,50 +60,69 @@ export function TitleParticles() {
         ctx.textBaseline = 'middle'
       }
 
-      // Size the canvas to the ink, not the other way round. Padding here
-      // becomes dead space inside WORLD_W and silently shrinks the mark.
       applyFont()
       const measured = ctx.measureText('ABENOR').width
       const W = Math.max(400, Math.ceil(measured) + 6)
       const H = Math.ceil(FONT * 1.02)
       cv.width = W
       cv.height = H
-      applyFont() // resizing a canvas resets its 2D context
+      applyFont()
       ctx.fillText('ABENOR', W / 2, H / 2)
 
-      const data = ctx.getImageData(0, 0, W, H).data
-      const pos: number[] = []
-      const rnd: number[] = []
-      const siz: number[] = []
-      const hot: number[] = []
+      const imgData = ctx.getImageData(0, 0, W, H).data
+      let posArr: number[] = []
+      let rndArr: number[] = []
+      let sizArr: number[] = []
+      let hotArr: number[] = []
 
       worldW.current = heroWorldWidth()
       const scale = worldW.current / W
-      const spread = worldW.current / 7.2 // dispersal keeps its proportion at any width
+      const spread = worldW.current / 7.2
 
       for (let y = 0; y < H; y += STEP) {
         for (let x = 0; x < W; x += STEP) {
-          if (data[(y * W + x) * 4 + 3] > 140) {
-            // exact grid position, no z jitter — depth variation reads as
-            // inconsistent dot size once perspective is applied
-            pos.push((x - W / 2) * scale, -(y - H / 2) * scale, 0)
-            rnd.push(
+          if (imgData[(y * W + x) * 4 + 3] > 140) {
+            posArr.push((x - W / 2) * scale, -(y - H / 2) * scale, 0)
+            rndArr.push(
               (Math.random() - 0.5) * 9 * spread,
               (Math.random() - 0.5) * 5 * spread,
               (Math.random() - 0.5) * 7 * spread,
             )
-            siz.push(Math.random() < 0.07 ? 1.7 : 1.05)
-            hot.push(Math.random() < 0.055 ? 1 : 0)
+            sizArr.push(Math.random() < 0.075 ? 2.4 : 1.5)
+            hotArr.push(Math.random() < 0.055 ? 1 : 0)
           }
         }
       }
 
+      // Cap particle count like the mockup
+      if (posArr.length / 3 > MAX_PARTICLES) {
+        const total = posArr.length / 3
+        const step = total / MAX_PARTICLES
+        const p2: number[] = [], r2: number[] = [], s2: number[] = [], h2: number[] = []
+        for (let i = 0; i < MAX_PARTICLES; i++) {
+          const j = Math.floor(i * step)
+          const j3 = j * 3
+          p2.push(posArr[j3], posArr[j3 + 1], posArr[j3 + 2])
+          r2.push(rndArr[j3], rndArr[j3 + 1], rndArr[j3 + 2])
+          s2.push(sizArr[j])
+          h2.push(hotArr[j])
+        }
+        posArr = p2; rndArr = r2; sizArr = s2; hotArr = h2
+      }
+
+      const count = posArr.length / 3
+      const homePos = new Float32Array(posArr)
+      const randOff = new Float32Array(rndArr)
+      const curPos = new Float32Array(homePos)
+      const velX = new Float32Array(count)
+      const velY = new Float32Array(count)
+
       const g = new THREE.BufferGeometry()
-      g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3))
-      g.setAttribute('aRand', new THREE.Float32BufferAttribute(rnd, 3))
-      g.setAttribute('aSize', new THREE.Float32BufferAttribute(siz, 1))
-      g.setAttribute('aHot', new THREE.Float32BufferAttribute(hot, 1))
-      setGeo(g)
+      g.setAttribute('position', new THREE.BufferAttribute(curPos, 3))
+      g.setAttribute('aSize', new THREE.Float32BufferAttribute(sizArr, 1))
+      g.setAttribute('aHot', new THREE.Float32BufferAttribute(hotArr, 1))
+
+      setPs({ geo: g, homePos, randOff, curPos, velX, velY, count })
     }
 
     if (document.fonts?.ready) document.fonts.ready.then(build)
@@ -122,11 +133,10 @@ export function TitleParticles() {
     }
   }, [])
 
-  useEffect(() => () => geo?.dispose(), [geo])
+  useEffect(() => () => ps?.geo.dispose(), [ps])
 
   useEffect(() => {
     const onMove = (e: PointerEvent) => {
-      // screen → world on the z=0 plane, good enough for a repulsion field
       mouse.current.set(
         (e.clientX / window.innerWidth - 0.5) * viewport.width,
         -(e.clientY / window.innerHeight - 0.5) * viewport.height,
@@ -138,31 +148,74 @@ export function TitleParticles() {
 
   const uniforms = useMemo(
     () => ({
-      uDisperse: { value: 0 },
       uTime: { value: 0 },
-      uMouse: { value: new THREE.Vector2(-99, -99) },
       uInk: { value: new THREE.Color(PALETTE.ink) },
       uHot: { value: new THREE.Color(PALETTE.molten) },
       uDpr: { value: 1 },
-      uRadius: { value: 0.46 },
+      uFade: { value: 1 },
     }),
     [],
   )
 
-  useFrame((state, delta) => {
-    if (!mat.current) return
+  useFrame((s, delta) => {
+    if (!ps || !mat.current) return
+    const { homePos, randOff, curPos, velX, velY, count, geo } = ps
     const u = mat.current.uniforms
-    u.uDisperse.value = act.current
+
     u.uTime.value += delta
-    u.uDpr.value = Math.min(state.gl.getPixelRatio(), 2)
-    u.uRadius.value = worldW.current * 0.064
-    ;(u.uMouse.value as THREE.Vector2).lerp(mouse.current, 0.12)
+    u.uDpr.value = Math.min(s.gl.getPixelRatio(), 2)
+
+    const disperse = act.current
+    u.uFade.value = 1.0 - disperse * 0.85
+
+    const t = u.uTime.value
+
+    const repFactor = 1 - Math.min(disperse * 5, 1)
+    const mx = mouse.current.x
+    const my = mouse.current.y
+    const ww = worldW.current
+    const repR = ww * REP_RADIUS_FRAC
+    const repR2 = repR * repR
+    const repS = ww * REP_STRENGTH_FRAC * repFactor
+
+    for (let i = 0; i < count; i++) {
+      const i3 = i * 3
+
+      const hx = homePos[i3]
+      const hy = homePos[i3 + 1]
+
+      const tx = hx + Math.sin(t * 0.5 + hy * 2.0) * 0.005 + randOff[i3] * disperse
+      const ty = hy + Math.cos(t * 0.4 + hx * 2.0) * 0.005 + randOff[i3 + 1] * disperse
+
+      let ax = (tx - curPos[i3]) * SPRING
+      let ay = (ty - curPos[i3 + 1]) * SPRING
+
+      if (repFactor > 0.01) {
+        const dx = curPos[i3] - mx
+        const dy = curPos[i3 + 1] - my
+        const d2 = dx * dx + dy * dy
+        if (d2 < repR2 && d2 > 0.00001) {
+          const f = ((repR2 - d2) / repR2) * repS / Math.sqrt(d2)
+          ax += dx * f
+          ay += dy * f
+        }
+      }
+
+      velX[i] = (velX[i] + ax) * DAMPING
+      velY[i] = (velY[i] + ay) * DAMPING
+
+      curPos[i3] += velX[i]
+      curPos[i3 + 1] += velY[i]
+      curPos[i3 + 2] = randOff[i3 + 2] * disperse
+    }
+
+    ;(geo.getAttribute('position') as THREE.BufferAttribute).needsUpdate = true
   })
 
-  if (!geo) return null
+  if (!ps) return null
 
   return (
-    <points geometry={geo} frustumCulled={false}>
+    <points geometry={ps.geo} frustumCulled={false}>
       <shaderMaterial
         ref={mat}
         uniforms={uniforms}
@@ -176,45 +229,22 @@ export function TitleParticles() {
 }
 
 const VERT = /* glsl */ `
-  attribute vec3 aRand;
   attribute float aSize;
   attribute float aHot;
 
-  uniform float uDisperse;
-  uniform float uTime;
-  uniform vec2  uMouse;
   uniform float uDpr;
-  uniform float uRadius;
+  uniform float uFade;
 
   varying float vHot;
   varying float vFade;
 
   void main() {
     vHot = aHot;
+    vFade = uFade;
 
-    vec3 p = position;
-
-    // idle drift so the mark breathes — small enough that the grid holds
-    p.x += sin(uTime * 0.5 + position.y * 2.0) * 0.005;
-    p.y += cos(uTime * 0.4 + position.x * 2.0) * 0.005;
-
-    // scroll dispersal
-    p += aRand * uDisperse;
-
-    // cursor repulsion — a tight swirl, not a crater. The radius arrives as a
-    // uniform because it has to stay proportional to the mark, which is now
-    // sized from the viewport.
-    vec2 d = p.xy - uMouse;
-    float dist = length(d);
-    float force = smoothstep(uRadius, 0.0, dist) * (uRadius * 0.65);
-    p.xy += normalize(d + 1e-5) * force;
-
-    vFade = 1.0 - uDisperse * 0.85;
-
-    vec4 mv = modelViewMatrix * vec4(p, 1.0);
+    vec4 mv = modelViewMatrix * vec4(position, 1.0);
     gl_Position = projectionMatrix * mv;
-    // ~2px at rest: dots should sit inside the 4px pitch, not merge into it
-    gl_PointSize = aSize * uDpr * (11.0 / -mv.z);
+    gl_PointSize = aSize * uDpr * (10.0 / -mv.z);
   }
 `
 
@@ -228,12 +258,14 @@ const FRAG = /* glsl */ `
   varying float vFade;
 
   void main() {
-    // round points with a soft edge
     vec2 c = gl_PointCoord - 0.5;
-    float a = smoothstep(0.5, 0.32, length(c));
+    float d = length(c);
+    float a = smoothstep(0.5, 0.42, d);
     if (a < 0.01) discard;
 
     vec3 col = mix(uInk, uHot, vHot);
-    gl_FragColor = vec4(col, a * vFade);
+    float alpha = a * vFade;
+    alpha = clamp(alpha * 1.8, 0.0, 1.0);
+    gl_FragColor = vec4(col, alpha);
   }
 `
