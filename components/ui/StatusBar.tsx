@@ -30,8 +30,8 @@ export function StatusBar() {
   }, [])
 
   return (
-    <div className="border-rule bg-paper-2/60 relative z-10 border-y backdrop-blur-[2px]">
-      <div className="wrap text-ink-2 flex flex-wrap items-center justify-between gap-4 py-3 font-mono text-[10.5px] tracking-[0.2em] uppercase">
+    <div className="border-rule bg-paper-2/80 fixed inset-x-0 top-[68px] z-30 border-y backdrop-blur-[6px]">
+      <div className="wrap text-ink-2 flex flex-wrap items-center justify-between gap-4 py-2.5 font-mono text-[10.5px] tracking-[0.2em] uppercase">
         <span className="text-ink flex items-center gap-2.5">
           <i
             aria-hidden="true"

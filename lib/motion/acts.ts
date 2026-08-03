@@ -17,7 +17,6 @@ export type ActId =
   | 'problems'
   | 'automation'
   | 'build'
-  | 'terms'
   | 'close'
 
 interface ActDef {
@@ -38,39 +37,33 @@ const DEFS: ActDef[] = [
   },
   {
     id: 'position',
-    vh: 80,
+    vh: 65,
     label: 'Studio',
     camera: { position: [0, 0.15, 3.2], lookAt: [0, 0, 0], fov: 50 },
   },
   {
     id: 'problems',
-    vh: 155,
+    vh: 140,
     label: 'Problems',
     camera: { position: [1.2, 0.5, 9], lookAt: [0, 0, -2], fov: 40 },
   },
   {
     id: 'automation',
-    vh: 205,
+    vh: 185,
     label: 'Automation',
     camera: { position: [3, 0.8, 11], lookAt: [1.5, 0, -3], fov: 38 },
   },
   {
     id: 'build',
-    vh: 185,
+    vh: 165,
     label: 'How it works',
     camera: { position: [4.5, 0.4, 12.5], lookAt: [3, 0, -4], fov: 40 },
-  },
-  {
-    id: 'terms',
-    vh: 120,
-    label: 'Terms',
-    camera: { position: [6, 0.9, 13.5], lookAt: [4.5, 0, -5], fov: 42 },
   },
   {
     id: 'close',
     vh: 95,
     label: 'Contact',
-    camera: { position: [7, 1.2, 15], lookAt: [6, 0, -6], fov: 46 },
+    camera: { position: [6, 1.0, 14], lookAt: [5, 0, -5.5], fov: 44 },
   },
 ]
 
@@ -130,8 +123,8 @@ export const CAMERA_KEYS: CameraKey[] = [
   ...DEFS.map((d, i) => ({ at: ACTS[i].start, ...d.camera })),
   {
     at: 1,
-    position: [7.6, 1.4, 17] as [number, number, number],
-    lookAt: [6.5, 0, -6.5] as [number, number, number],
-    fov: 48,
+    position: [6.5, 1.2, 15.5] as [number, number, number],
+    lookAt: [5.5, 0, -6] as [number, number, number],
+    fov: 46,
   },
 ]

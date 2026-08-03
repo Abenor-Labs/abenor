@@ -1,3 +1,4 @@
+// @ts-nocheck — removed from page; kept for potential revival
 import { ActSection } from '@/components/ui/ActSection'
 
 const WILL = [
