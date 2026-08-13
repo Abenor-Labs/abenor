@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     siteName: 'Abenor',
     title: 'Abenor — We build the software that stops the copy-pasting',
     description:
-      'Send us one job somebody does by hand every week. Within two working days we will tell you whether it can be automated, and what it would take.',
+      'Thirty minutes. You describe one job somebody does by hand every week, we say whether it can be automated and what it would take.',
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },

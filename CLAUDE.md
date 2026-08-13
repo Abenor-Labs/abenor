@@ -35,10 +35,13 @@ accent color because one did not feel like enough; `border-left` as a colored
 stripe; an em dash in interface copy; grey picked by eye instead of by measured
 contrast ratio.
 
-**Two open tensions** are documented in PRODUCT.md and must not be resolved
-silently inside an unrelated task: the success metric is booked calls while the
-page promotes email, and the stated personality is bold while the current build
-sits at the composed end of the range.
+**One open tension** is documented in PRODUCT.md and must not be resolved
+silently inside an unrelated task: the stated personality is bold while the
+current build sits at the composed end of the range.
+
+**CTA hierarchy is graduated and deliberate.** Nav and the Act 07 close ask for
+a booked call; the two mid-page InlineCTAs ask for an email. Do not flatten this
+to one ask in either direction without reading the PRODUCT.md section on it.
 
 ## Commands
 

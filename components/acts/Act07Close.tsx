@@ -24,12 +24,12 @@ export function Act07Close() {
             className="fadeup font-display mx-auto mt-5 max-w-[16ch] leading-[0.98] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
-            Send us one thing that <em className="text-molten not-italic">wastes an afternoon</em>.
+            Bring us one thing that <em className="text-molten not-italic">wastes an afternoon</em>.
           </h2>
 
           <p className="fadeup text-ink-2 mx-auto mt-7 max-w-[48ch] text-[15px] leading-[1.72]">
-            Describe one job somebody does by hand every week. In two working days we say whether it
-            can be automated, and what it would take.
+            Thirty minutes. You describe one job somebody does by hand every week, we say whether it
+            can be automated and what it would take.
           </p>
 
           {/*
@@ -46,11 +46,23 @@ export function Act07Close() {
             <em className="text-molten-deep not-italic">not worth it</em>, we will say so.
           </p>
 
+          {/*
+            The call is the primary ask HERE and only here.
+
+            A booked call is a bigger commitment than an email, and the page
+            spends five acts earning it: this is the one place a visitor has
+            read the process, seen the receipts, and been told we will say "not
+            worth it" if it is. The two mid-page CTAs stay on email precisely
+            because a visitor mid-scroll has not earned that yet. Warm up
+            cheap, close on the call.
+          */}
           <div className="fadeup mt-10">
             <Magnetic>
               <a
-                href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
-                data-cursor="Send"
+                href={CALENDLY}
+                target="_blank"
+                rel="noreferrer noopener"
+                data-cursor="Book"
                 className="bg-molten-deep raised inline-flex items-center gap-3 px-10 py-[20px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5"
                 style={{
                   color: '#FFF7F2',
@@ -58,31 +70,23 @@ export function Act07Close() {
                     '0 2px 4px rgba(0,0,0,0.06), 0 8px 24px -6px rgba(194,58,5,0.28)',
                 }}
               >
-                {CONTACT} <span aria-hidden="true">→</span>
+                Book 30 minutes <span aria-hidden="true">→</span>
               </a>
             </Magnetic>
           </div>
 
           {/*
-            Calendly is deliberately the smaller of the two.
-
-            The whole page is built on making the first ask cheap: one
-            paragraph, answered in two days, no calendar, no timezone, no
-            appointment to keep. A booked call is a bigger commitment than
-            that, so giving it equal weight would split attention between two
-            asks and drag the average commitment up rather than down. It sits
-            here as the option for someone who has already decided, and it is
-            styled as a link because that is what it is.
+            Email stays reachable, as a link rather than a button. Someone who
+            will not put a slot in a calendar is not lost, they are just
+            earlier, and the cheap ask is what catches them.
           */}
           <p className="fadeup mt-6">
             <a
-              href={CALENDLY}
-              target="_blank"
-              rel="noreferrer noopener"
-              data-cursor="Book"
+              href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
+              data-cursor="Send"
               className="text-ink-2 hover:text-ink border-rule hover:border-ink inline-flex min-h-11 items-center gap-2 border-b pb-1 font-mono text-[11px] tracking-[0.18em] uppercase transition-colors duration-300"
             >
-              Or book 30 minutes <span aria-hidden="true">→</span>
+              Or email {CONTACT} <span aria-hidden="true">→</span>
             </a>
           </p>
 
@@ -92,7 +96,7 @@ export function Act07Close() {
             nobody. A name is the cheapest way to cash it.
           */}
           <p className="fadeup text-ink-3 mt-10 font-mono text-[10.5px] tracking-[0.2em] uppercase">
-            <b className="text-ink font-medium">Mahamad Suhail</b>, who replies
+            <b className="text-ink font-medium">Mahamad Suhail</b>, who takes the call
           </p>
         </div>
       </div>

@@ -39,23 +39,31 @@ one continuous camera.
 **Success is a booked call.** Not traffic, not time on page, not an email that
 turns into a thread.
 
-### Live tension: booked calls vs. the cheap ask
+### Resolved: graduated commitment, call at the close
 
-The page currently argues the opposite of its own success metric, and this was a
-deliberate decision that now needs revisiting rather than being silently
-inherited.
+The page used to argue the opposite of its own success metric: email was the
+primary CTA everywhere and Calendly was a secondary link, on the reasoning that
+a one-paragraph email answered free in two days is a much smaller commitment
+than a scheduled call.
 
-Act 07 promotes the email address as the primary CTA and demotes the Calendly
-link to secondary, on the reasoning that a one-paragraph email answered free in
-two days is a much smaller commitment than a scheduled call, and that splitting
-attention between two asks drags average commitment up rather than down. Every
-InlineCTA on the page points at mailto.
+That reasoning was right about mid-page and wrong about the close. The current
+hierarchy is graduated:
 
-If booked calls are the real measure, that hierarchy is inverted. Options,
-roughly in ascending order of disruption: promote Calendly to equal weight in
-Act 07; make the call the primary CTA and email the fallback; or keep the email
-ask but treat the reply as an explicit funnel to a call and say so on the page.
-Do not resolve this silently inside an unrelated task.
+- **Nav** (reachable at every scroll position): book a call. It is the one
+  control always on screen, so it carries the outcome the site is measured on.
+- **Mid-page InlineCTAs** (after Act 03, after Act 04): email. A visitor still
+  scrolling has not read the process or seen the receipts, and has not earned a
+  calendar commitment. The cheap ask catches them.
+- **Act 07 close**: book a call as the filled primary, email as a link
+  underneath. This is the one point where a visitor has read everything,
+  including the offer to be told "not worth it".
+
+Email is never removed, only demoted. Someone who will not put a slot in a
+calendar is earlier in the funnel, not lost.
+
+If this is revisited, the thing to preserve is the graduation itself. A blanket
+swap to calls everywhere raises the cost of the first interaction on a page
+whose entire argument is that the first ask should be cheap.
 
 ## Brand Personality
 

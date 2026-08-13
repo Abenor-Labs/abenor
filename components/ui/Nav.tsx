@@ -5,6 +5,7 @@ import { ACTS, currentAct } from '@/lib/motion/acts'
 import { subscribeScroll } from '@/lib/scroll/progress'
 
 const LINKS = ACTS.filter((a) => a.id !== 'title')
+const CALENDLY = 'https://calendly.com/hello-abenor/30min'
 
 /**
  * Fixed nav with a live act indicator.
@@ -78,11 +79,21 @@ export function Nav() {
           </ul>
 
           <div className="flex items-center gap-3">
+            {/*
+              The persistent CTA points at the calendar, not the inbox: a
+              booked call is the outcome this page is measured on, and this is
+              the one control that is reachable from every scroll position.
+              Email is still offered at the close for anyone not ready to
+              commit a slot.
+            */}
             <a
-              href="mailto:hello.abenor@gmail.com"
-              className="border-ink text-ink hover:bg-ink hover:text-paper border px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] uppercase transition-colors duration-300"
+              href={CALENDLY}
+              target="_blank"
+              rel="noreferrer noopener"
+              data-cursor="Book"
+              className="border-ink text-ink hover:bg-ink hover:text-paper border px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] whitespace-nowrap uppercase transition-colors duration-300"
             >
-              Free answer
+              Book a call
             </a>
 
             <button
