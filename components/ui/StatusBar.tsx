@@ -30,21 +30,33 @@ export function StatusBar() {
   }, [])
 
   return (
-    <div className="border-rule bg-paper-2/80 fixed inset-x-0 top-[68px] z-30 border-y backdrop-blur-[6px]">
-      <div className="wrap text-ink-2 flex flex-wrap items-center justify-between gap-4 py-2.5 font-mono text-[10.5px] tracking-[0.2em] uppercase">
-        <span className="text-ink flex items-center gap-2.5">
+    /* 68px was stale: the nav is py-5 around a 44px hamburger below lg (84px)
+       and a 34px button above it (74px), so the bar's top border was sitting
+       inside the nav's own box on small screens. */
+    <div className="border-rule bg-paper-2/80 fixed inset-x-0 top-[84px] z-30 border-y backdrop-blur-[6px] lg:top-[74px]">
+      {/*
+        This bar is fixed under a fixed nav, so every row it wraps to is a row
+        stolen from the viewport for the whole visit. Three wide uppercase
+        strings do not fit a 375px phone on one line, and the nav above is
+        already 68px — left alone it costs well over a fifth of a small screen
+        permanently. So the bar sheds text as the viewport narrows rather than
+        growing taller: the founding line is in the footer anyway, and the
+        clock reads fine without its label.
+      */}
+      <div className="wrap text-ink-2 flex items-center justify-between gap-4 py-2.5 font-mono text-[10.5px] tracking-[0.2em] uppercase">
+        <span className="text-ink flex items-center gap-2.5 whitespace-nowrap">
           <i
             aria-hidden="true"
-            className="bg-molten inline-block h-[7px] w-[7px] rounded-full"
+            className="bg-molten inline-block h-[7px] w-[7px] shrink-0 rounded-full"
             style={{ boxShadow: '0 0 0 3px rgba(255,94,26,0.18)', animation: 'beat 2s ease-in-out infinite' }}
           />
           Taking work now
         </span>
-        <span>
-          Studio time{' '}
+        <span className="whitespace-nowrap">
+          <span className="hidden sm:inline">Studio time </span>
           <b className="text-ink font-medium tabular-nums">{time ?? '--:--:--'}</b> IST
         </span>
-        <span>Software studio · started 2026</span>
+        <span className="hidden whitespace-nowrap md:inline">Software studio · started 2026</span>
       </div>
     </div>
   )

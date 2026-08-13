@@ -6,12 +6,13 @@ const PANES = {
   builds: {
     title: 'Active builds',
     rows: [
+      // Four rows, matching `runs`. Six overflowed the frame by 53px and the
+      // last one was sliced in half by the tab bar, which reads as a bug
+      // rather than as a scrollable list.
       ['Onboarding flow', 'n8n · 14 nodes', 'LIVE'],
       ['Client portal', 'Next.js · staging', '92%'],
       ['Delivery app', 'iOS · TestFlight', 'RC2'],
       ['Billing sync', 'Stripe → CRM', 'LIVE'],
-      ['Design system', 'v2 tokens', 'WIP'],
-      ['Analytics pipe', 'Postgres', 'LIVE'],
     ],
   },
   runs: {
@@ -23,11 +24,22 @@ const PANES = {
       ['Retry queue', '3 hr ago', '2 HELD'],
     ],
   },
+  /*
+    The builds and runs panes are a product mockup — nobody reads a demo
+    screen as a live feed, and the caption beside this says so.
+
+    This pane is different and has to be held to a different standard,
+    because its rows are not illustrating a tool, they are stating facts
+    about us. It used to claim "Q3 · open · 2 SLOTS" and "< 24H", numbers
+    that were never true and that sit one scroll above Act 06 admitting we
+    have shipped two projects for free. Anything in here must be a promise
+    made elsewhere on this page, kept verbatim.
+  */
   studio: {
     title: 'Studio',
     rows: [
-      ['Capacity', 'Q3 · open', '2 SLOTS'],
-      ['Response time', 'business hours', '< 24H'],
+      ['Capacity', 'taking work now', 'OPEN'],
+      ['First reply', 'to any enquiry', '< 2 DAYS'],
       ['Handover docs', 'every project', 'YES'],
     ],
   },
@@ -55,7 +67,12 @@ export function PhonePanel() {
           <span>Abenor</span>
         </div>
 
-        <div className="scrollbar-none flex-1 overflow-y-auto px-3 pb-3">
+        {/*
+          overflow-hidden, not auto: a scrollable region inside a decorative
+          mock phone steals the swipe from the page on touch. The rows are
+          trimmed to fit instead.
+        */}
+        <div className="scrollbar-none flex-1 overflow-hidden px-3 pb-3">
           <h3
             className="font-display mt-2 mb-3 text-[23px] font-extrabold tracking-[-0.03em]"
             style={{ color: '#EFEDE8' }}

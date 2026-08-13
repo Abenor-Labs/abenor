@@ -17,9 +17,12 @@
   --color-paper-3: #E4E2DC;
 
   /* foreground */
+  /* ink-3 is deliberately not lighter than this: at #6E7180 it measured
+     4.49:1 on paper and missed WCAG AA for the 10px mono labels it is
+     used for. #6A6D7C is 4.75:1 and visually indistinguishable. */
   --color-ink: #0A0B0F;
   --color-ink-2: #5A5E6D;
-  --color-ink-3: #6E7180;
+  --color-ink-3: #6A6D7C;
 
   /* structure */
   --color-rule: #D4D2CC;
@@ -29,6 +32,14 @@
   --color-molten: #E8470A;
   --color-molten-soft: #FF8C40;
   --color-ice: #2B4FD0;
+
+  /* Small-text accent. `molten` is 3.64:1 on paper — fine for the big
+     extrabold headings (large text only needs 3:1), but it fails AA
+     everywhere it is set in 8–17px mono, and it fails again as a button
+     fill under near-white label text. `molten-deep` is 4.98:1 on paper
+     and 5.08:1 under #FFF7F2. Rule of thumb: heading accent → molten,
+     anything you actually have to read → molten-deep. */
+  --color-molten-deep: #C23A05;
 
   /* type */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;

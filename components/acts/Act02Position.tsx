@@ -5,9 +5,8 @@ import { gsap, ScrollTrigger, SplitText } from '@/lib/scroll/gsap'
 import { prefersReducedMotion } from '@/lib/scroll/progress'
 import { ActSection } from '@/components/ui/ActSection'
 
-const LINE =
-  'Ask a question on Monday. The person who answers is the same person writing the code.'
-const ACCENT = /question|answers|code/i
+const LINE = 'The person who answers you is the person writing the code.'
+const ACCENT = /answers|writing|code/i
 
 /**
  * Act 02 — Position.

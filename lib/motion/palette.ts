@@ -11,8 +11,10 @@ export const PALETTE = {
   paper3: '#E4E2DC',
   ink: '#0A0B0F',
   ink2: '#5A5E6D',
+  ink3: '#6A6D7C',
   rule: '#D4D2CC',
   molten: '#E8470A',
+  moltenDeep: '#C23A05',
   moltenSoft: '#FF8C40',
   ice: '#2B4FD0',
 } as const

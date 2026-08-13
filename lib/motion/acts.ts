@@ -17,6 +17,7 @@ export type ActId =
   | 'problems'
   | 'automation'
   | 'build'
+  | 'proof'
   | 'close'
 
 interface ActDef {
@@ -58,6 +59,12 @@ const DEFS: ActDef[] = [
     vh: 165,
     label: 'How it works',
     camera: { position: [4.5, 0.4, 12.5], lookAt: [3, 0, -4], fov: 40 },
+  },
+  {
+    id: 'proof',
+    vh: 120,
+    label: 'Receipts',
+    camera: { position: [5.2, 0.7, 13.2], lookAt: [4, 0, -4.8], fov: 42 },
   },
   {
     id: 'close',

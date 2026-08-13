@@ -47,6 +47,7 @@ function CanvasReady() {
  */
 export function StageInner() {
   const [small, setSmall] = useState(false)
+  const [reduced, setReduced] = useState(false)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)')
@@ -55,6 +56,26 @@ export function StageInner() {
     mq.addEventListener('change', set)
     return () => mq.removeEventListener('change', set)
   }, [])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const set = () => setReduced(mq.matches)
+    set()
+    mq.addEventListener('change', set)
+    return () => mq.removeEventListener('change', set)
+  }, [])
+
+  /*
+    The stylesheet already keeps the DOM wordmark visible under reduced
+    motion, on the grounds that the particle version never animates in. But
+    the canvas was still mounting and painting its own wordmark underneath,
+    so those visitors got both marks stacked on top of each other. The CSS
+    was only ever half the guard; this is the other half.
+
+    Returning null also means data-canvas never gets set, which is exactly
+    what the handover rule wants — no canvas, DOM mark stays.
+  */
+  if (reduced) return null
 
   return (
     <div

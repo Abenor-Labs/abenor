@@ -9,6 +9,11 @@ interface NodeDef {
   label: string
 }
 
+/**
+ * The flow, once. Both the draggable graph and the phone-sized list below
+ * read from this array, so the two renderings of the same story cannot drift
+ * apart when somebody edits one of them.
+ */
 const NODES: NodeDef[] = [
   { x: 0.04, y: 0.1, kind: 'Trigger', label: 'Enquiry form submitted' },
   { x: 0.29, y: 0.04, kind: 'Filter', label: 'Real lead?' },
@@ -160,11 +165,18 @@ export function FlowGraph() {
     dragging.current = null
   }
 
+  /*
+    touch-pan-y on the wrapper, not touch-none. The wrapper is a 400px-tall
+    full-width band in the middle of the lead act; with touch-action:none any
+    swipe starting inside it refused to scroll the page at all on a tablet.
+    The nodes keep touch-none because they genuinely capture the drag — the
+    surface behind them only needs to let vertical scroll through.
+  */
   return (
     <div
       ref={wrap}
       aria-hidden="true"
-      className="border-rule bg-paper raised relative h-[clamp(400px,50vw,540px)] touch-none overflow-hidden border"
+      className="border-rule bg-paper raised relative h-[clamp(400px,50vw,540px)] touch-pan-y overflow-hidden border"
       style={{
         backgroundImage:
           'linear-gradient(var(--color-rule) 1px, transparent 1px), linear-gradient(90deg, var(--color-rule) 1px, transparent 1px)',
@@ -223,5 +235,42 @@ export function FlowGraph() {
         </div>
       ))}
     </div>
+  )
+}
+
+/**
+ * The same flow, for phones.
+ *
+ * The graph positions seven ~128px nodes fractionally across its container
+ * and clamps them inside it, which is correct behaviour and still unreadable
+ * at 375px: they overlap into a pile, and the instruction to drag one is
+ * meaningless when they are stacked. Rather than shrink the toy until it is
+ * merely bad, the small screen gets the information without the interaction —
+ * a plain ordered list of the same steps, same source array.
+ */
+export function FlowList() {
+  return (
+    <ol className="border-rule border-t">
+      {NODES.map((n) => (
+        <li
+          key={n.label}
+          className="border-rule flex items-baseline gap-3 border-b py-3"
+        >
+          <span
+            aria-hidden="true"
+            className="mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full"
+            style={{ background: KIND_COLOR[n.kind] }}
+          />
+          <span className="flex-1">
+            <span className="font-display block text-[15px] leading-tight font-semibold tracking-[-0.01em]">
+              {n.label}
+            </span>
+            <span className="text-ink-3 mt-0.5 block font-mono text-[9px] tracking-[0.2em] uppercase">
+              {n.kind}
+            </span>
+          </span>
+        </li>
+      ))}
+    </ol>
   )
 }

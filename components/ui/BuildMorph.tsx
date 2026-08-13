@@ -8,25 +8,25 @@ const STEPS = [
   {
     k: '01',
     t: 'A call',
-    d: 'Thirty minutes. You describe what is broken. We say whether we can help, and if we cannot, who might.',
+    d: 'Thirty minutes. You describe what is broken. We say if we can help, or who can.',
     label: 'Before we start',
   },
   {
     k: '02',
     t: 'A written scope',
-    d: 'What we will build, what we will not, and a number — before anyone writes code. Most first projects are two to six weeks.',
+    d: 'What we build, what we do not, and a number. Before any code. Most first projects run two to six weeks.',
     label: 'Scope document',
   },
   {
     k: '03',
     t: 'Weekly working software',
-    d: 'Not status updates. Something you can open and click, every week, from the first one.',
+    d: 'Not status updates. Something you can open and click, every week.',
     label: 'Week 2 build',
   },
   {
     k: '04',
     t: 'Keys handed over',
-    d: 'Repository, hosting and credentials in your accounts, with documentation written for the developer who comes after us.',
+    d: 'Repository, hosting and credentials in your accounts. Documented for whoever comes after us.',
     label: 'Shipped',
   },
 ]
@@ -113,7 +113,7 @@ export function BuildMorph() {
             style={{ background: 'var(--color-paper)' }}
           >
             <div className="flex items-center gap-2 mb-4">
-              <span className="text-molten font-mono text-[9px] tracking-[0.2em] uppercase font-medium">Scope</span>
+              <span className="text-molten-deep font-mono text-[9px] tracking-[0.2em] uppercase font-medium">Scope</span>
               <span className="text-ink-3 font-mono text-[9px]">v1.0</span>
             </div>
             <div className="space-y-3 flex-1">
@@ -169,7 +169,7 @@ export function BuildMorph() {
                     className="rounded-sm px-2 py-1"
                     style={{ background: i === 1 ? 'var(--color-paper)' : 'transparent' }}
                   >
-                    <span className={`font-mono text-[8px] ${i === 1 ? 'text-molten font-medium' : 'text-ink-3'}`}>{n}</span>
+                    <span className={`font-mono text-[8px] ${i === 1 ? 'text-molten-deep font-medium' : 'text-ink-3'}`}>{n}</span>
                   </div>
                 ))}
               </div>
@@ -208,7 +208,7 @@ export function BuildMorph() {
               Live.
             </span>
             <span className="mt-3 font-mono text-[10px] tracking-[0.2em] uppercase" style={{ color: 'rgba(239,237,232,0.5)' }}>
-              Repo · hosting · credentials — yours
+              Repo · hosting · credentials · yours
             </span>
           </div>
 
@@ -263,7 +263,7 @@ export function BuildMorph() {
                 <div className="py-[clamp(12px,1.8vh,20px)]">
                   <span
                     className={`font-mono text-[10px] tracking-[0.24em] uppercase transition-colors duration-500 ${
-                      on ? 'text-molten' : 'text-ink-3'
+                      on ? 'text-molten-deep' : 'text-ink-3'
                     }`}
                   >
                     {s.k}

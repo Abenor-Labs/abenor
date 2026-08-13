@@ -9,8 +9,25 @@ import { ActSection } from '@/components/ui/ActSection'
  * properly set masthead, and LCP never depends on three.js.
  */
 export function Act01Title() {
+  /*
+    Centred on small screens, bottom-aligned from lg up.
+
+    The act is a full 100vh and the block only needs about a third of it, so
+    hanging it off the bottom leaves the rest as dead paper — on a phone that
+    is most of the first screen showing nothing at all. Wide viewports are
+    short enough relative to the mark that the low anchor still reads as
+    composition rather than a gap, so the bottom alignment is kept there.
+
+    The 112px top pad is the fixed nav plus the status bar. Centring has to
+    discount that strip or the block sits visibly high in the space it is
+    supposed to be centred in.
+  */
   return (
-    <ActSection id="title" className="overflow-hidden pb-[clamp(28px,5vw,64px)]">
+    <ActSection
+      id="title"
+      align="center"
+      className="overflow-hidden pt-[112px] pb-[clamp(28px,5vw,64px)] lg:justify-end lg:pt-0"
+    >
       {/*
         Legibility veil over the flow field.
 
@@ -45,21 +62,8 @@ export function Act01Title() {
           style={{ fontSize: 'clamp(17px, 2.3vw, 30px)' }}
         >
           Right now, someone in your business is copying data between two tabs.{' '}
-          <strong className="text-molten font-semibold">We build the software that stops that.</strong>
+          <strong className="text-molten-deep font-semibold">We build the software that stops that.</strong>
         </p>
-      </div>
-
-      <div className="wrap mt-[clamp(20px,3vw,40px)]">
-        <dl className="text-ink-2 flex flex-wrap gap-x-10 gap-y-2 font-mono text-[10.5px] tracking-[0.22em] uppercase">
-          <div className="flex gap-2">
-            <dt className="text-ink-3">Stack</dt>
-            <dd className="text-ink">TypeScript · React · Next.js · Python</dd>
-          </div>
-          <div className="flex gap-2">
-            <dt className="text-ink-3">Delivery</dt>
-            <dd className="text-ink">Weekly builds · Your repo · Full handover</dd>
-          </div>
-        </dl>
       </div>
     </ActSection>
   )

@@ -1,27 +1,138 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useFrame, useThree } from '@react-three/fiber'
+import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import { PALETTE } from '@/lib/motion/palette'
 import { useActProgress } from '../useActProgress'
 
-const FILL = 0.9
+/* Camera state for the title act. Must stay in step with CAMERA_KEYS[0]. */
 const HERO_Z = 7.5
 const HERO_FOV = 42
 
-function heroWorldWidth(): number {
-  const visibleH = 2 * HERO_Z * Math.tan((HERO_FOV / 2) * (Math.PI / 180))
-  const aspect = window.innerWidth / Math.max(1, window.innerHeight)
-  return visibleH * aspect * FILL
-}
-
-const STEP = 4
-const MAX_PARTICLES = 7000
+/*
+  The mark is built in NORMALISED space: one unit = the width of the wordmark.
+  Everything below — dispersal spread, repulsion radius, breathing — is a
+  fraction of the mark, so the whole thing survives any viewport by being
+  scaled as an object rather than rebuilt at a new size.
+*/
 const SPRING = 0.055
 const DAMPING = 0.86
-const REP_RADIUS_FRAC = 0.09
-const REP_STRENGTH_FRAC = 0.0027
+const REP_RADIUS = 0.09
+const REP_STRENGTH = 0.0027
+const BREATH_AMP = 0.0007
+const BREATH_FREQ = 14
+const SPREAD_X = 9 / 7.2
+const SPREAD_Y = 5 / 7.2
+const SPREAD_Z = 7 / 7.2
+
+/*
+  Dot pitch, in CSS pixels, that the mark should hold at EVERY width.
+
+  This is the whole fix for small screens. The raster is a fixed 260px font,
+  so a fixed sampling step means the pitch on screen is proportional to the
+  viewport: ~3.5px at 1440, and 0.96px at 390. Below about 2px the dots touch
+  and the wordmark stops being a particle field and becomes a black slab —
+  which is exactly what a phone was getting. Deriving the step from the mark's
+  real pixel width keeps the pitch constant instead.
+*/
+const PITCH_WIDE = 3.4
+const PITCH_NARROW = 2.6
+const MIN_STEP = 3
+const MAX_STEP = 20
+
+/**
+ * A constant pitch keeps the mark from clogging, but it does not keep it
+ * looking like the same mark: a phone-sized wordmark is only ~13 dots across
+ * a stroke, so at desktop pitch it reads as a ghost next to the solid DOM
+ * mark it replaces, and the handover shows as a weight drop. Tightening the
+ * pitch below ~900px of mark restores the ink without ever reaching the
+ * touching-dots territory that broke small screens in the first place.
+ */
+function targetPitch(markPx: number): number {
+  const t = Math.min(1, Math.max(0, (markPx - 300) / 600))
+  return PITCH_NARROW + (PITCH_WIDE - PITCH_NARROW) * t
+}
+
+const RASTER_FONT = 260
+const MAX_PARTICLES = 7000
+
+interface Metrics {
+  /** mark width in world units */
+  world: number
+  /** mark centre in world units */
+  worldX: number
+  worldY: number
+  /** mark width in CSS pixels */
+  px: number
+  /** mark centre in CSS pixels, y in document space so scroll cannot skew it */
+  cxPx: number
+  cyPx: number
+}
+
+/**
+ * Where the DOM wordmark is, expressed in world units.
+ *
+ * The particle mark is not sized to the viewport — it is sized to the DOM
+ * mark it replaces. That element already carries the responsive rules
+ * (`clamp(58px, 15.5vw, 238px)` inside `.wrap`, which is gutter-padded and
+ * capped at 1460px), so measuring it means the two marks agree at every
+ * width by construction. Sizing the particles independently is what made
+ * them overflow: it ignored both the gutters and the 238px cap.
+ */
+function measure(): Metrics {
+  const vw = Math.max(1, window.innerWidth)
+  const vh = Math.max(1, window.innerHeight)
+
+  const visibleH = 2 * HERO_Z * Math.tan((HERO_FOV / 2) * (Math.PI / 180))
+  const worldPerPx = (visibleH * (vw / vh)) / vw
+
+  const el = document.querySelector('.wordmark-fallback')
+  const r = el?.getBoundingClientRect()
+
+  const px = r && r.width > 0 ? r.width : vw * 0.9
+  const cxPx = r && r.width > 0 ? r.left + r.width / 2 : vw / 2
+  const cyPx = r && r.width > 0 ? r.top + window.scrollY + r.height / 2 : vh / 2
+
+  return {
+    world: px * worldPerPx,
+    worldX: (cxPx - vw / 2) * worldPerPx,
+    worldY: -(cyPx - vh / 2) * worldPerPx,
+    px,
+    cxPx,
+    cyPx,
+  }
+}
+
+interface Raster {
+  data: Uint8ClampedArray
+  W: number
+  H: number
+}
+
+function rasterise(): Raster | null {
+  const cv = document.createElement('canvas')
+  const ctx = cv.getContext('2d', { willReadFrequently: true })
+  if (!ctx) return null
+
+  const applyFont = () => {
+    ctx.font = `800 ${RASTER_FONT}px "Bricolage Grotesque", sans-serif`
+    ctx.letterSpacing = `${-0.05 * RASTER_FONT}px`
+    ctx.fillStyle = '#fff'
+    ctx.textAlign = 'center'
+    ctx.textBaseline = 'middle'
+  }
+
+  applyFont()
+  const W = Math.max(400, Math.ceil(ctx.measureText('ABENOR').width) + 6)
+  const H = Math.ceil(RASTER_FONT * 1.02)
+  cv.width = W
+  cv.height = H
+  applyFont()
+  ctx.fillText('ABENOR', W / 2, H / 2)
+
+  return { data: ctx.getImageData(0, 0, W, H).data, W, H }
+}
 
 interface ParticleState {
   geo: THREE.BufferGeometry
@@ -31,120 +142,141 @@ interface ParticleState {
   velX: Float32Array
   velY: Float32Array
   count: number
+  step: number
+}
+
+function sample(raster: Raster, step: number): ParticleState {
+  const { data, W, H } = raster
+  const pos: number[] = []
+  const rnd: number[] = []
+  const siz: number[] = []
+  const hot: number[] = []
+
+  for (let y = 0; y < H; y += step) {
+    for (let x = 0; x < W; x += step) {
+      if (data[(y * W + x) * 4 + 3] > 140) {
+        // normalised: one unit == the width of the wordmark
+        pos.push((x - W / 2) / W, -(y - H / 2) / W, 0)
+        rnd.push(
+          (Math.random() - 0.5) * SPREAD_X,
+          (Math.random() - 0.5) * SPREAD_Y,
+          (Math.random() - 0.5) * SPREAD_Z,
+        )
+        siz.push(Math.random() < 0.075 ? 2.4 : 1.5)
+        hot.push(Math.random() < 0.055 ? 1 : 0)
+      }
+    }
+  }
+
+  const count = pos.length / 3
+  const homePos = new Float32Array(pos)
+  const curPos = new Float32Array(homePos)
+
+  const geo = new THREE.BufferGeometry()
+  geo.setAttribute('position', new THREE.BufferAttribute(curPos, 3))
+  geo.setAttribute('aSize', new THREE.Float32BufferAttribute(siz, 1))
+  geo.setAttribute('aHot', new THREE.Float32BufferAttribute(hot, 1))
+
+  return {
+    geo,
+    homePos,
+    randOff: new Float32Array(rnd),
+    curPos,
+    velX: new Float32Array(count),
+    velY: new Float32Array(count),
+    count,
+    step,
+  }
 }
 
 export function TitleParticles() {
   const [ps, setPs] = useState<ParticleState | null>(null)
+  const pts = useRef<THREE.Points>(null)
   const mat = useRef<THREE.ShaderMaterial>(null)
-  const worldW = useRef(7.2)
+  const raster = useRef<Raster | null>(null)
+  const stepRef = useRef(0)
+  const metrics = useRef<Metrics>({ world: 7, worldX: 0, worldY: 0, px: 1000, cxPx: 0, cyPx: 0 })
   const act = useActProgress('title', 0.1)
-  const { viewport } = useThree()
   const mouse = useRef(new THREE.Vector2(-99, -99))
 
   useEffect(() => {
     let cancelled = false
+    let timer: number | undefined
 
-    const build = () => {
+    /*
+      Rebuild only when the sampling step actually changes. Scale and position
+      are object transforms applied every frame, so a resize that leaves the
+      pitch alone costs nothing — which matters because mobile browsers fire
+      resize on every URL-bar collapse.
+    */
+    const fit = () => {
       if (cancelled) return
+      metrics.current = measure()
 
-      const FONT = 260
-      const cv = document.createElement('canvas')
-      const ctx = cv.getContext('2d', { willReadFrequently: true })
-      if (!ctx) return
+      const r = raster.current
+      if (!r) return
 
-      const applyFont = () => {
-        ctx.font = `800 ${FONT}px "Bricolage Grotesque", sans-serif`
-        ctx.letterSpacing = '-13px'
-        ctx.fillStyle = '#fff'
-        ctx.textAlign = 'center'
-        ctx.textBaseline = 'middle'
+      const px = metrics.current.px
+      let step = Math.min(
+        MAX_STEP,
+        Math.max(MIN_STEP, Math.round((targetPitch(px) * r.W) / px)),
+      )
+      if (step === stepRef.current) return
+
+      let next = sample(r, step)
+      // Guard rather than decimate: thinning a sampled grid by index leaves
+      // visible stripes, so coarsen the grid itself instead.
+      while (next.count > MAX_PARTICLES && step < MAX_STEP) {
+        next.geo.dispose()
+        step += 1
+        next = sample(r, step)
       }
 
-      applyFont()
-      const measured = ctx.measureText('ABENOR').width
-      const W = Math.max(400, Math.ceil(measured) + 6)
-      const H = Math.ceil(FONT * 1.02)
-      cv.width = W
-      cv.height = H
-      applyFont()
-      ctx.fillText('ABENOR', W / 2, H / 2)
-
-      const imgData = ctx.getImageData(0, 0, W, H).data
-      let posArr: number[] = []
-      let rndArr: number[] = []
-      let sizArr: number[] = []
-      let hotArr: number[] = []
-
-      worldW.current = heroWorldWidth()
-      const scale = worldW.current / W
-      const spread = worldW.current / 7.2
-
-      for (let y = 0; y < H; y += STEP) {
-        for (let x = 0; x < W; x += STEP) {
-          if (imgData[(y * W + x) * 4 + 3] > 140) {
-            posArr.push((x - W / 2) * scale, -(y - H / 2) * scale, 0)
-            rndArr.push(
-              (Math.random() - 0.5) * 9 * spread,
-              (Math.random() - 0.5) * 5 * spread,
-              (Math.random() - 0.5) * 7 * spread,
-            )
-            sizArr.push(Math.random() < 0.075 ? 2.4 : 1.5)
-            hotArr.push(Math.random() < 0.055 ? 1 : 0)
-          }
-        }
-      }
-
-      // Cap particle count like the mockup
-      if (posArr.length / 3 > MAX_PARTICLES) {
-        const total = posArr.length / 3
-        const step = total / MAX_PARTICLES
-        const p2: number[] = [], r2: number[] = [], s2: number[] = [], h2: number[] = []
-        for (let i = 0; i < MAX_PARTICLES; i++) {
-          const j = Math.floor(i * step)
-          const j3 = j * 3
-          p2.push(posArr[j3], posArr[j3 + 1], posArr[j3 + 2])
-          r2.push(rndArr[j3], rndArr[j3 + 1], rndArr[j3 + 2])
-          s2.push(sizArr[j])
-          h2.push(hotArr[j])
-        }
-        posArr = p2; rndArr = r2; sizArr = s2; hotArr = h2
-      }
-
-      const count = posArr.length / 3
-      const homePos = new Float32Array(posArr)
-      const randOff = new Float32Array(rndArr)
-      const curPos = new Float32Array(homePos)
-      const velX = new Float32Array(count)
-      const velY = new Float32Array(count)
-
-      const g = new THREE.BufferGeometry()
-      g.setAttribute('position', new THREE.BufferAttribute(curPos, 3))
-      g.setAttribute('aSize', new THREE.Float32BufferAttribute(sizArr, 1))
-      g.setAttribute('aHot', new THREE.Float32BufferAttribute(hotArr, 1))
-
-      setPs({ geo: g, homePos, randOff, curPos, velX, velY, count })
+      stepRef.current = step
+      setPs(next)
     }
 
-    if (document.fonts?.ready) document.fonts.ready.then(build)
-    else build()
+    const onResize = () => {
+      metrics.current = measure()
+      window.clearTimeout(timer)
+      timer = window.setTimeout(fit, 150)
+    }
+
+    const start = () => {
+      if (cancelled) return
+      raster.current = rasterise()
+      fit()
+    }
+
+    if (document.fonts?.ready) document.fonts.ready.then(start)
+    else start()
+
+    window.addEventListener('resize', onResize)
+    window.addEventListener('orientationchange', onResize)
 
     return () => {
       cancelled = true
+      window.clearTimeout(timer)
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
     }
   }, [])
 
   useEffect(() => () => ps?.geo.dispose(), [ps])
 
   useEffect(() => {
+    // Pointer mapped against the mark's own pixel box, so repulsion lands
+    // where the dots visibly are at any viewport.
     const onMove = (e: PointerEvent) => {
+      const m = metrics.current
       mouse.current.set(
-        (e.clientX / window.innerWidth - 0.5) * viewport.width,
-        -(e.clientY / window.innerHeight - 0.5) * viewport.height,
+        (e.clientX - m.cxPx) / m.px,
+        -(e.clientY + window.scrollY - m.cyPx) / m.px,
       )
     }
     window.addEventListener('pointermove', onMove)
     return () => window.removeEventListener('pointermove', onMove)
-  }, [viewport.width, viewport.height])
+  }, [])
 
   const uniforms = useMemo(
     () => ({
@@ -161,22 +293,38 @@ export function TitleParticles() {
     if (!ps || !mat.current) return
     const { homePos, randOff, curPos, velX, velY, count, geo } = ps
     const u = mat.current.uniforms
+    const m = metrics.current
+
+    if (pts.current) {
+      pts.current.position.set(m.worldX, m.worldY, 0)
+      pts.current.scale.setScalar(m.world)
+    }
 
     u.uTime.value += delta
     u.uDpr.value = Math.min(s.gl.getPixelRatio(), 2)
 
     const disperse = act.current
-    u.uFade.value = 1.0 - disperse * 0.85
+    /*
+      Must reach a true zero. At `* 0.85` this floored at 0.15, which sounds
+      like nothing and is not: the title act ends one screen in, so every
+      section after it was read through 7000 leftover particles. On a phone
+      they pack into a quarter of the area and the 13px answer copy in Act 03
+      is genuinely illegible behind them. ShaderBackdrop already fades to zero
+      and stops drawing; this now matches it.
+    */
+    u.uFade.value = Math.max(0, 1.0 - disperse)
+
+    // Invisible: skip the simulation entirely rather than keep integrating
+    // positions nobody can see for the remaining six acts.
+    if (u.uFade.value <= 0.001) return
 
     const t = u.uTime.value
 
     const repFactor = 1 - Math.min(disperse * 5, 1)
     const mx = mouse.current.x
     const my = mouse.current.y
-    const ww = worldW.current
-    const repR = ww * REP_RADIUS_FRAC
-    const repR2 = repR * repR
-    const repS = ww * REP_STRENGTH_FRAC * repFactor
+    const repR2 = REP_RADIUS * REP_RADIUS
+    const repS = REP_STRENGTH * repFactor
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
@@ -184,8 +332,8 @@ export function TitleParticles() {
       const hx = homePos[i3]
       const hy = homePos[i3 + 1]
 
-      const tx = hx + Math.sin(t * 0.5 + hy * 2.0) * 0.005 + randOff[i3] * disperse
-      const ty = hy + Math.cos(t * 0.4 + hx * 2.0) * 0.005 + randOff[i3 + 1] * disperse
+      const tx = hx + Math.sin(t * 0.5 + hy * BREATH_FREQ) * BREATH_AMP + randOff[i3] * disperse
+      const ty = hy + Math.cos(t * 0.4 + hx * BREATH_FREQ) * BREATH_AMP + randOff[i3 + 1] * disperse
 
       let ax = (tx - curPos[i3]) * SPRING
       let ay = (ty - curPos[i3 + 1]) * SPRING
@@ -194,8 +342,8 @@ export function TitleParticles() {
         const dx = curPos[i3] - mx
         const dy = curPos[i3 + 1] - my
         const d2 = dx * dx + dy * dy
-        if (d2 < repR2 && d2 > 0.00001) {
-          const f = ((repR2 - d2) / repR2) * repS / Math.sqrt(d2)
+        if (d2 < repR2 && d2 > 0.0000001) {
+          const f = (((repR2 - d2) / repR2) * repS) / Math.sqrt(d2)
           ax += dx * f
           ay += dy * f
         }
@@ -215,7 +363,7 @@ export function TitleParticles() {
   if (!ps) return null
 
   return (
-    <points geometry={ps.geo} frustumCulled={false}>
+    <points ref={pts} geometry={ps.geo} frustumCulled={false}>
       <shaderMaterial
         ref={mat}
         uniforms={uniforms}

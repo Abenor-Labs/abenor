@@ -54,14 +54,21 @@ export function Nav() {
             ABENOR
           </a>
 
-          <ul className="hidden gap-7 md:flex">
+          {/*
+            lg, not md: the act list gained "Receipts" and six mono labels
+            plus the wordmark and the CTA no longer clear 768px without
+            wrapping into the logo.
+          */}
+          <ul className="hidden gap-7 lg:flex">
             {LINKS.map((a) => (
               <li key={a.id}>
                 <a
                   href={`#${a.id}`}
                   aria-current={active === a.id ? 'true' : undefined}
                   className={`font-mono text-[11px] tracking-[0.16em] uppercase transition-opacity duration-300 ${
-                    active === a.id ? 'text-molten opacity-100' : 'text-ink opacity-55 hover:opacity-100'
+                    active === a.id
+                      ? 'text-molten-deep opacity-100'
+                      : 'text-ink opacity-85 hover:opacity-100'
                   }`}
                 >
                   {a.label}
@@ -72,17 +79,17 @@ export function Nav() {
 
           <div className="flex items-center gap-3">
             <a
-              href="mailto:hello@abenor.com"
+              href="mailto:hello.abenor@gmail.com"
               className="border-ink text-ink hover:bg-ink hover:text-paper border px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] uppercase transition-colors duration-300"
             >
-              Start a build
+              Free answer
             </a>
 
             <button
               type="button"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMenuOpen((o) => !o)}
-              className="border-ink text-ink flex h-[38px] w-[38px] items-center justify-center border transition-colors duration-300 md:hidden"
+              className="border-ink text-ink flex h-11 w-11 items-center justify-center border transition-colors duration-300 lg:hidden"
             >
               <span className="flex w-[16px] flex-col gap-[4px]">
                 <span
@@ -103,15 +110,15 @@ export function Nav() {
         </div>
 
         {menuOpen && (
-          <div className="bg-paper border-rule border-t md:hidden">
+          <div className="bg-paper border-rule border-t lg:hidden">
             <ul className="wrap flex flex-col gap-1 py-4">
               {LINKS.map((a) => (
                 <li key={a.id}>
                   <a
                     href={`#${a.id}`}
                     onClick={() => setMenuOpen(false)}
-                    className={`block py-2.5 font-mono text-[12px] tracking-[0.16em] uppercase transition-colors duration-200 ${
-                      active === a.id ? 'text-molten' : 'text-ink-2'
+                    className={`block py-3 font-mono text-[12px] tracking-[0.16em] uppercase transition-colors duration-200 ${
+                      active === a.id ? 'text-molten-deep' : 'text-ink-2'
                     }`}
                   >
                     {a.label}

@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: '%s — Abenor',
   },
   description:
-    'Right now someone in your business is copying data between two tabs. Abenor is a software studio that automates it away — n8n workflows, websites, iOS and Android apps, and the internal tools that replace the spreadsheet holding everything together.',
+    'Right now someone in your business is copying data between two tabs. Abenor is a software studio that automates it away: n8n workflows, websites, iOS and Android apps, and the internal tools that replace the spreadsheet.',
   keywords: [
     'n8n automation agency',
     'workflow automation',
@@ -63,8 +63,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${bricolage.variable} ${plexMono.variable}`}>
       <body className="grain">
         <a
-          href="#problems"
-          className="bg-molten text-paper sr-only font-mono text-[12px] tracking-[0.16em] uppercase focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-3"
+          href="#title"
+          className="bg-molten-deep text-paper sr-only font-mono text-[12px] tracking-[0.16em] uppercase focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-3"
         >
           Skip to content
         </a>
