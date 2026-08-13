@@ -137,6 +137,8 @@ unmissable accent, and lets the interface itself be the evidence.
   viewport.
 - Heavy and confident components: real fills, thick hit areas, no timidity in
   the primary action.
+- Exactly one inversion, at the close, where the ground drops to ink and the
+  accent stops being a tint and becomes light.
 
 ## 2. Colors
 
@@ -197,6 +199,17 @@ appearance rather than by size is how this system fails accessibility.
 **The No-Grey-Guessing Rule.** Every neutral in this palette has a measured
 contrast ratio behind it. Never introduce a new grey by eye. Compute it against
 Cooled Steel first, or reuse Slag or Ash.
+
+**The Inverted Accent Rule.** The accent flips with the surface it sits on.
+Forged Deep (#C23A05) is the small-text accent on paper at 4.98:1; on Cast Ink
+it collapses to roughly 1.9:1 and disappears. On ink the accent is Molten Pour
+(#E8470A), which reads 4.66:1 there. Never carry an accent across an inversion
+unchanged: the token that was correct on one ground is wrong on the other.
+
+**The One Inversion Rule.** Exactly one section of the site floods to ink, and
+it is the close. The page spends twelve thousand pixels on paper so that the
+ground dropping out means something. A second inverted section makes the first
+one a pattern instead of an event, and the accent stops reading as heat.
 
 ## 3. Typography
 
@@ -265,9 +278,15 @@ objects.
 - **raised-lg** (`box-shadow: 0 2px 4px rgba(0,0,0,0.04), 0 12px 32px -8px
   rgba(0,0,0,0.12), 0 32px 72px -28px rgba(0,0,0,0.14)`): reserved for the
   largest floating object on a screen. At most one per viewport.
-- **CTA glow** (`0 2px 4px rgba(0,0,0,0.06), 0 8px 24px -6px rgba(194,58,5,0.28)`):
-  the primary button only. Tinted with the accent so the lift reads as heat
-  rather than as a generic drop shadow.
+- **CTA glow, on paper** (`0 2px 4px rgba(0,0,0,0.06), 0 8px 24px -6px
+  rgba(194,58,5,0.28)`): the primary button only. Tinted with the accent so the
+  lift reads as heat rather than as a generic drop shadow.
+- **CTA glow, on ink** (`0 0 0 1px rgba(232,71,10,0.4), 0 10px 32px -6px
+  rgba(232,71,10,0.5), 0 28px 80px -24px rgba(232,71,10,0.35)`): the same button
+  on the inverted close. A black-based shadow is invisible on ink, so the lift
+  has to be made of the accent itself. This is the one place in the system where
+  a shadow emits rather than occludes, and it is what "the accent becomes light"
+  means in practice.
 
 ### Named Rules
 
@@ -351,6 +370,27 @@ exists to prove the page is a place rather than a document.
   wrap to a second row, because it is fixed and every row it takes is stolen from
   the viewport permanently.
 
+### Adaptive Chrome
+
+The nav and the status bar are fixed, so they sit over whatever section happens
+to be under them, and one section is ink. Everything fixed reads four variables
+rather than a literal color: `--chrome-fg`, `--chrome-fg-dim`, `--chrome-bg`,
+`--chrome-rule`, plus `--chrome-accent` and the two scrim stops. A
+`data-surface` attribute on the root element swaps the whole set, and the
+handover is a 450ms cross-fade on `ease-out-expo`.
+
+- **The flag is driven by the section's real position, never by scroll
+  progress.** Act ranges come from each act's declared `vh`, but real heights
+  diverge from that (Act 05 is a 500vh scroll track inside a 165vh act), so a
+  progress-derived boundary lands hundreds of pixels from where the ink starts
+  and paints a dark bar over a paper section. An IntersectionObserver watches a
+  zero-height band at y=112px, the exact bottom edge of the nav plus the status
+  bar.
+- Do not add a blanket `transition` rule to chrome descendants. It sets the
+  shorthand at the same specificity as Tailwind's own transition utilities and
+  wins on source order, which silently kills the hamburger's transform
+  animation. Chrome elements carry `chrome-t` individually.
+
 ### Particle Wordmark
 
 The hero mark is measured off the DOM wordmark's own bounding box and rendered as
@@ -379,6 +419,11 @@ solid slab on a phone or thin out into a ghost.
   One invented number poisons the real ones.
 - **Do** ship a working reduced-motion path: canvas unmounted, DOM wordmark
   retained, reveals resolved to rest state.
+- **Do** swap the accent when a surface inverts: Forged Deep on paper, Molten
+  Pour on ink. Re-measure, never re-use.
+- **Do** make the close the biggest heading on the page after the wordmark. Six
+  acts open at the same size; arriving at the ask in that size says the ask is
+  one more section.
 
 ### Don't:
 
@@ -401,6 +446,9 @@ solid slab on a phone or thin out into a ghost.
   periods, parentheses.
 - **Don't** let a mono uppercase label wrap. Cut the content at that breakpoint
   instead.
+- **Don't** add a second inverted section. One is an event, two is a pattern.
+- **Don't** drive the chrome's surface flag off scroll progress or act index.
+  Watch the section itself.
 
 **Audit test:** if a screenshot of a new section could be dropped onto any
 automation agency's site without anyone noticing, it has failed. The tell is

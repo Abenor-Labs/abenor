@@ -48,6 +48,70 @@ body {
   outline-offset: 3px;
 }
 
+/* ══ Adaptive chrome ══════════════════════════════════════
+   The nav and the status bar are fixed, so they sit over
+   whatever act happens to be under them. Every act is paper
+   except the close, which floods to ink; without this the
+   last screen of the site is a dark section wearing a cream
+   hat.
+
+   Nav writes `data-surface` on <html> from the active act.
+   Everything fixed reads these four variables instead of a
+   literal color, and the handover is a 450ms cross-fade
+   rather than a cut.
+   ═══════════════════════════════════════════════════════ */
+:root {
+  --chrome-fg: var(--color-ink);
+  --chrome-fg-dim: var(--color-ink-2);
+  --chrome-bg: var(--color-paper);
+  --chrome-bg-2: rgba(239, 237, 232, 0.8);
+  --chrome-rule: var(--color-rule);
+  --chrome-accent: var(--color-molten-deep);
+  --chrome-scrim-1: var(--color-paper);
+  --chrome-scrim-2: color-mix(in srgb, var(--color-paper) 82%, transparent);
+}
+
+[data-surface='ink'] {
+  --chrome-fg: var(--color-paper);
+  --chrome-fg-dim: rgba(248, 246, 241, 0.62);
+  --chrome-bg: var(--color-ink);
+  --chrome-bg-2: rgba(16, 18, 24, 0.82);
+  --chrome-rule: rgba(248, 246, 241, 0.16);
+  /* molten-deep is tuned for contrast on paper and goes muddy on ink;
+     the accent inverts with the surface it sits on */
+  --chrome-accent: var(--color-molten);
+  --chrome-scrim-1: var(--color-ink);
+  --chrome-scrim-2: color-mix(in srgb, var(--color-ink) 82%, transparent);
+}
+
+/* Deliberately NOT a blanket `.chrome *` rule: that sets the `transition`
+   shorthand at the same specificity as Tailwind's own transition utilities and
+   wins on source order, which silently kills the hamburger's transform
+   animation. Chrome elements carry their own `transition-colors` instead. */
+.chrome-t {
+  transition:
+    color 450ms var(--ease-out-expo),
+    background-color 450ms var(--ease-out-expo),
+    border-color 450ms var(--ease-out-expo);
+}
+
+.nav-scrim {
+  background: linear-gradient(
+    180deg,
+    var(--chrome-scrim-1) 0%,
+    var(--chrome-scrim-2) 55%,
+    transparent 100%
+  );
+  transition: background 450ms var(--ease-out-expo);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chrome-t,
+  .nav-scrim {
+    transition-duration: 0.001ms !important;
+  }
+}
+
 /* ── layout helpers ──────────────────────────────────────── */
 .wrap {
   width: 100%;

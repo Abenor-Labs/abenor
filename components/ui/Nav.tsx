@@ -26,6 +26,37 @@ export function Nav() {
     })
   }, [])
 
+  /*
+    The fixed chrome inverts when the close section passes under it.
+
+    Deliberately NOT driven by the active act. Act ranges are derived from each
+    act's declared `vh`, but real section heights diverge from that (Act 05 is
+    a 500vh scroll track inside a 165vh act), so the progress-derived boundary
+    lands hundreds of pixels away from where the ink actually starts. Flipping
+    there paints a dark chrome band over a still-paper section.
+
+    The observer watches a zero-height band at y=112px, which is the bottom
+    edge of the nav plus the status bar. The chrome changes colour exactly
+    when the ink arrives at it, whatever the section heights do later.
+  */
+  useEffect(() => {
+    const el = document.getElementById('close')
+    if (!el) return
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        document.documentElement.dataset.surface = entry.isIntersecting ? 'ink' : 'paper'
+      },
+      { rootMargin: '-112px 0px -100% 0px', threshold: 0 },
+    )
+    io.observe(el)
+
+    return () => {
+      io.disconnect()
+      delete document.documentElement.dataset.surface
+    }
+  }, [])
+
   return (
     <>
       <div
@@ -40,18 +71,14 @@ export function Nav() {
         here than a hard bar — it keeps the header feeling weightless while
         still guaranteeing the links stay legible over any act.
       */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed inset-x-0 top-0 z-30 h-[110px]"
-        style={{
-          background:
-            'linear-gradient(180deg, var(--color-paper) 0%, color-mix(in srgb, var(--color-paper) 82%, transparent) 55%, transparent 100%)',
-        }}
-      />
+      <div aria-hidden="true" className="nav-scrim pointer-events-none fixed inset-x-0 top-0 z-30 h-[110px]" />
 
       <nav aria-label="Main navigation" className="fixed inset-x-0 top-0 z-40">
         <div className="wrap flex items-center justify-between gap-5 py-5">
-          <a href="#title" className="font-display text-ink text-[18px] font-extrabold tracking-[0.2em]">
+          <a
+            href="#title"
+            className="font-display chrome-t text-[18px] font-extrabold tracking-[0.2em] text-[var(--chrome-fg)]"
+          >
             ABENOR
           </a>
 
@@ -66,10 +93,10 @@ export function Nav() {
                 <a
                   href={`#${a.id}`}
                   aria-current={active === a.id ? 'true' : undefined}
-                  className={`font-mono text-[11px] tracking-[0.16em] uppercase transition-opacity duration-300 ${
+                  className={`chrome-t font-mono text-[11px] tracking-[0.16em] uppercase ${
                     active === a.id
-                      ? 'text-molten-deep opacity-100'
-                      : 'text-ink opacity-85 hover:opacity-100'
+                      ? 'text-[var(--chrome-accent)] opacity-100'
+                      : 'text-[var(--chrome-fg)] opacity-85 hover:opacity-100'
                   }`}
                 >
                   {a.label}
@@ -91,7 +118,7 @@ export function Nav() {
               target="_blank"
               rel="noreferrer noopener"
               data-cursor="Book"
-              className="border-ink text-ink hover:bg-ink hover:text-paper border px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] whitespace-nowrap uppercase transition-colors duration-300"
+              className="chrome-t border border-[var(--chrome-fg)] px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] whitespace-nowrap text-[var(--chrome-fg)] uppercase hover:bg-[var(--chrome-fg)] hover:text-[var(--chrome-bg)]"
             >
               Book a call
             </a>
@@ -100,19 +127,19 @@ export function Nav() {
               type="button"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMenuOpen((o) => !o)}
-              className="border-ink text-ink flex h-11 w-11 items-center justify-center border transition-colors duration-300 lg:hidden"
+              className="chrome-t flex h-11 w-11 items-center justify-center border border-[var(--chrome-fg)] text-[var(--chrome-fg)] lg:hidden"
             >
               <span className="flex w-[16px] flex-col gap-[4px]">
                 <span
-                  className="bg-ink block h-px w-full transition-transform duration-300"
+                  className="block h-px w-full bg-[var(--chrome-fg)] transition-[transform,background-color] duration-300"
                   style={menuOpen ? { transform: 'rotate(45deg) translate(1.7px, 1.7px)' } : undefined}
                 />
                 <span
-                  className="bg-ink block h-px w-full transition-all duration-300"
+                  className="block h-px w-full bg-[var(--chrome-fg)] transition-all duration-300"
                   style={menuOpen ? { opacity: 0, transform: 'scaleX(0)' } : undefined}
                 />
                 <span
-                  className="bg-ink block h-px w-full transition-transform duration-300"
+                  className="block h-px w-full bg-[var(--chrome-fg)] transition-[transform,background-color] duration-300"
                   style={menuOpen ? { transform: 'rotate(-45deg) translate(1.7px, -1.7px)' } : undefined}
                 />
               </span>
@@ -121,15 +148,15 @@ export function Nav() {
         </div>
 
         {menuOpen && (
-          <div className="bg-paper border-rule border-t lg:hidden">
+          <div className="chrome-t border-t border-[var(--chrome-rule)] bg-[var(--chrome-bg)] lg:hidden">
             <ul className="wrap flex flex-col gap-1 py-4">
               {LINKS.map((a) => (
                 <li key={a.id}>
                   <a
                     href={`#${a.id}`}
                     onClick={() => setMenuOpen(false)}
-                    className={`block py-3 font-mono text-[12px] tracking-[0.16em] uppercase transition-colors duration-200 ${
-                      active === a.id ? 'text-molten-deep' : 'text-ink-2'
+                    className={`chrome-t block py-3 font-mono text-[12px] tracking-[0.16em] uppercase ${
+                      active === a.id ? 'text-[var(--chrome-accent)]' : 'text-[var(--chrome-fg-dim)]'
                     }`}
                   >
                     {a.label}

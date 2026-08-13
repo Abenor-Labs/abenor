@@ -35,9 +35,10 @@ accent color because one did not feel like enough; `border-left` as a colored
 stripe; an em dash in interface copy; grey picked by eye instead of by measured
 contrast ratio.
 
-**One open tension** is documented in PRODUCT.md and must not be resolved
-silently inside an unrelated task: the stated personality is bold while the
-current build sits at the composed end of the range.
+**The close is the one inverted surface.** It floods to ink and the fixed chrome
+inverts with it via `data-surface` on the root element. Do not add a second
+inversion, and do not carry an accent across one unchanged: Forged Deep on
+paper, Molten Pour on ink.
 
 **CTA hierarchy is graduated and deliberate.** Nav and the Act 07 close ask for
 a booked call; the two mid-page InlineCTAs ask for an email. Do not flatten this

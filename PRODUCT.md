@@ -82,16 +82,23 @@ Voice:
 - Second person, active voice, short sentences. No hedging, no "we strive to".
 - Wants to be remembered, not merely tasteful.
 
-### Execution gap to close
+### Execution gap: partly closed
 
 The stated personality includes **bold and energetic**; "editorial and composed"
-was explicitly not chosen. The current build is the composed end of that range:
-warm paper surface, near-black ink, a single molten accent used sparingly, large
-restrained type. It is well-made but quiet.
+was explicitly not chosen. The build was the composed end of that range: warm
+paper, near-black ink, a single accent used sparingly, large restrained type.
+Well-made but quiet.
 
-Future work should push the energetic register harder (accent commitment, scale
-contrast, moments of surprise) without reaching for the anti-references. Treat
-"it is already tasteful" as insufficient.
+The close now inverts. The ground drops to ink for the final section, the accent
+becomes light rather than a tint, and the heading is the biggest type on the
+page after the wordmark. The fixed chrome inverts with it. That is the page
+raising its voice exactly once, at the ask.
+
+What remains quiet, and is fair game for the next pass: the six paper acts still
+share one rhythm (eyebrow, headline, rule, content) at one heading size, and the
+accent inside them never commits beyond a single word of emphasis. The
+constraint is that any further boldness must not turn the one inversion into a
+pattern. See the One Inversion Rule in DESIGN.md.
 
 ## Anti-references
 
