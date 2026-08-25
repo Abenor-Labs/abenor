@@ -313,12 +313,12 @@ like it was made out of stock, not out of CSS.
   0.18em, uppercase, padding 20px 40px, plus the tinted CTA glow. The label is
   the literal email address, not a verb phrase, because naming the destination is
   cheaper for the reader than promising an outcome.
-- **Hover / Focus:** the arrow glyph slides 6px right over 220ms on
+- **Hover / Focus:** the arrow glyph slides 6px right over 150ms on
   `ease-out-expo` (`.nudge` on the button, `.arrow` on the glyph). The button
   does not lift, tint, or scale. Movement inside the shape, not of the shape.
   This used to widen the flex `gap` instead, which re-ran layout and paint on
   every frame of the tween; the effect is identical and the transform is free.
-- **Press:** `scale(0.975)` over 140ms on `:active` (`.press`). The one moment
+- **Press:** `scale(0.96)` over 140ms on `:active` (`.press`). The one moment
   where any perceptible delay reads as breakage rather than as motion. Note
   that `.press` owns `transition-property` for the element, so it must not be
   combined with `.chrome-t`, which needs the same longhands for the surface
@@ -354,7 +354,7 @@ The primary content pattern on this site, and the reason it needs so few cards.
   label, because a header three screens above the cell it describes is not a
   header.
 - **Hover:** a Cooled Steel Shade wash scales in from the bottom edge over
-  `--dur-ui` (220ms) on `ease-out-expo`, bleeding into the gutters via a
+  `--dur-ui` (150ms) on `ease-out-expo`, bleeding into the gutters via a
   negative inset so the highlight reaches the full width of the viewport.
   Nothing else moves. 500ms was the old figure and a pointer running down a
   five-row list outran it, so the wash kept arriving after the pointer had
@@ -444,15 +444,15 @@ Durations are tokens in `styles/tokens.css`, not numbers typed at the call site.
 | Token | Value | Used for |
 | --- | --- | --- |
 | `--dur-press` | 140ms | pointer-down feedback |
-| `--dur-ui` | 220ms | hover, colour, small state changes |
+| `--dur-ui` | 150ms | hover, colour, small state changes |
 | `--dur-panel` | 320ms | disclosure, anything with height |
 | `--dur-surface` | 450ms | the paper/ink chrome handover |
 
 Two curves, and deliberately no third. `--ease-out-expo` for anything entering
 or leaving; `--ease-in-out-quart` for something already on screen that moves.
 There is no `ease-in` token: it starts slow, which delays the exact frame the
-visitor is watching, so `ease-out` at 220ms reads faster than `ease-in` at
-220ms.
+visitor is watching, so `ease-out` at 150ms reads faster than `ease-in` at
+150ms.
 
 **Nothing a pointer triggers may exceed 300ms.** Past that a hover stops reading
 as response and starts reading as lag. Scrubbed scroll work is exempt — the

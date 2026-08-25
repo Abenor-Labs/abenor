@@ -39,8 +39,20 @@ export function Avatar({
   return (
     <span
       aria-hidden="true"
-      className="bg-paper-3 text-ink-2 border-rule relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border font-mono font-medium select-none"
-      style={{ width: size, height: size, fontSize: size * 0.32 }}
+      /*
+        Not the Scribe Rule border every other surface uses. That grey is warm
+        and tinted, and a tinted hairline around a photograph picks up whatever
+        is behind it and reads as dirt on the image edge rather than as an
+        outline. Photographs get a neutral black at 10 percent instead — the
+        only place on the site that does not take its border from the palette.
+      */
+      className="bg-paper-3 text-ink-2 relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full border font-mono font-medium select-none"
+      style={{
+        width: size,
+        height: size,
+        fontSize: size * 0.32,
+        borderColor: 'oklch(0 0 0 / 0.1)',
+      }}
     >
       {initials}
       {!failed && (

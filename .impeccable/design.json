@@ -157,7 +157,7 @@
       },
       {
         "name": "dur-ui",
-        "value": "220ms",
+        "value": "150ms",
         "purpose": "Hover, colour, small state changes. Nothing a pointer triggers may exceed 300ms."
       },
       {

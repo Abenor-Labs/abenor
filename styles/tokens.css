@@ -61,7 +61,7 @@
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
 
   --dur-press: 140ms; /* pointer-down feedback */
-  --dur-ui: 220ms; /* hover, colour, small state changes */
+  --dur-ui: 150ms; /* hover, colour, small state changes */
   --dur-panel: 320ms; /* accordions, disclosure, anything with height */
   --dur-surface: 450ms; /* the paper/ink chrome handover */
 
