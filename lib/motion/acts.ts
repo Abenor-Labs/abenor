@@ -79,7 +79,7 @@ const DEFS: ActDef[] = [
        diligence wants a list, not another paragraph. Height assumes every
        panel closed, which is how the section is first seen. */
     id: 'faq',
-    vh: 105,
+    vh: 85,
     label: 'Questions',
     camera: { position: [5.6, 0.85, 13.6], lookAt: [4.6, 0, -5.1], fov: 43 },
   },

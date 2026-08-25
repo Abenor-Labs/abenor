@@ -5,12 +5,16 @@
  * visitor who never scrolls past the fold otherwise leaves having seen a claim
  * and no evidence for it.
  *
- * It used to carry a stack row and a delivery row as well, moved down out of
- * the hero on the grounds that specs three seconds in answer a question nobody
- * has asked yet. That reasoning holds and goes one step further: the FAQ
- * answers both — "what do you build with" and "who owns it when you are done"
- * — at the point where a visitor is actually asking. Under the hero they were
- * two rows of uppercase mono that a stranger has no way to evaluate.
+ * The delivery row that sat beside the stack is gone: weekly builds, your repo,
+ * full handover are all answered by the FAQ, at the point where somebody is
+ * actually asking rather than three seconds in.
+ *
+ * The stack row stays, and the reason is in PRODUCT.md rather than in this
+ * file. Three audiences read this page and the second one, technical founders,
+ * can evaluate a stack and will check it. It was briefly cut on the grounds
+ * that an SMB owner does not know what n8n is, which is true and is not the
+ * point: the line is not there to inform audience one, it is there to be
+ * verified by audience two. One row of eight words buys that.
  */
 export function ProofStrip() {
   return (
@@ -28,6 +32,17 @@ export function ProofStrip() {
         <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.22em] uppercase">
           Two projects shipped
         </span>
+      </div>
+
+      <div className="wrap border-rule border-t py-[clamp(12px,1.8vw,18px)]">
+        {/* Label above the values below sm, beside them from sm up. Inline at
+            375px the values wrapped mid-list and the second line hung under
+            the label, which at 10.5px with 0.22em tracking reads as broken
+            rather than as an indent. */}
+        <dl className="text-ink-2 flex flex-col gap-y-1 font-mono text-[10.5px] tracking-[0.22em] uppercase sm:flex-row sm:gap-x-2">
+          <dt className="text-ink-3">Stack</dt>
+          <dd className="text-ink">TypeScript · React · Next.js · Python</dd>
+        </dl>
       </div>
     </div>
   )

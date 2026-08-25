@@ -33,7 +33,7 @@ Suhail personally). It builds workflow automation, websites, iOS and Android
 apps, and the internal tools that replace the spreadsheet holding a company
 together.
 
-The site is the entire top of funnel. It is one scroll-driven page, seven acts,
+The site is the entire top of funnel. It is one scroll-driven page, eight acts,
 one continuous camera.
 
 **Success is a booked call.** Not traffic, not time on page, not an email that

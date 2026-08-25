@@ -7,48 +7,53 @@ import { MaskedText } from '@/components/ui/MaskedText'
 /**
  * Act 07 — Questions.
  *
- * The cheapest section on the page to write and the densest to read, which
- * is why it earns its place after the receipts: by here the visitor has
- * decided they are interested and switched from being sold to to doing
- * diligence. Prose is the wrong shape for diligence. A list of the seven
- * things people actually ask, answered in two sentences each, is the right
- * one.
+ * Five things a buyer is anxious about, answered in a sentence each.
  *
- * Every answer is a fact already true elsewhere in the repository — the
- * handover terms from Act 05, the client count from Act 06, the stack from
- * the proof strip. Nothing here is a new claim, and the two questions with
- * uncomfortable answers (what it costs, how many clients) are answered
- * straight rather than skipped. A FAQ that only contains flattering
- * questions is read as marketing and stops being load-bearing.
+ * The first draft had seven, and three of them were not questions. "Who
+ * actually writes the code", "how many clients have you had", "what do you
+ * build with" — nobody says those out loud to a supplier. They were things we
+ * wanted to say, wearing a question mark, which is the same bluff as a
+ * paragraph of self-description and harder to spot. If a proposed question is
+ * one the studio is pleased to be asked, it is probably one of these.
+ *
+ * What replaced them are the objections a stranger actually has, including
+ * the one the page creates for itself: Act 02 says the person who answers is
+ * the person writing the code, which immediately raises "so what happens when
+ * he is gone". Answering that in the same breath as ownership turns the
+ * weakest structural fact about a studio this size into the strongest answer
+ * here.
+ *
+ * Two rules for editing this list. Each answer is one sentence, because the
+ * second sentence is always where the reassurance starts and the fact stops.
+ * And the uncomfortable ones stay: a FAQ that ducks price is read as a price
+ * list somebody removed.
  */
 const QUESTIONS: [string, string][] = [
   [
-    'Who actually writes the code?',
-    'The person who answers your email is the person in the repository. There is no account manager in between, which is the whole reason a studio this size is worth hiring.',
-  ],
-  [
-    'Who owns it when you are done?',
-    'You do. Repository, hosting and credentials live in your accounts from day one, not ours, and the release process is written down for whoever comes after us.',
-  ],
-  [
-    'How long does a first automation take?',
-    'Eleven working days: two to scope it, five to build, three against your real data, one to hand over. The scope is written before any code, and it says what we are not building as well as what we are.',
-  ],
-  [
     'What does it cost?',
-    'One workflow, two weeks, fixed fee, quoted in the reply once we know which workflow. We do not publish a number here because a number invented before the scope is a number we would have to walk back.',
+    'One workflow, two weeks, a fixed fee quoted in the reply, and if it does not run you do not pay.',
   ],
   [
-    'What happens after handover?',
-    'A monthly retainer if you want us on call for changes and breakages. If you do not, the handover stands on its own — that is what the documentation is for.',
+    'How long does it take?',
+    'Eleven working days: two to scope it in writing, five to build, three against your real data, one to hand over.',
   ],
   [
-    'How many clients have you had?',
-    'Two, and both were built free to get started. The words on this page are theirs and the invoices never existed. Better you hear that from us than find it out later.',
+    'Do we have to change the tools we already use?',
+    'No, we wire together the ones you have, and tell you when one of them is the actual problem.',
   ],
   [
-    'What do you build with?',
-    'TypeScript, React, Next.js and Python, with n8n for workflow automation. Nothing here is a platform you would need us to keep paying for.',
+    'What if you disappear?',
+    'Repository, hosting and credentials sit in your accounts from day one, documented for whoever comes next, and a monthly retainer keeps us on call if you want one.',
+  ],
+  [
+    /*
+      The one answer on this page authored rather than sourced. Everything
+      else restates a fact that already existed in the codebase; this takes a
+      position on a competitor, and it should be read and approved rather than
+      inherited.
+    */
+    'Can I not just do this with Zapier?',
+    'Often you can, and for one simple trigger you should, so we are worth paying only when it breaks at 3am and nobody wrote down why it was built that way.',
   ],
 ]
 
@@ -69,7 +74,7 @@ export function Act07FAQ() {
             className="font-display leading-[0.95] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
-            Seven <em className="text-molten not-italic">straight</em> answers
+            Five <em className="text-molten not-italic">straight</em> answers
           </MaskedText>
         </div>
 
