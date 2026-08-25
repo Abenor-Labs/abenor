@@ -84,8 +84,12 @@ const DEFS: ActDef[] = [
     camera: { position: [5.6, 0.85, 13.6], lookAt: [4.6, 0, -5.1], fov: 43 },
   },
   {
+    /* The section centres its content inside this height, so any excess turns
+       into equal slack above and below rather than into breathing room where
+       it would help. The content is about 800px; 95vh on a tall monitor left
+       roughly a third of the screen as empty ink. */
     id: 'close',
-    vh: 95,
+    vh: 88,
     label: 'Contact',
     camera: { position: [6, 1.0, 14], lookAt: [5, 0, -5.5], fov: 44 },
   },

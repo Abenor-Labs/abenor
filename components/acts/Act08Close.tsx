@@ -24,7 +24,11 @@ export function Act08Close() {
     <ActSection
       id="close"
       align="center"
-      className="bg-ink text-paper pb-[clamp(40px,7vw,90px)]"
+      /* Padding was clamp(40px, 7vw, 90px), which on a wide screen put 90px of
+         empty ink under a footer that already had 80px of margin above it. The
+         close is the last thing on a twelve-thousand-pixel page: it should end,
+         not trail off. */
+      className="bg-ink text-paper pb-[clamp(28px,4vw,56px)]"
     >
       <div className="wrap">
         {/* accent line: the vertical mark that opens the section */}
@@ -34,33 +38,62 @@ export function Act08Close() {
           style={{ background: 'var(--color-molten)', opacity: 0.75 }}
         />
 
-        <div className="mx-auto max-w-[680px] text-center">
-          <span className="fadeup font-mono text-[10.5px] tracking-[0.24em] text-[rgba(248,246,241,0.5)] uppercase">
-            Taking work now
-          </span>
+        {/*
+          880, not 680. The measure that suits a 15px mono paragraph does not
+          suit 92px display type: at 680 the heading was breaking into four
+          lines of two or three words each. The paragraphs below keep their own
+          `ch` caps, so only the heading actually uses the extra width — which
+          is the right hierarchy anyway, display type breaking the measure that
+          prose obeys.
+        */}
+        <div className="mx-auto max-w-[880px] text-center">
+          {/*
+            The eyebrow here read "Taking work now" — the same three words the
+            status bar has been showing, fixed, sixty pixels above it, on every
+            screen since the hero. A label repeating what is already on screen
+            is not a label. The accent rule opens the section and the heading
+            is 92px; nothing needs announcing.
+          */}
 
           {/*
-            Bigger than every other act heading on purpose. Six sections have
+            Bigger than every other act heading on purpose. Five sections have
             now opened at clamp(28px, 5.4vw, 72px); arriving at the ask in the
             same size says the ask is one more section. DESIGN.md's Wide-Gap
             Rule applies between sections, not only within them.
+
+            The accent is one word, not three. "wastes an afternoon" spanned a
+            line break, so the orange arrived as two fragments on two lines and
+            read as two statements. Every other act heading accents one or two
+            words for the same reason. The full stop moved inside the `em` with
+            it: outside, it was the one paper-coloured glyph in the middle of
+            an orange word, which looks like a stray dot rather than punctuation.
           */}
           <MaskedText
             as="h2"
-            className="font-display mx-auto mt-4 max-w-[14ch] leading-[0.94] font-extrabold tracking-[-0.045em]"
+            className="font-display mx-auto max-w-[19ch] leading-[0.94] font-extrabold tracking-[-0.045em]"
             style={{ fontSize: 'clamp(34px, 6.4vw, 92px)' }}
           >
-            Bring us one thing that <em className="text-molten not-italic">wastes an afternoon</em>.
+            Bring us one thing that wastes an{' '}
+            <em className="text-molten not-italic">afternoon.</em>
           </MaskedText>
 
           {/*
-            One sentence where there were two. The detail this used to carry —
-            what it costs, how long it takes, who owns the result — now has a
-            section of its own two screens up, and repeating it here only
-            delays the ask.
+            One line, and it does not open with "Thirty minutes".
+
+            The duration was here and is also on the button two hundred pixels
+            below, which is the sort of repetition that is invisible while
+            writing and obvious on screen. It belongs on the button: that is
+            where it is a commitment being asked for rather than a fact being
+            mentioned.
+
+            What is left is the only thing this sentence has to do — say what
+            the visitor brings. What we do with it is the next block, and
+            saying it here as well was the second half of the same duplication:
+            "we say whether it can be automated" and "if the honest answer is
+            not worth it, we will say so" are one promise told twice.
           */}
-          <p className="fadeup mx-auto mt-6 max-w-[48ch] text-[15px] leading-[1.72] text-[rgba(248,246,241,0.72)]">
-            Thirty minutes, and one job somebody does by hand every week.
+          <p className="fadeup mx-auto mt-5 max-w-[44ch] text-[15px] leading-[1.72] text-[rgba(248,246,241,0.72)]">
+            You describe one job somebody does by hand every week.
           </p>
 
           {/*
@@ -77,7 +110,7 @@ export function Act08Close() {
             large text at 600 weight.
           */}
           <p
-            className="fadeup font-display mx-auto mt-7 max-w-[24ch] border-y border-[rgba(248,246,241,0.18)] py-5 leading-[1.3] font-semibold tracking-[-0.02em]"
+            className="fadeup font-display mx-auto mt-6 max-w-[24ch] border-y border-[rgba(248,246,241,0.18)] py-5 leading-[1.3] font-semibold tracking-[-0.02em]"
             style={{ fontSize: 'clamp(19px, 2.4vw, 26px)' }}
           >
             And if the honest answer is{' '}
@@ -94,7 +127,7 @@ export function Act08Close() {
             because a visitor mid-scroll has not earned that yet. Warm up
             cheap, close on the call.
           */}
-          <div className="fadeup mt-8">
+          <div className="fadeup mt-7">
             <Magnetic>
               <a
                 href={CALENDLY}
@@ -124,7 +157,7 @@ export function Act08Close() {
             will not put a slot in a calendar is not lost, they are just
             earlier, and the cheap ask is what catches them.
           */}
-          <p className="fadeup mt-6">
+          <p className="fadeup mt-5">
             <a
               href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
               data-cursor="Send"
@@ -142,13 +175,13 @@ export function Act08Close() {
             the code", and until now the page made that claim and then showed
             nobody. A name is the cheapest way to cash it.
           */}
-          <p className="fadeup mt-10 font-mono text-[10.5px] tracking-[0.2em] text-[rgba(248,246,241,0.5)] uppercase">
+          <p className="fadeup mt-7 font-mono text-[10.5px] tracking-[0.2em] text-[rgba(248,246,241,0.5)] uppercase">
             <b className="text-paper font-medium">Mahamad Suhail</b>, who takes the call
           </p>
         </div>
       </div>
 
-      <footer className="wrap mt-[clamp(40px,6vw,80px)]">
+      <footer className="wrap mt-[clamp(32px,4vw,52px)]">
         {/* justify-between with three items and one wrap always widows the
             third onto its own line; centre until there is room for the row */}
         <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 border-t border-[rgba(248,246,241,0.16)] pt-6 text-center font-mono text-[10.5px] tracking-[0.22em] text-[rgba(248,246,241,0.5)] uppercase sm:justify-between sm:gap-4 sm:text-left">
