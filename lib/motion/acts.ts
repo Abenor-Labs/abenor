@@ -44,18 +44,20 @@ const DEFS: ActDef[] = [
     camera: { position: [0, 0.15, 3.2], lookAt: [0, 0, 0], fov: 50 },
   },
   {
-    /* 140vh was sized for five hover-revealed rows of prose. The act is now a
-       three-column table of the same five things and reads in about half the
-       height; leaving the old figure would have stretched the camera move
-       across a screen and a half of empty paper. */
+    /* 140vh was sized for five hover-revealed rows of prose, then 110 for a
+       three-column table. The third column has since gone, so this comes down
+       again. The figure tracks the content: left high, the camera move
+       stretches across a screen of empty paper. */
     id: 'problems',
-    vh: 110,
+    vh: 95,
     label: 'What we build',
     camera: { position: [1.2, 0.5, 9], lookAt: [0, 0, -2], fov: 40 },
   },
   {
+    /* 185 covered a four-row "what changes" list and an itemised timebox that
+       both said what the Act 03 table and the FAQ already say. Both are gone. */
     id: 'automation',
-    vh: 185,
+    vh: 150,
     label: 'Automation',
     camera: { position: [3, 0.8, 11], lookAt: [1.5, 0, -3], fov: 38 },
   },
@@ -67,7 +69,7 @@ const DEFS: ActDef[] = [
   },
   {
     id: 'proof',
-    vh: 120,
+    vh: 110,
     label: 'Receipts',
     camera: { position: [5.2, 0.7, 13.2], lookAt: [4, 0, -4.8], fov: 42 },
   },

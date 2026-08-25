@@ -127,11 +127,19 @@ export function Act06Proof() {
           ))}
         </ul>
 
-        <p className="fadeup text-ink-2 mt-[clamp(20px,3vw,32px)] max-w-[54ch] text-[13px] leading-[1.7]">
-          {/* "Better you hear it from us" used to close this line. The FAQ two
-              screens down now makes the same admission at more length, and the
-              second telling reads as protesting. */}
-          Both were built free, to get started. The words are theirs; the invoices never existed.
+        {/*
+          Cut from three sentences to one, not removed.
+
+          FAQ question six now carries the full admission — whose words, what
+          invoices, why we are telling you. But the first principle here is
+          that caveats ship with the claims they qualify, and these two cards
+          are the claim. Moving the whole thing a screen down would have left
+          a testimonial section that reads clean and a confession filed
+          somewhere a visitor might not open. So the caveat stays where the
+          claim is, at the shortest length that still lands.
+        */}
+        <p className="fadeup text-ink-2 mt-[clamp(20px,3vw,32px)] font-mono text-[10.5px] tracking-[0.18em] uppercase">
+          Both built free, to get started
         </p>
       </div>
     </ActSection>

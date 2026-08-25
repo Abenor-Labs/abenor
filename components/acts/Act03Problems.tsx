@@ -10,45 +10,45 @@ import { MaskedText } from '@/components/ui/MaskedText'
  * finish reading a sentence, which a phone cannot do; and the whole thing ran
  * to about four hundred words to convey five facts.
  *
- * It is now a table. Same five things, roughly half the words, and the
- * deliverable — the part a buyer is actually shopping for — is a column of
- * its own instead of the tail of a sentence.
+ * It is now a table. Same five things, the deliverable in a column of its own
+ * instead of buried in the tail of a sentence.
  *
- * The wording still puts the fault on the tools and the credit on the reader:
- * the spreadsheet held, the tools were never introduced, nobody was given the
- * job. Owners identify with their business personally, so a list of what is
- * broken reads as a list of what they got wrong unless it is written this
- * way. Same diagnosis, no accusation. That constraint should survive edits.
+ * Two columns, not three. A "what you get" column stood here briefly and was
+ * cut: on a five-row table it turned out to be the outcome half of the same
+ * sentence as "what we build", so every row said its one thing twice. If a
+ * row's deliverable does not sell itself, sharpen that cell rather than adding
+ * a column to explain it.
+ *
+ * The wording puts the fault on the tools and the credit on the reader: the
+ * spreadsheet held, the tools were never introduced, nobody was given the job.
+ * Owners identify with their business personally, so a list of what is broken
+ * reads as a list of what they got wrong unless it is written this way. Same
+ * diagnosis, no accusation. That constraint should survive edits.
  */
-const ROWS: { problem: string; build: string; get: string }[] = [
+const ROWS: { problem: string; build: string }[] = [
   {
     problem: 'The same record gets typed into two systems that were never introduced.',
     build: 'A sync between them, with alerting.',
-    get: 'A broken sync tells you before a customer does.',
   },
   {
     problem: 'Your site passed through three people. Nobody owns it.',
-    build: 'Design, build, deploy, DNS.',
-    get: 'One repository, one team, one number at 11pm.',
+    build: 'Design, build, deploy, DNS. One repository.',
   },
   {
     problem: 'You need an app. You do not need a mobile team.',
     build: 'iOS and Android, through store review.',
-    get: 'The release process, written down and handed over.',
   },
   {
     problem: 'It looked right in Figma and fell apart with real content.',
     build: 'The system, not the screenshot: spacing, loading, empty and error states.',
-    get: 'Proven against your data before launch, not after.',
   },
   {
     problem: 'A spreadsheet is holding your company together. It has, so far.',
     build: 'A real tool: database, permissions, audit trail.',
-    get: 'It keeps working after its author leaves.',
   },
 ]
 
-const COLS = ['The problem', 'What we build', 'What you get']
+const COLS = ['The problem', 'What we build']
 
 export function Act03Problems() {
   return (
@@ -74,7 +74,7 @@ export function Act03Problems() {
         */}
         <div
           aria-hidden="true"
-          className="border-rule text-ink-3 hidden grid-cols-[1.25fr_1fr_1fr] gap-x-8 border-b pb-3 font-mono text-[10px] tracking-[0.22em] uppercase md:grid"
+          className="border-rule text-ink-3 hidden grid-cols-[1.15fr_1fr] gap-x-10 border-b pb-3 font-mono text-[10px] tracking-[0.22em] uppercase md:grid"
         >
           {COLS.map((c) => (
             <span key={c}>{c}</span>
@@ -86,7 +86,7 @@ export function Act03Problems() {
             <li
               key={r.problem}
               data-cursor="Read"
-              className="fadeup border-rule group relative grid grid-cols-1 gap-y-3 border-b py-[clamp(20px,2.6vw,32px)] md:grid-cols-[1.25fr_1fr_1fr] md:items-start md:gap-x-8"
+              className="fadeup border-rule group relative grid grid-cols-1 gap-y-3 border-b py-[clamp(20px,2.6vw,32px)] md:grid-cols-[1.15fr_1fr] md:items-start md:gap-x-10"
             >
               {/*
                 The row you are pointing at lifts off the paper. Purpose is
@@ -116,18 +116,11 @@ export function Act03Problems() {
                 {r.problem}
               </h3>
 
-              <p className="text-ink max-w-[40ch] text-[13.5px] leading-[1.6]">
+              <p className="text-ink-2 max-w-[46ch] text-[13.5px] leading-[1.6]">
                 <span className="text-ink-3 mb-1 block font-mono text-[9.5px] tracking-[0.22em] uppercase md:hidden">
                   {COLS[1]}
                 </span>
                 {r.build}
-              </p>
-
-              <p className="text-ink-2 max-w-[40ch] text-[13.5px] leading-[1.6]">
-                <span className="text-ink-3 mb-1 block font-mono text-[9.5px] tracking-[0.22em] uppercase md:hidden">
-                  {COLS[2]}
-                </span>
-                {r.get}
               </p>
             </li>
           ))}

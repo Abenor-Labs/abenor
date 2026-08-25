@@ -32,7 +32,7 @@ const QUESTIONS: [string, string][] = [
   ],
   [
     'How long does a first automation take?',
-    'Eleven working days. Two to scope it, five to build, three to run it against your real data, one to hand it over. Anything larger gets a real estimate before it gets a start date.',
+    'Eleven working days: two to scope it, five to build, three against your real data, one to hand over. The scope is written before any code, and it says what we are not building as well as what we are.',
   ],
   [
     'What does it cost?',

@@ -4,13 +4,6 @@ import { PhonePanel } from '@/components/ui/PhonePanel'
 import { MaskedText } from '@/components/ui/MaskedText'
 import { Counter } from '@/components/ui/Counter'
 
-const CHANGES: [string, string][] = [
-  ['Lead lands in a form', 'and never gets typed into the CRM again'],
-  ['Invoice is paid', 'and the ops sheet, the CRM and the channel all know'],
-  ['A sync fails at 3am', 'and you are told before the customer notices'],
-  ['Someone leaves', 'and the process survives them, because it was never in their head'],
-]
-
 /**
  * Act 04 — Automation.
  *
@@ -18,6 +11,13 @@ const CHANGES: [string, string][] = [
  * The graph shows what gets built; the phone shows what it looks like once it
  * is running — which doubles as the only place on the page that demonstrates
  * the mobile work rather than claiming it.
+ *
+ * A four-row "what changes" list used to sit under the price block: lead lands
+ * in a form, invoice is paid, sync fails at 3am, someone leaves. Every one of
+ * them was a restatement of a row in the Act 03 table one screen above, in
+ * softer words, and the flow graph below already draws the first of them. The
+ * eleven-day breakdown went with it — the FAQ answers "how long does a first
+ * automation take" in the same numbers, and this page said it three times.
  */
 export function Act04Automation() {
   return (
@@ -89,33 +89,10 @@ export function Act04Automation() {
               <dd className="font-display text-ink text-[clamp(15px,1.9vw,21px)] leading-[1.3] font-semibold tracking-[-0.02em]">
                 One workflow · two weeks · fixed fee
               </dd>
-              {/*
-                The timebox, itemised. "Two weeks" is a promise; eleven days
-                split four ways is a plan, and a buyer can tell the difference
-                — the second one can be checked against, which is exactly why
-                it is worth publishing and the round number is not.
-              */}
-              <dd className="border-rule text-ink-2 w-full border-t pt-3 font-mono text-[10.5px] leading-[2] tracking-[0.16em] uppercase">
-                <b className="text-ink font-medium">2</b> scope ·{' '}
-                <b className="text-ink font-medium">5</b> build ·{' '}
-                <b className="text-ink font-medium">3</b> test on your data ·{' '}
-                <b className="text-ink font-medium">1</b> handover
-              </dd>
               <dd className="text-ink-2 w-full text-[13px] leading-[1.6]">
                 Quoted in the reply. Asking costs nothing.
               </dd>
             </dl>
-
-            <ul className="fadeup border-rule mt-8 border-t">
-              {CHANGES.map(([a, b]) => (
-                <li key={a} className="border-rule border-b py-[clamp(14px,2vw,20px)]">
-                  <span className="font-display block text-[clamp(15px,1.8vw,20px)] leading-[1.2] font-semibold tracking-[-0.02em]">
-                    {a}
-                  </span>
-                  <span className="text-ink-2 mt-1 block text-[13px] leading-[1.6]">{b}</span>
-                </li>
-              ))}
-            </ul>
           </div>
 
           <div className="flex flex-col items-center gap-4 lg:items-start">

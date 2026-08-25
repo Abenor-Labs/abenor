@@ -5,44 +5,27 @@ import { gsap, ScrollTrigger } from '@/lib/scroll/gsap'
 import { prefersReducedMotion } from '@/lib/scroll/progress'
 
 /**
- * The four steps, each carrying what it costs in time.
+ * The four steps: a name, and what it costs in time.
  *
- * The `when` column is the change that matters. "Weekly working software" is
- * an adjective; "8 days" is a claim a buyer can hold us to, and the four of
- * them add to the same eleven working days quoted in Act 04 and in the FAQ.
- * If any of those three numbers is edited, all three have to move together —
- * a page that quotes two different timelines is worse than one that quotes
+ * Each step used to carry a sentence of description that opened as the step
+ * became active. They are gone, and the frame beside them is the reason: it
+ * already draws the conversation, the scope document, the working build and
+ * the handover, so the prose was captioning a picture the visitor is looking
+ * at. Where a fact in one of those sentences was load-bearing rather than
+ * descriptive — the scope is written, and it lands before any code — it moved
+ * into the FAQ, which is now the one place on the page that holds facts.
+ *
+ * The `when` column is what replaced them. "Weekly working software" is an
+ * adjective; "8 days" is a claim a buyer can hold us to, and the four add to
+ * the same eleven working days the FAQ quotes. If either is edited, both have
+ * to move: a page quoting two different timelines is worse than one quoting
  * none.
  */
 const STEPS = [
-  {
-    k: '01',
-    t: 'A call',
-    when: '30 min',
-    d: 'You describe what is broken. We say if we can help, or who can.',
-    label: 'Before we start',
-  },
-  {
-    k: '02',
-    t: 'A written scope',
-    when: '2 days',
-    d: 'What we build, what we do not, and a number. Before any code.',
-    label: 'Scope document',
-  },
-  {
-    k: '03',
-    t: 'Working software',
-    when: '8 days',
-    d: 'Five building, three against your real data. Something you can open and click, every week.',
-    label: 'Week 2 build',
-  },
-  {
-    k: '04',
-    t: 'Keys handed over',
-    when: '1 day',
-    d: 'Repository, hosting and credentials in your accounts. Documented for whoever comes after us.',
-    label: 'Shipped',
-  },
+  { k: '01', t: 'A call', when: '30 min', label: 'Before we start' },
+  { k: '02', t: 'A written scope', when: '2 days', label: 'Scope document' },
+  { k: '03', t: 'Working software', when: '8 days', label: 'Week 2 build' },
+  { k: '04', t: 'Keys handed over', when: '1 day', label: 'Shipped' },
 ]
 
 export function BuildMorph() {
@@ -302,16 +285,6 @@ export function BuildMorph() {
                   <h3 className="font-display mt-1 text-[clamp(18px,2.2vw,27px)] leading-[1.1] font-semibold tracking-[-0.02em]">
                     {s.t}
                   </h3>
-                  <p
-                    className="text-ink-2 overflow-hidden text-[13px] leading-[1.6] transition-[max-height,opacity,margin-top] duration-[var(--dur-panel)] ease-[var(--ease-out-expo)]"
-                    style={{
-                      maxHeight: on ? '9rem' : '0rem',
-                      opacity: on ? 1 : 0,
-                      marginTop: on ? '0.5rem' : '0rem',
-                    }}
-                  >
-                    {s.d}
-                  </p>
                 </div>
               </li>
             )
