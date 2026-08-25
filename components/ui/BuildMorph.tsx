@@ -4,28 +4,42 @@ import { useEffect, useRef, useState } from 'react'
 import { gsap, ScrollTrigger } from '@/lib/scroll/gsap'
 import { prefersReducedMotion } from '@/lib/scroll/progress'
 
+/**
+ * The four steps, each carrying what it costs in time.
+ *
+ * The `when` column is the change that matters. "Weekly working software" is
+ * an adjective; "8 days" is a claim a buyer can hold us to, and the four of
+ * them add to the same eleven working days quoted in Act 04 and in the FAQ.
+ * If any of those three numbers is edited, all three have to move together —
+ * a page that quotes two different timelines is worse than one that quotes
+ * none.
+ */
 const STEPS = [
   {
     k: '01',
     t: 'A call',
-    d: 'Thirty minutes. You describe what is broken. We say if we can help, or who can.',
+    when: '30 min',
+    d: 'You describe what is broken. We say if we can help, or who can.',
     label: 'Before we start',
   },
   {
     k: '02',
     t: 'A written scope',
-    d: 'What we build, what we do not, and a number. Before any code. Most first projects run two to six weeks.',
+    when: '2 days',
+    d: 'What we build, what we do not, and a number. Before any code.',
     label: 'Scope document',
   },
   {
     k: '03',
-    t: 'Weekly working software',
-    d: 'Not status updates. Something you can open and click, every week.',
+    t: 'Working software',
+    when: '8 days',
+    d: 'Five building, three against your real data. Something you can open and click, every week.',
     label: 'Week 2 build',
   },
   {
     k: '04',
     t: 'Keys handed over',
+    when: '1 day',
     d: 'Repository, hosting and credentials in your accounts. Documented for whoever comes after us.',
     label: 'Shipped',
   },
@@ -232,13 +246,18 @@ export function BuildMorph() {
             className="absolute top-0 bottom-0 left-0 w-px"
             style={{ background: 'var(--color-rule)' }}
           />
-          {/* progress fill */}
+          {/*
+            Progress fill. Scaled, not grown: animating `height` re-runs
+            layout and paint on every frame of a 700ms tween that fires on
+            every step change, and this rule is full-height already, so a
+            transform does the identical thing on the compositor.
+          */}
           <span
             aria-hidden="true"
-            className="absolute top-0 left-0 w-px transition-all duration-700"
+            className="absolute top-0 bottom-0 left-0 w-px origin-top transition-transform duration-500 ease-[var(--ease-out-expo)]"
             style={{
               background: 'var(--color-molten)',
-              height: `${((step + 1) / STEPS.length) * 100}%`,
+              transform: `scaleY(${(step + 1) / STEPS.length})`,
             }}
           />
           {STEPS.map((s, i) => {
@@ -248,31 +267,43 @@ export function BuildMorph() {
               <li
                 key={s.k}
                 aria-current={on ? 'step' : undefined}
-                className="relative pl-6 transition-opacity duration-500"
+                className="relative pl-6 transition-opacity duration-300"
                 style={{ opacity: on ? 1 : done ? 0.5 : 0.25 }}
               >
                 {/* tick mark */}
                 <span
                   aria-hidden="true"
-                  className="absolute top-[0.85em] left-[-3px] h-[7px] w-[7px] rounded-full border-2 transition-all duration-500"
+                  className="absolute top-[0.85em] left-[-3px] h-[7px] w-[7px] rounded-full border-2 transition-[background-color,border-color] duration-300"
                   style={{
                     borderColor: on || done ? 'var(--color-molten)' : 'var(--color-rule)',
-                    background: done ? 'var(--color-molten)' : on ? 'var(--color-paper)' : 'var(--color-paper)',
+                    background: done ? 'var(--color-molten)' : 'var(--color-paper)',
                   }}
                 />
                 <div className="py-[clamp(12px,1.8vh,20px)]">
-                  <span
-                    className={`font-mono text-[10px] tracking-[0.24em] uppercase transition-colors duration-500 ${
-                      on ? 'text-molten-deep' : 'text-ink-3'
-                    }`}
-                  >
-                    {s.k}
+                  <span className="flex items-baseline gap-3">
+                    <span
+                      className={`font-mono text-[10px] tracking-[0.24em] uppercase transition-colors duration-300 ${
+                        on ? 'text-molten-deep' : 'text-ink-3'
+                      }`}
+                    >
+                      {s.k}
+                    </span>
+                    {/*
+                      The duration sits on the step, always visible, not
+                      inside the panel that only the active step opens. It is
+                      the one fact here a visitor might be scanning for, and
+                      burying it behind the current scroll position would mean
+                      three of the four are unreadable at any moment.
+                    */}
+                    <span className="text-ink-3 font-mono text-[10px] tracking-[0.18em] uppercase tabular-nums">
+                      {s.when}
+                    </span>
                   </span>
                   <h3 className="font-display mt-1 text-[clamp(18px,2.2vw,27px)] leading-[1.1] font-semibold tracking-[-0.02em]">
                     {s.t}
                   </h3>
                   <p
-                    className="text-ink-2 overflow-hidden text-[13px] leading-[1.6] transition-all duration-500"
+                    className="text-ink-2 overflow-hidden text-[13px] leading-[1.6] transition-[max-height,opacity,margin-top] duration-[var(--dur-panel)] ease-[var(--ease-out-expo)]"
                     style={{
                       maxHeight: on ? '9rem' : '0rem',
                       opacity: on ? 1 : 0,

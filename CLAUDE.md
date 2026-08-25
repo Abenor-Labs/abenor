@@ -2,7 +2,7 @@
 
 Marketing site for a software studio. Next.js 15 App Router, React 19, Tailwind
 v4, GSAP + Lenis for scroll, react-three-fiber for the hero. One scroll-driven
-page, seven acts, one continuous camera.
+page, eight acts, one continuous camera.
 
 ## Design Context
 

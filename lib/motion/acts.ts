@@ -18,6 +18,7 @@ export type ActId =
   | 'automation'
   | 'build'
   | 'proof'
+  | 'faq'
   | 'close'
 
 interface ActDef {
@@ -43,9 +44,13 @@ const DEFS: ActDef[] = [
     camera: { position: [0, 0.15, 3.2], lookAt: [0, 0, 0], fov: 50 },
   },
   {
+    /* 140vh was sized for five hover-revealed rows of prose. The act is now a
+       three-column table of the same five things and reads in about half the
+       height; leaving the old figure would have stretched the camera move
+       across a screen and a half of empty paper. */
     id: 'problems',
-    vh: 140,
-    label: 'Problems',
+    vh: 110,
+    label: 'What we build',
     camera: { position: [1.2, 0.5, 9], lookAt: [0, 0, -2], fov: 40 },
   },
   {
@@ -57,7 +62,7 @@ const DEFS: ActDef[] = [
   {
     id: 'build',
     vh: 165,
-    label: 'How it works',
+    label: 'Process',
     camera: { position: [4.5, 0.4, 12.5], lookAt: [3, 0, -4], fov: 40 },
   },
   {
@@ -65,6 +70,16 @@ const DEFS: ActDef[] = [
     vh: 120,
     label: 'Receipts',
     camera: { position: [5.2, 0.7, 13.2], lookAt: [4, 0, -4.8], fov: 42 },
+  },
+  {
+    /* Sits after the receipts and before the ask on purpose. By here the
+       visitor has stopped being sold to and started doing diligence, and
+       diligence wants a list, not another paragraph. Height assumes every
+       panel closed, which is how the section is first seen. */
+    id: 'faq',
+    vh: 105,
+    label: 'Questions',
+    camera: { position: [5.6, 0.85, 13.6], lookAt: [4.6, 0, -5.1], fov: 43 },
   },
   {
     id: 'close',

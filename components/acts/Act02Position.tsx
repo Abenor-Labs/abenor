@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { gsap, ScrollTrigger, SplitText } from '@/lib/scroll/gsap'
-import { prefersReducedMotion } from '@/lib/scroll/progress'
+import { gsap, SplitText } from '@/lib/scroll/gsap'
 import { ActSection } from '@/components/ui/ActSection'
 
 const LINE = 'The person who answers you is the person writing the code.'
@@ -22,36 +21,50 @@ export function Act02Position() {
     const el = root.current
     if (!el) return
 
-    if (prefersReducedMotion()) {
-      el.style.color = 'var(--color-ink)'
-      return
-    }
+    /*
+      gsap.matchMedia rather than a one-off check of the media query.
 
-    const split = new SplitText(el, { type: 'words', wordsClass: 'w' })
-    const words = split.words as HTMLElement[]
+      The old `if (prefersReducedMotion())` read the setting once, at mount,
+      and never looked again — a visitor who turns the OS setting on mid-visit
+      kept the scrubbed reveal, and one who turns it off never got it. This
+      also gives GSAP a scope to revert, so switching preference tears the
+      split back down instead of leaving orphaned word spans in the DOM.
+    */
+    const mm = gsap.matchMedia()
 
-    gsap.set(words, { color: 'var(--color-rule-2)' })
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const split = new SplitText(el, { type: 'words', wordsClass: 'w' })
+      const words = split.words as HTMLElement[]
 
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 78%',
-        end: 'bottom 62%',
-        scrub: 0.6,
-      },
+      gsap.set(words, { color: 'var(--color-rule-2)' })
+
+      const tl = gsap.timeline({
+        scrollTrigger: { trigger: el, start: 'top 78%', end: 'bottom 62%', scrub: 0.6 },
+      })
+
+      tl.to(words, {
+        color: (i: number) =>
+          ACCENT.test(words[i].textContent ?? '') ? 'var(--color-molten)' : 'var(--color-ink)',
+        stagger: 1,
+        ease: 'none',
+      })
+
+      return () => split.revert()
     })
 
-    tl.to(words, {
-      color: (i: number) =>
-        ACCENT.test(words[i].textContent ?? '') ? 'var(--color-molten)' : 'var(--color-ink)',
-      stagger: 1,
-      ease: 'none',
+    /* Reduced motion is not "no reveal", it is "the sentence is simply
+       there". Colour alone would have been Tier 3 and safe to keep, but the
+       scrub is driven by scroll position, and scroll-linked motion is the
+       thing the setting is actually about. */
+    mm.add('(prefers-reduced-motion: reduce)', () => {
+      el.style.color = 'var(--color-ink)'
+      return () => {
+        el.style.color = ''
+      }
     })
 
     return () => {
-      tl.scrollTrigger?.kill()
-      tl.kill()
-      split.revert()
+      mm.revert()
     }
   }, [])
 

@@ -45,9 +45,25 @@
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
-  /* motion */
+  /* motion
+
+     Curves first. `ease-out-expo` is the entrance/exit curve for everything;
+     `ease-in-out-quart` is for something already on screen that moves. There
+     is deliberately no ease-in token: it starts slow, which delays the exact
+     frame the visitor is looking at, and `ease-out` at 200ms reads faster
+     than `ease-in` at 200ms.
+
+     Then durations, as a scale rather than as numbers typed at each call
+     site. The ceiling for anything a pointer triggers is 300ms — past that a
+     hover stops reading as response and starts reading as lag. Scrubbed
+     scroll work is exempt: the visitor sets its pace, not us. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --dur-press: 140ms; /* pointer-down feedback */
+  --dur-ui: 220ms; /* hover, colour, small state changes */
+  --dur-panel: 320ms; /* accordions, disclosure, anything with height */
+  --dur-surface: 450ms; /* the paper/ink chrome handover */
 
   /* layout */
   --spacing-gut: clamp(18px, 4vw, 64px);

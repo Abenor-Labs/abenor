@@ -1,107 +1,136 @@
-'use client'
-
-import { useState } from 'react'
 import { ActSection } from '@/components/ui/ActSection'
+import { MaskedText } from '@/components/ui/MaskedText'
 
 /**
- * The wording here is doing something specific and it should survive edits.
+ * Act 03 — What we build.
  *
- * Owners identify with their business personally, so a list of what is broken
- * reads as a list of what they got wrong, and the reflex is to defend rather
- * than enquire. Every line is therefore written to put the fault on the tools
- * and the credit on the reader: the spreadsheet held, the tools never talked,
- * nobody was given the job. Same diagnosis, no accusation.
+ * This used to be five problems, each with a paragraph of answer that only
+ * settled into place on hover. Three things were wrong with it. The answers
+ * were prose where the reader wanted a spec; the hover was the only way to
+ * finish reading a sentence, which a phone cannot do; and the whole thing ran
+ * to about four hundred words to convey five facts.
+ *
+ * It is now a table. Same five things, roughly half the words, and the
+ * deliverable — the part a buyer is actually shopping for — is a column of
+ * its own instead of the tail of a sentence.
+ *
+ * The wording still puts the fault on the tools and the credit on the reader:
+ * the spreadsheet held, the tools were never introduced, nobody was given the
+ * job. Owners identify with their business personally, so a list of what is
+ * broken reads as a list of what they got wrong unless it is written this
+ * way. Same diagnosis, no accusation. That constraint should survive edits.
  */
-const PROBLEMS = [
+const ROWS: { problem: string; build: string; get: string }[] = [
   {
     problem: 'The same record gets typed into two systems that were never introduced.',
-    answer: 'We wire them together, with alerting. A broken sync tells you before a customer does.',
+    build: 'A sync between them, with alerting.',
+    get: 'A broken sync tells you before a customer does.',
   },
   {
     problem: 'Your site passed through three people. Nobody owns it.',
-    answer:
-      'We take all of it: design, build, deploy, DNS. One repository, one team, one number at 11pm.',
+    build: 'Design, build, deploy, DNS.',
+    get: 'One repository, one team, one number at 11pm.',
   },
   {
     problem: 'You need an app. You do not need a mobile team.',
-    answer:
-      'iOS and Android, through store review, handed over with the release process written down.',
+    build: 'iOS and Android, through store review.',
+    get: 'The release process, written down and handed over.',
   },
   {
     problem: 'It looked right in Figma and fell apart with real content.',
-    answer:
-      'We design the system, not the screenshot: spacing, loading, empty and error states, proven against your real data.',
+    build: 'The system, not the screenshot: spacing, loading, empty and error states.',
+    get: 'Proven against your data before launch, not after.',
   },
   {
     problem: 'A spreadsheet is holding your company together. It has, so far.',
-    answer:
-      'We replace it with a real tool: database, permissions, audit trail. It keeps working after its author leaves.',
+    build: 'A real tool: database, permissions, audit trail.',
+    get: 'It keeps working after its author leaves.',
   },
 ]
 
-export function Act03Problems() {
-  const [active, setActive] = useState<number | null>(null)
+const COLS = ['The problem', 'What we build', 'What you get']
 
+export function Act03Problems() {
   return (
     <ActSection id="problems" align="center">
       <div className="wrap">
         <div className="fadeup border-rule mb-[clamp(26px,4vw,50px)] flex flex-wrap items-baseline gap-4 border-b pb-4">
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
-            [ <b className="text-molten-deep font-medium">01</b> ] Sound familiar
+            [ <b className="text-molten-deep font-medium">01</b> ] Five of these
           </span>
-          <h2
+          <MaskedText
+            as="h2"
             className="font-display leading-[0.95] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
-            Five problems we <em className="text-molten not-italic">fix</em>
-          </h2>
+            Problems we <em className="text-molten not-italic">fix</em>
+          </MaskedText>
+        </div>
+
+        {/*
+          Column headings exist only where there are columns. Below md the
+          rows stack and each cell carries its own label instead — a header
+          row three screens above the cell it describes is not a header.
+        */}
+        <div
+          aria-hidden="true"
+          className="border-rule text-ink-3 hidden grid-cols-[1.25fr_1fr_1fr] gap-x-8 border-b pb-3 font-mono text-[10px] tracking-[0.22em] uppercase md:grid"
+        >
+          {COLS.map((c) => (
+            <span key={c}>{c}</span>
+          ))}
         </div>
 
         <ul>
-          {PROBLEMS.map((p, i) => {
-            const on = active === i
-            return (
-              <li
-                key={i}
-                data-cursor="Read"
-                onPointerEnter={() => setActive(i)}
-                onPointerLeave={() => setActive((cur) => (cur === i ? null : cur))}
-                className="fadeup border-rule group relative grid grid-cols-[1fr] items-start gap-y-2 border-b py-[clamp(22px,3vw,40px)] md:grid-cols-[1.15fr_1fr] md:items-center md:gap-x-8"
+          {ROWS.map((r) => (
+            <li
+              key={r.problem}
+              data-cursor="Read"
+              className="fadeup border-rule group relative grid grid-cols-1 gap-y-3 border-b py-[clamp(20px,2.6vw,32px)] md:grid-cols-[1.25fr_1fr_1fr] md:items-start md:gap-x-8"
+            >
+              {/*
+                The row you are pointing at lifts off the paper. Purpose is
+                state indication on a five-row table where the cells line up
+                horizontally and the eye loses the row — not decoration.
+
+                220ms rather than the 500ms this had before: a pointer moving
+                down a list crosses rows faster than that, and a wash still
+                arriving after the pointer has left reads as lag.
+
+                No hover gate written here on purpose. Tailwind v4 already
+                emits `hover:` variants inside `@media (hover: hover)`, so a
+                tap on a touch screen never fires this — and an arbitrary
+                variant spelling the query out by hand does not survive the
+                CSS minifier, which drops the `and (pointer: fine)` half and
+                leaves a query that only looks stricter.
+              */}
+              <span
+                aria-hidden="true"
+                className="bg-paper-2 pointer-events-none absolute inset-x-[calc(var(--gut)*-1)] inset-y-0 -z-10 origin-bottom scale-y-0 transition-transform duration-[var(--dur-ui)] ease-[var(--ease-out-expo)] group-hover:origin-top group-hover:scale-y-100"
+              />
+
+              <h3
+                className="font-display leading-[1.15] font-semibold tracking-[-0.025em]"
+                style={{ fontSize: 'clamp(17px, 2.1vw, 26px)' }}
               >
-                {/* wash */}
-                <span
-                  aria-hidden="true"
-                  className="bg-paper-2 absolute inset-x-[calc(var(--gut)*-1)] inset-y-0 -z-10 origin-bottom scale-y-0 transition-transform duration-500 group-hover:origin-top group-hover:scale-y-100"
-                  style={{ transitionTimingFunction: 'cubic-bezier(0.16,1,0.3,1)' }}
-                />
+                {r.problem}
+              </h3>
 
-                <h3
-                  data-t={p.problem}
-                  className="split-h font-display leading-[1.08] font-semibold tracking-[-0.03em] transition-transform duration-500 group-hover:translate-x-2"
-                  style={{ fontSize: 'clamp(19px, 2.6vw, 34px)' }}
-                >
-                  {p.problem}
-                </h3>
+              <p className="text-ink max-w-[40ch] text-[13.5px] leading-[1.6]">
+                <span className="text-ink-3 mb-1 block font-mono text-[9.5px] tracking-[0.22em] uppercase md:hidden">
+                  {COLS[1]}
+                </span>
+                {r.build}
+              </p>
 
-                {/*
-                  The answers used to rest at opacity 0.4 and only come up on
-                  pointerenter. Two problems with that: touch devices never
-                  fire it, so half the copy on this page was permanently
-                  invisible on a phone; and 0.4 of ink-2 on paper is 1.5:1,
-                  which is not "de-emphasised", it is unreadable everywhere.
-
-                  The reveal is now motion, not contrast — the text is always
-                  legible, and hover only settles it into place.
-                */}
-                <p
-                  className="text-ink-2 max-w-[46ch] text-[13px] leading-[1.62] transition-transform duration-500"
-                  style={{ transform: on ? 'translateY(0)' : 'translateY(4px)' }}
-                >
-                  {p.answer}
-                </p>
-              </li>
-            )
-          })}
+              <p className="text-ink-2 max-w-[40ch] text-[13.5px] leading-[1.6]">
+                <span className="text-ink-3 mb-1 block font-mono text-[9.5px] tracking-[0.22em] uppercase md:hidden">
+                  {COLS[2]}
+                </span>
+                {r.get}
+              </p>
+            </li>
+          ))}
         </ul>
       </div>
     </ActSection>

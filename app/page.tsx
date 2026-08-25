@@ -8,7 +8,8 @@ import { Act03Problems } from '@/components/acts/Act03Problems'
 import { Act04Automation } from '@/components/acts/Act04Automation'
 import { Act05Build } from '@/components/acts/Act05Build'
 import { Act06Proof } from '@/components/acts/Act06Proof'
-import { Act07Close } from '@/components/acts/Act07Close'
+import { Act07FAQ } from '@/components/acts/Act07FAQ'
+import { Act08Close } from '@/components/acts/Act08Close'
 import { InlineCTA } from '@/components/ui/InlineCTA'
 import { ProofStrip } from '@/components/ui/ProofStrip'
 
@@ -37,7 +38,15 @@ export default function HomePage() {
           proved, and Act06 now hands straight to the real close.
         */}
         <Act06Proof />
-        <Act07Close />
+        {/*
+          Questions land between the receipts and the ask. By the time someone
+          has read the evidence they have stopped being sold to and started
+          doing diligence, and diligence is the moment to answer what it
+          costs, who owns the code and how many clients there have actually
+          been — before the ask, not in a footer after it.
+        */}
+        <Act07FAQ />
+        <Act08Close />
       </main>
     </>
   )

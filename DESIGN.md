@@ -160,10 +160,12 @@ A worked-metal palette: one warm neutral ground, one near-black, one heat.
 
 ### Secondary
 
-- **Quench Blue** (#2B4FD0): used once, as the cold half of the chromatic-split
-  hover on headings, against Molten Pour. It exists to make the split read as an
-  ink misregistration rather than as an RGB screen glitch. It has no other job.
-  Do not promote it to a second brand color.
+- **Quench Blue** (#2B4FD0): currently unused in the interface. Its one job was
+  the cold half of the chromatic-split hover on the Act 03 headings, which has
+  been removed — decoration on type the visitor is reading, which is what the
+  motion gate exists to catch. It survives in the 3D palette and in the "Live."
+  panel's second radial. Do not give it a new job on the page: a colour looking
+  for one is how a second brand accent gets in.
 
 ### Neutral
 
@@ -311,9 +313,16 @@ like it was made out of stock, not out of CSS.
   0.18em, uppercase, padding 20px 40px, plus the tinted CTA glow. The label is
   the literal email address, not a verb phrase, because naming the destination is
   cheaper for the reader than promising an outcome.
-- **Hover / Focus:** the internal gap between label and arrow widens from 12px to
-  20px over 300ms. The button does not lift, tint, or scale. Movement inside the
-  shape, not of the shape.
+- **Hover / Focus:** the arrow glyph slides 6px right over 220ms on
+  `ease-out-expo` (`.nudge` on the button, `.arrow` on the glyph). The button
+  does not lift, tint, or scale. Movement inside the shape, not of the shape.
+  This used to widen the flex `gap` instead, which re-ran layout and paint on
+  every frame of the tween; the effect is identical and the transform is free.
+- **Press:** `scale(0.975)` over 140ms on `:active` (`.press`). The one moment
+  where any perceptible delay reads as breakage rather than as motion. Note
+  that `.press` owns `transition-property` for the element, so it must not be
+  combined with `.chrome-t`, which needs the same longhands for the surface
+  handover.
 - **Ghost:** 1px Cast Ink border, transparent fill, ink label. On hover it
   inverts completely to a Cast Ink fill with a paper label over 300ms. Used for
   the persistent nav CTA and the secondary inline CTA.
@@ -338,14 +347,37 @@ testimonial panels and the illustrative mockup frames.
 
 The primary content pattern on this site, and the reason it needs so few cards.
 
-- **Structure:** a 1px Scribe Rule bottom border, `clamp(22px, 3vw, 40px)`
-  vertical padding, and a two-column grid above 768px that collapses to one
-  column below it.
-- **Hover:** a Cooled Steel Shade wash scales in from the bottom edge over 500ms
-  on `ease-out-expo`, bleeding into the gutters via a negative inset so the
-  highlight reaches the full width of the viewport. The title shifts 8px right.
+- **Structure:** a 1px Scribe Rule bottom border, `clamp(20px, 2.6vw, 32px)`
+  vertical padding, and a grid above 768px that collapses to one column below
+  it. Act 03 runs three columns (problem, what we build, what you get) with a
+  mono column header above the first row; below 768px each cell carries its own
+  label, because a header three screens above the cell it describes is not a
+  header.
+- **Hover:** a Cooled Steel Shade wash scales in from the bottom edge over
+  `--dur-ui` (220ms) on `ease-out-expo`, bleeding into the gutters via a
+  negative inset so the highlight reaches the full width of the viewport.
+  Nothing else moves. 500ms was the old figure and a pointer running down a
+  five-row list outran it, so the wash kept arriving after the pointer had
+  gone.
 - **Prohibited:** revealing copy on hover. Text that only exists on pointerenter
   is invisible on touch and was already removed once from this codebase.
+
+### Disclosure (FAQ)
+
+The only component on the site whose content is hidden by default, which makes
+it the only one where sloppy semantics remove information rather than merely
+annoying.
+
+- **Trigger:** a real `<button>` with `aria-expanded` and `aria-controls`,
+  full-width, `clamp(16px, 2.2vw, 24px)` vertical padding.
+- **Mark:** a plus that rotates one of its two bars 90 degrees into a minus over
+  `--dur-ui`. One mark changing state, not two glyphs swapped.
+- **Panel:** `grid-template-rows: 0fr → 1fr` over `--dur-panel` (320ms) on
+  `ease-out-expo`. The grid trick rather than a measured pixel height, so
+  nothing is read back from the DOM and the answer can rewrap freely. This is
+  the one sanctioned place to animate layout: one small panel, one direction,
+  no transform equivalent.
+- **Behaviour:** single-open, keyed by id rather than index.
 
 ### Navigation
 
@@ -399,7 +431,79 @@ element it replaces rather than re-deriving them. Dot pitch is held constant in
 CSS pixels (2.6px on narrow marks, 3.4px on wide ones) so it never clogs into a
 solid slab on a phone or thin out into a ghost.
 
-## 6. Do's and Don'ts
+## 6. Motion
+
+Every effect carries an argument. That principle needs a mechanism, and this is
+it: a scale to pick values from, a gate to pass before writing any, and a tiering
+rule for visitors who have asked for less.
+
+### The scale
+
+Durations are tokens in `styles/tokens.css`, not numbers typed at the call site.
+
+| Token | Value | Used for |
+| --- | --- | --- |
+| `--dur-press` | 140ms | pointer-down feedback |
+| `--dur-ui` | 220ms | hover, colour, small state changes |
+| `--dur-panel` | 320ms | disclosure, anything with height |
+| `--dur-surface` | 450ms | the paper/ink chrome handover |
+
+Two curves, and deliberately no third. `--ease-out-expo` for anything entering
+or leaving; `--ease-in-out-quart` for something already on screen that moves.
+There is no `ease-in` token: it starts slow, which delays the exact frame the
+visitor is watching, so `ease-out` at 220ms reads faster than `ease-in` at
+220ms.
+
+**Nothing a pointer triggers may exceed 300ms.** Past that a hover stops reading
+as response and starts reading as lag. Scrubbed scroll work is exempt — the
+visitor sets its pace, not us.
+
+### The gate
+
+Four questions, in order, before any new motion is written. If a candidate fails
+one, it does not get built.
+
+1. **Frequency.** Seen a hundred times a day, it should never animate. Seen
+   occasionally, standard animation. Rare or first-time, that is where a longer
+   beat is allowed to live.
+2. **Purpose.** Name it in one word: feedback, spatial consistency, state
+   indication, preventing a jarring change, or explanation. "It looks good" is
+   not on the list. The 200-hours counter passes on *explanation* — the argument
+   of the sentence is that the number is bigger than it feels.
+3. **Speed.** It has to work inside the scale above.
+4. **Function.** Data the visitor is reading does not move for style.
+
+### Never ship
+
+`transition: all`. Animating `width`, `height`, `margin`, `top`, `left` or flex
+`gap` — the arrow nudge and the Act 05 progress rule were both fixed for this.
+`scale(0)` as an entrance. `ease-in` on interface motion. A `will-change`
+declared in static CSS: GSAP sets it on tween start and clears it on complete,
+because the hint costs a compositor layer for as long as it is present and is
+worth paying for only while something is actually moving.
+
+### Reduced motion is tiered, not off
+
+The old rule flattened every duration on the page to 0.001ms, which is an
+over-correction twice over: it removed the transitions that exist to stop things
+teleporting, and it removed colour and opacity fades, which imply no self-motion
+and were never the problem.
+
+- **Tier 1, removed:** the camera timeline, parallax, the particle wordmark,
+  Lenis (never instantiated), every keyframed loop.
+- **Tier 2, softened:** reveals and nudges lose their travel and arrive as a
+  short fade. Global cap of 150ms.
+- **Tier 3, kept:** opacity, colour, focus rings. The chrome handover included —
+  cutting it would invert the whole fixed chrome between one frame and the next,
+  which is precisely the jarring change the setting exists to prevent.
+
+Durations use 0.01ms rather than 0s: a zero-length animation fires no
+`animationend`, and anything waiting on that event hangs forever. JS-driven
+motion is gated with `gsap.matchMedia()` rather than a one-off query read, so
+toggling the OS setting mid-visit takes effect and GSAP reverts the setup
+instead of leaving orphaned nodes in the DOM.
+
+## 7. Do's and Don'ts
 
 ### Do:
 
@@ -421,8 +525,8 @@ solid slab on a phone or thin out into a ghost.
   retained, reveals resolved to rest state.
 - **Do** swap the accent when a surface inverts: Forged Deep on paper, Molten
   Pour on ink. Re-measure, never re-use.
-- **Do** make the close the biggest heading on the page after the wordmark. Six
-  acts open at the same size; arriving at the ask in that size says the ask is
+- **Do** make the close the biggest heading on the page after the wordmark. Five
+  act headings open at the same size; arriving at the ask in that size says the ask is
   one more section.
 
 ### Don't:
@@ -440,8 +544,12 @@ solid slab on a phone or thin out into a ghost.
 - **Don't** add a second shadowed element to a viewport that already has one.
 - **Don't** introduce a new grey by eye. Every neutral here has a measured ratio.
 - **Don't** reveal copy on hover. It is invisible on touch.
-- **Don't** promote Quench Blue (#2B4FD0) beyond its single job in the heading
-  hover split.
+- **Don't** reintroduce Quench Blue (#2B4FD0) into the interface. Its single job
+  was the chromatic split on the Act 03 headings, and that effect is gone — it
+  was decoration on type the visitor was trying to read, which is the one place
+  the motion gate rejects outright. The token stays in the palette for the 3D
+  layer; on the page it now has no job, and a colour looking for one is how a
+  second accent gets in.
 - **Don't** write em dashes in interface copy. Commas, colons, semicolons,
   periods, parentheses.
 - **Don't** let a mono uppercase label wrap. Cut the content at that breakpoint

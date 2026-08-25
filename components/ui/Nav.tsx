@@ -83,11 +83,13 @@ export function Nav() {
           </a>
 
           {/*
-            lg, not md: the act list gained "Receipts" and six mono labels
-            plus the wordmark and the CTA no longer clear 768px without
-            wrapping into the logo.
+            xl, not lg: the act list gained "Questions" and "What we build",
+            and seven mono labels at 0.16em tracking plus the wordmark and the
+            CTA no longer clear 1024px without wrapping into the logo. The
+            breakpoint has moved twice for the same reason — if another act is
+            added, shorten a label rather than moving it a third time.
           */}
-          <ul className="hidden gap-7 lg:flex">
+          <ul className="hidden gap-7 xl:flex">
             {LINKS.map((a) => (
               <li key={a.id}>
                 <a
@@ -118,6 +120,11 @@ export function Nav() {
               target="_blank"
               rel="noreferrer noopener"
               data-cursor="Book"
+              /* deliberately not `.press`: that class owns transition-property
+                 for the element, and `.chrome-t` needs those same longhands to
+                 run the 450ms paper/ink handover. Whichever lost would either
+                 desync this button from the rest of the fixed chrome or drop
+                 the press feedback silently. */
               className="chrome-t border border-[var(--chrome-fg)] px-4 py-2 font-mono text-[10.5px] tracking-[0.16em] whitespace-nowrap text-[var(--chrome-fg)] uppercase hover:bg-[var(--chrome-fg)] hover:text-[var(--chrome-bg)]"
             >
               Book a call
@@ -127,7 +134,7 @@ export function Nav() {
               type="button"
               aria-label={menuOpen ? 'Close menu' : 'Open menu'}
               onClick={() => setMenuOpen((o) => !o)}
-              className="chrome-t flex h-11 w-11 items-center justify-center border border-[var(--chrome-fg)] text-[var(--chrome-fg)] lg:hidden"
+              className="chrome-t flex h-11 w-11 items-center justify-center border border-[var(--chrome-fg)] text-[var(--chrome-fg)] xl:hidden"
             >
               <span className="flex w-[16px] flex-col gap-[4px]">
                 <span
@@ -135,7 +142,7 @@ export function Nav() {
                   style={menuOpen ? { transform: 'rotate(45deg) translate(1.7px, 1.7px)' } : undefined}
                 />
                 <span
-                  className="block h-px w-full bg-[var(--chrome-fg)] transition-all duration-300"
+                  className="block h-px w-full bg-[var(--chrome-fg)] transition-[opacity,transform] duration-300"
                   style={menuOpen ? { opacity: 0, transform: 'scaleX(0)' } : undefined}
                 />
                 <span
@@ -148,7 +155,7 @@ export function Nav() {
         </div>
 
         {menuOpen && (
-          <div className="chrome-t border-t border-[var(--chrome-rule)] bg-[var(--chrome-bg)] lg:hidden">
+          <div className="chrome-t border-t border-[var(--chrome-rule)] bg-[var(--chrome-bg)] xl:hidden">
             <ul className="wrap flex flex-col gap-1 py-4">
               {LINKS.map((a) => (
                 <li key={a.id}>

@@ -1,5 +1,6 @@
 import { ActSection } from '@/components/ui/ActSection'
 import { Avatar } from '@/components/ui/Avatar'
+import { MaskedText } from '@/components/ui/MaskedText'
 
 /**
  * Act 06 — Receipts.
@@ -68,12 +69,13 @@ export function Act06Proof() {
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ <b className="text-molten-deep font-medium">04</b> ] Receipts
           </span>
-          <h2
+          <MaskedText
+            as="h2"
             className="font-display leading-[0.95] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
             What we have <em className="text-molten not-italic">actually</em> shipped
-          </h2>
+          </MaskedText>
         </div>
 
         {/*
@@ -113,9 +115,12 @@ export function Act06Proof() {
                   target="_blank"
                   rel="noreferrer noopener"
                   data-cursor="Open"
-                  className="text-ink border-rule hover:border-ink mt-6 inline-flex min-h-11 items-center gap-2 border-t pt-4 font-mono text-[10.5px] tracking-[0.18em] uppercase transition-colors duration-300"
+                  className="text-ink border-rule hover:border-ink nudge press mt-6 inline-flex min-h-11 items-center gap-2 border-t pt-4 font-mono text-[10.5px] tracking-[0.18em] uppercase transition-colors duration-[var(--dur-ui)]"
                 >
-                  View site <span aria-hidden="true">→</span>
+                  View site{' '}
+                  <span aria-hidden="true" className="arrow">
+                    →
+                  </span>
                 </a>
               )}
             </li>
@@ -123,8 +128,10 @@ export function Act06Proof() {
         </ul>
 
         <p className="fadeup text-ink-2 mt-[clamp(20px,3vw,32px)] max-w-[54ch] text-[13px] leading-[1.7]">
+          {/* "Better you hear it from us" used to close this line. The FAQ two
+              screens down now makes the same admission at more length, and the
+              second telling reads as protesting. */}
           Both were built free, to get started. The words are theirs; the invoices never existed.
-          Better you hear it from us.
         </p>
       </div>
     </ActSection>

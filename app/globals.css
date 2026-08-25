@@ -105,10 +105,14 @@ body {
   transition: background 450ms var(--ease-out-expo);
 }
 
+/* Shortened, not removed. A colour cross-fade implies no self-motion, so it
+   is not a vestibular trigger — and cutting it entirely is worse than keeping
+   it: the whole fixed chrome would invert between one frame and the next,
+   which is precisely the jarring change reduced motion exists to prevent. */
 @media (prefers-reduced-motion: reduce) {
   .chrome-t,
   .nav-scrim {
-    transition-duration: 0.001ms !important;
+    transition-duration: 150ms !important;
   }
 }
 
@@ -269,49 +273,80 @@ body {
   }
 }
 
-/* ══ Chromatic split on hover ═════════════════════════════
-   Two offset copies of the heading in the accent and the
-   secondary, screened together. On paper this reads as an
-   ink misregistration rather than a screen glitch, which
-   suits the theme better than an RGB shift would.
+/* ══ Arrow nudge ══════════════════════════════════════════
+   Every "→" on the page used to be pushed out by animating
+   the flex `gap` of its link. Gap is a layout property: the
+   browser re-runs layout, paint and composite on every one
+   of those frames, for decoration. A transform on the glyph
+   alone reads identically and never leaves the compositor.
+
+   Gated on a real pointer, because a tap fires a synthetic
+   hover on touch and the arrow would stick out afterwards.
    ═══════════════════════════════════════════════════════ */
-.split-h {
-  position: relative;
+.arrow {
+  display: inline-block;
+  transition: transform var(--dur-ui) var(--ease-out-expo);
 }
 
-.split-h::before,
-.split-h::after {
-  content: attr(data-t);
-  position: absolute;
-  inset: 0;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 300ms ease;
-}
-
-.split-h::before {
-  color: var(--color-molten);
-  transform: translate(-2px, -1px);
-}
-
-.split-h::after {
-  color: var(--color-ice);
-  transform: translate(2px, 1px);
-}
-
-.group:hover .split-h::before,
-.group:hover .split-h::after {
-  opacity: 0.55;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .split-h::before,
-  .split-h::after {
-    display: none;
+@media (hover: hover) and (pointer: fine) {
+  .nudge:hover .arrow {
+    transform: translateX(6px);
   }
 }
 
-/* ── reveal primitives, driven by GSAP ───────────────────── */
+/* Pointer-down feedback. 140ms is at the fast end on purpose: press response
+   is the one moment where any perceptible delay reads as the page being
+   broken rather than as animation.
+
+   Longhands, and the colour properties listed alongside transform, because
+   these rules are unlayered and Tailwind's utilities are not — an unlayered
+   `transition` shorthand here would beat `transition-colors` on the same
+   element whatever its specificity, and silently drop the hover fade. Every
+   element that presses also changes colour, so the class owns both. */
+.press {
+  transition-property: transform, color, background-color, border-color;
+  transition-duration: var(--dur-press), var(--dur-ui), var(--dur-ui), var(--dur-ui);
+  transition-timing-function: var(--ease-out-expo);
+}
+
+.press:active {
+  transform: scale(0.975);
+}
+
+/* ══ Disclosure ═══════════════════════════════════════════
+   An accordion is the one place height is worth animating —
+   there is no transform that opens a panel without either
+   clipping the answer or scaling the type. This uses the
+   grid trick rather than a measured pixel height: the row
+   goes 0fr → 1fr and the browser resolves the real content
+   height itself, so nothing has to be read from the DOM and
+   nothing breaks when the answer rewraps.
+
+   Layout work, then, but on one small panel at a time and
+   only while it is opening. That is the sanctioned exception,
+   not licence to animate height elsewhere.
+   ═══════════════════════════════════════════════════════ */
+.disclosure {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--dur-panel) var(--ease-out-expo);
+}
+
+.disclosure[data-open='true'] {
+  grid-template-rows: 1fr;
+}
+
+.disclosure > * {
+  overflow: hidden;
+}
+
+/* ── reveal primitives, driven by GSAP ─────────────────────
+   No `will-change` here. Declared in static CSS it applies to
+   every matching element for the life of the page, which
+   promotes dozens of layers that are idle almost all of that
+   time. GSAP sets it when a tween starts and clears it on
+   complete instead — surgical and temporary, which is the
+   only way the hint is worth paying for. */
 .rv {
   display: block;
   overflow: hidden;
@@ -320,32 +355,73 @@ body {
 .rv > * {
   display: block;
   transform: translateY(102%);
-  will-change: transform;
 }
 
 .fadeup {
   opacity: 0;
   transform: translateY(32px);
-  will-change: transform, opacity;
 }
 
-/* ══ Reduced motion ═══════════════════════════════════════
-   The camera timeline locks and every scene holds its rest
-   state. Nothing becomes unreachable — this is a hard
-   requirement from the spec, not a nicety.
+/* ══ Reduced motion — tiered, not a kill switch ═══════════
+   The old rule here flattened every duration on the page to
+   0.001ms. That is an over-correction twice over. It removes
+   transitions that exist to stop things teleporting, and it
+   removes colour and opacity fades, which imply no
+   self-motion and were never the problem: the setting is
+   about nausea from apparent movement, not about dislike of
+   animation.
+
+   So motion is sorted into three tiers instead.
+
+   Tier 1, removed: the camera timeline, parallax, the
+   particle wordmark, Lenis (never instantiated — see
+   LenisProvider), and every keyframed loop.
+   Tier 2, softened: reveals and nudges lose their travel and
+   arrive as a short fade.
+   Tier 3, kept: opacity, colour, focus rings.
+
+   0.01ms rather than 0s throughout — a zero-length animation
+   fires no `animationend`, and anything waiting on that
+   event hangs forever.
    ═══════════════════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
+  /* Tier 1 — remove. iteration-count matters as much as duration: without
+     it an infinite spin keeps running at near-zero duration, burning frames
+     to animate nothing. */
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Tier 2 — soften, globally. A cap rather than a kill: nothing on the page
+     may take longer than a short fade, but every transition still happens, so
+     nothing jumps between states. Individual transforms are neutralised
+     below; this only governs how long anything is allowed to take. */
+  *,
+  *::before,
+  *::after {
+    transition-duration: 150ms !important;
   }
 
   .rv > *,
   .fadeup {
     transform: none !important;
     opacity: 1 !important;
+  }
+
+  .arrow,
+  .press:active {
+    transform: none !important;
+  }
+
+  /* Tier 3 — keep, shortened. */
+  .arrow,
+  .press,
+  .cursor-ring,
+  .cursor-label {
+    transition-duration: 150ms !important;
   }
 }

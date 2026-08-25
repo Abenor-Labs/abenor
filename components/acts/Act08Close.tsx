@@ -1,10 +1,11 @@
 import { ActSection } from '@/components/ui/ActSection'
 import { Magnetic } from '@/components/ui/Cursor'
+import { MaskedText } from '@/components/ui/MaskedText'
 
 const CONTACT = 'hello.abenor@gmail.com'
 const CALENDLY = 'https://calendly.com/hello-abenor/30min'
 
-export function Act07Close() {
+export function Act08Close() {
   return (
     /*
       The one inverted surface on the page.
@@ -44,16 +45,22 @@ export function Act07Close() {
             same size says the ask is one more section. DESIGN.md's Wide-Gap
             Rule applies between sections, not only within them.
           */}
-          <h2
-            className="fadeup font-display mx-auto mt-4 max-w-[14ch] leading-[0.94] font-extrabold tracking-[-0.045em]"
+          <MaskedText
+            as="h2"
+            className="font-display mx-auto mt-4 max-w-[14ch] leading-[0.94] font-extrabold tracking-[-0.045em]"
             style={{ fontSize: 'clamp(34px, 6.4vw, 92px)' }}
           >
             Bring us one thing that <em className="text-molten not-italic">wastes an afternoon</em>.
-          </h2>
+          </MaskedText>
 
+          {/*
+            One sentence where there were two. The detail this used to carry —
+            what it costs, how long it takes, who owns the result — now has a
+            section of its own two screens up, and repeating it here only
+            delays the ask.
+          */}
           <p className="fadeup mx-auto mt-6 max-w-[48ch] text-[15px] leading-[1.72] text-[rgba(248,246,241,0.72)]">
-            Thirty minutes. You describe one job somebody does by hand every week, we say whether it
-            can be automated and what it would take.
+            Thirty minutes, and one job somebody does by hand every week.
           </p>
 
           {/*
@@ -94,7 +101,7 @@ export function Act07Close() {
                 target="_blank"
                 rel="noreferrer noopener"
                 data-cursor="Book"
-                className="bg-molten-deep raised inline-flex items-center gap-3 px-10 py-[20px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5"
+                className="bg-molten-deep raised nudge press inline-flex items-center gap-3 px-10 py-[20px] font-mono text-[12px] font-medium tracking-[0.18em] uppercase transition-colors duration-[var(--dur-ui)]"
                 /* The paper glow is a black-based shadow and vanishes on ink.
                    On this surface the lift has to be made of the accent
                    itself, which is what "the accent becomes light" means. */
@@ -104,7 +111,10 @@ export function Act07Close() {
                     '0 0 0 1px rgba(232,71,10,0.4), 0 10px 32px -6px rgba(232,71,10,0.5), 0 28px 80px -24px rgba(232,71,10,0.35)',
                 }}
               >
-                Book 30 minutes <span aria-hidden="true">→</span>
+                Book 30 minutes{' '}
+                <span aria-hidden="true" className="arrow">
+                  →
+                </span>
               </a>
             </Magnetic>
           </div>
@@ -118,9 +128,12 @@ export function Act07Close() {
             <a
               href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
               data-cursor="Send"
-              className="inline-flex min-h-11 items-center gap-2 border-b border-[rgba(248,246,241,0.25)] pb-1 font-mono text-[11px] tracking-[0.18em] text-[rgba(248,246,241,0.72)] uppercase transition-colors duration-300 hover:border-[var(--color-paper)] hover:text-[var(--color-paper)]"
+              className="nudge inline-flex min-h-11 items-center gap-2 border-b border-[rgba(248,246,241,0.25)] pb-1 font-mono text-[11px] tracking-[0.18em] text-[rgba(248,246,241,0.72)] uppercase transition-colors duration-[var(--dur-ui)] hover:border-[var(--color-paper)] hover:text-[var(--color-paper)]"
             >
-              Or email {CONTACT} <span aria-hidden="true">→</span>
+              Or email {CONTACT}{' '}
+              <span aria-hidden="true" className="arrow">
+                →
+              </span>
             </a>
           </p>
 

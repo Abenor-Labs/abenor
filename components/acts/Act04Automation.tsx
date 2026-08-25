@@ -1,6 +1,8 @@
 import { ActSection } from '@/components/ui/ActSection'
 import { FlowGraph, FlowList } from '@/components/ui/FlowGraph'
 import { PhonePanel } from '@/components/ui/PhonePanel'
+import { MaskedText } from '@/components/ui/MaskedText'
+import { Counter } from '@/components/ui/Counter'
 
 const CHANGES: [string, string][] = [
   ['Lead lands in a form', 'and never gets typed into the CRM again'],
@@ -25,12 +27,13 @@ export function Act04Automation() {
           <span className="text-ink-3 font-mono text-[10.5px] tracking-[0.24em] uppercase">
             [ <b className="text-molten-deep font-medium">02</b> ] Start here
           </span>
-          <h2
+          <MaskedText
+            as="h2"
             className="font-display leading-[0.95] font-extrabold tracking-[-0.04em]"
             style={{ fontSize: 'clamp(28px, 5.4vw, 72px)' }}
           >
             The <em className="text-molten not-italic">cheapest</em> way to test us
-          </h2>
+          </MaskedText>
         </div>
 
         <div className="flex flex-col gap-[clamp(28px,5vw,72px)] lg:flex-row lg:items-start">
@@ -45,12 +48,28 @@ export function Act04Automation() {
               gained. The same quantity moves people roughly twice as hard
               when it is framed as a loss, and this one is a loss either way:
               the hours are being spent right now, by someone, on re-typing.
+
+              Set as a figure rather than as words ("two hundred") so it can
+              count. The climb is the argument: the point of the sentence is
+              that the number is bigger than it feels, and a number that takes
+              a beat to arrive at 200 makes that case better than the printed
+              glyphs do.
             */}
-            <p className="fadeup text-ink border-rule mt-6 max-w-[46ch] border-y py-4 text-[15px] leading-[1.6]">
-              Four hours a week is{' '}
-              <strong className="text-molten-deep font-semibold">two hundred hours a year</strong>. A
-              month of someone&rsquo;s working life, spent re-typing.
-            </p>
+            <div className="fadeup border-rule mt-6 max-w-[46ch] border-y py-5">
+              <p
+                className="font-display text-ink leading-[1.15] font-semibold tracking-[-0.03em]"
+                style={{ fontSize: 'clamp(21px, 2.9vw, 33px)' }}
+              >
+                Four hours a week is{' '}
+                <span className="text-molten-deep">
+                  <Counter to={200} /> hours a year
+                </span>
+                .
+              </p>
+              <p className="text-ink-2 mt-2 text-[13px] leading-[1.6]">
+                A month of someone&rsquo;s working life, spent re-typing.
+              </p>
+            </div>
 
             {/*
               No number, deliberately, until there is a real one to publish.
@@ -69,6 +88,18 @@ export function Act04Automation() {
               </dt>
               <dd className="font-display text-ink text-[clamp(15px,1.9vw,21px)] leading-[1.3] font-semibold tracking-[-0.02em]">
                 One workflow · two weeks · fixed fee
+              </dd>
+              {/*
+                The timebox, itemised. "Two weeks" is a promise; eleven days
+                split four ways is a plan, and a buyer can tell the difference
+                — the second one can be checked against, which is exactly why
+                it is worth publishing and the round number is not.
+              */}
+              <dd className="border-rule text-ink-2 w-full border-t pt-3 font-mono text-[10.5px] leading-[2] tracking-[0.16em] uppercase">
+                <b className="text-ink font-medium">2</b> scope ·{' '}
+                <b className="text-ink font-medium">5</b> build ·{' '}
+                <b className="text-ink font-medium">3</b> test on your data ·{' '}
+                <b className="text-ink font-medium">1</b> handover
               </dd>
               <dd className="text-ink-2 w-full text-[13px] leading-[1.6]">
                 Quoted in the reply. Asking costs nothing.

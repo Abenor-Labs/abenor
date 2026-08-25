@@ -17,7 +17,17 @@ export function InlineCTA({ variant = 'default' }: { variant?: 'default' | 'alt'
           <a
             href={`mailto:${CONTACT}?subject=One%20thing%20that%20wastes%20an%20afternoon`}
             data-cursor="Send"
-            className={`inline-flex items-center gap-3 px-8 py-[16px] font-mono text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:gap-5 ${
+            /*
+              `transition-all` plus `hover:gap-5` used to do the arrow nudge
+              here. Two faults in one class list: `all` transitions every
+              property that happens to change, including ones that were never
+              meant to animate, and `gap` is a flex layout property — the
+              browser re-ran layout, paint and composite on every frame of a
+              300ms tween, on hover, to move one glyph six pixels. The `nudge`
+              /`arrow` pair does the same thing with a transform, and `press`
+              adds the pointer-down feedback the button never had.
+            */
+            className={`nudge press inline-flex items-center gap-3 px-8 py-[16px] font-mono text-[11px] font-medium tracking-[0.18em] uppercase transition-colors duration-[var(--dur-ui)] ${
               alt
                 ? 'border-ink text-ink hover:bg-ink hover:text-paper border'
                 : 'bg-molten-deep raised'
@@ -41,7 +51,10 @@ export function InlineCTA({ variant = 'default' }: { variant?: 'default' | 'alt'
               job, answered free in two days. Naming the small ask is what
               earns the chance to make the big one.
             */}
-            Send us one job <span aria-hidden="true">→</span>
+            Send us one job{' '}
+            <span aria-hidden="true" className="arrow">
+              →
+            </span>
           </a>
         </Magnetic>
       </div>
