@@ -1,11 +1,24 @@
 node_modules/
 .next/
 out/
-.env*
-!.env.example
 .DS_Store
 *.log
+
+# secrets — .env.example is the only one that ships
+.env*
+!.env.example
+
+# deploy
 .vercel
 
-.vercel
-.env*
+# agent tooling. Vendored skill definitions from ui-skills plus whatever else
+# lands here; it is per-machine configuration, not part of the site.
+.claude/
+
+# TypeScript's incremental build cache. Tracked by mistake, and it rewrote
+# itself on every `tsc`, so it dirtied the tree and blocked branch switches
+# for a file nobody reads.
+tsconfig.tsbuildinfo
+
+# local experiment, kept out of the way
+monad/
