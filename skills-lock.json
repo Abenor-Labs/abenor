@@ -115,6 +115,12 @@
       "skillPath": "skills/micro-interaction/SKILL.md",
       "computedHash": "5da171547f62f04a7c243607f276f8b4d1a8a449150ca5eb1c00aeb6cd15ece4"
     },
+    "scrollcraft": {
+      "source": "nateherkai/scroll-craft",
+      "sourceType": "github",
+      "skillPath": "plugins/nateherk-design/skills/scrollcraft/SKILL.md",
+      "computedHash": "b60fa7d106a7426747e0fdf0eb1dfa1437110305c13405feb44efabde07c93cb"
+    },
     "swiss-design": {
       "source": "zeke/swiss-design-skill",
       "sourceType": "github",
