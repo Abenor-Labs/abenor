@@ -1,4 +1,5 @@
 import { Section } from "./Section";
+import { FlowDiagram } from "./FlowDiagram";
 
 const SERVICES = [
   {
@@ -35,7 +36,23 @@ export function Work() {
       label="What we build"
       title={["Software that", "does the chore."]}
     >
-      <ul className="mt-14 divide-y divide-line border-y border-line">
+      <figure className="mt-14">
+        <div className="overflow-x-auto">
+          <div className="min-w-[46rem]">
+            <FlowDiagram />
+          </div>
+        </div>
+        <figcaption className="mt-4 flex items-baseline justify-between gap-4 border-t border-line pt-3 font-mono text-xs uppercase tracking-[0.08em] text-ink/70">
+          <span>
+            <span className="text-poster">(FIG. 02)</span> One workflow, running
+            without you
+          </span>
+          <span className="sm:hidden">Swipe</span>
+          <span className="hidden sm:inline">Schematic</span>
+        </figcaption>
+      </figure>
+
+      <ul className="mt-16 divide-y divide-line border-y border-line">
         {SERVICES.map((service) => (
           <li key={service.n} className="group">
             <article className="grid gap-x-8 gap-y-2 px-4 py-8 transition-colors duration-200 group-hover:bg-paper-2 md:-mx-8 md:grid-cols-[4rem_1fr_auto] md:px-8 md:py-10">
