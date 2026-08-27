@@ -1,5 +1,5 @@
 export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://abenor-v2.vercel.app";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://abenor.vercel.app";
 
 export const CONTACT_EMAIL = "hello.abenor@gmail.com";
 
