@@ -1,0 +1,36 @@
+{
+  "$schema": "https://impeccable.dev/schema.json",
+  "name": "abenor-v2",
+  "concept": "the-set-page",
+  "register": "brand",
+  "colors": {
+    "paper": "#FAFAF9",
+    "paper2": "#F5F5F4",
+    "line": "#E7E5E4",
+    "lineStrong": "#D6D3D1",
+    "ink": "#1C1917",
+    "inkDeep": "#0C0A09",
+    "poster": "#C8102E",
+    "posterDeep": "#A50D26"
+  },
+  "typography": {
+    "display": "IBM Plex Sans",
+    "body": "IBM Plex Sans",
+    "utility": "IBM Plex Mono"
+  },
+  "radius": 0,
+  "accentCount": 1,
+  "inversions": ["close-poster"],
+  "ctaHierarchy": {
+    "nav": "book-call",
+    "inline": "email",
+    "close": "book-call-primary-email-secondary"
+  },
+  "motion": {
+    "easeOut": "cubic-bezier(0.23, 1, 0.32, 1)",
+    "microMs": [150, 200],
+    "revealMs": [600, 800],
+    "staggerMs": [60, 90],
+    "reducedMotion": "static-rest-state"
+  }
+}
