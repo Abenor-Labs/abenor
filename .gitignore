@@ -22,3 +22,6 @@ tsconfig.tsbuildinfo
 
 # local experiment, kept out of the way
 monad/
+
+# browser automation screenshots and logs
+.playwright-mcp/
