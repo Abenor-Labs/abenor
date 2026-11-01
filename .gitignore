@@ -25,3 +25,5 @@ monad/
 
 # browser automation screenshots and logs
 .playwright-mcp/
+
+.vercel
