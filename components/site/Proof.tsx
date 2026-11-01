@@ -151,13 +151,6 @@ export function Proof() {
                 </li>
               )
             })}
-            <li className="flex items-center gap-4 py-4">
-              <span className="grid size-11 place-items-center rounded-full bg-paper-2 font-serif text-[20px] text-ink-2">A</span>
-              <span className="flex flex-col">
-                <span className="text-[15px] text-ink-3">This website</span>
-                <span className="text-[13px] text-ink-3">Designed, written and built in-house</span>
-              </span>
-            </li>
           </ul>
         </div>
       </div>
