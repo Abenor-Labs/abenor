@@ -1,9 +1,12 @@
-import { CALENDLY, EMAIL, MAILTO } from './primitives'
+import { Arrow, Button, CALENDLY, EMAIL, MAILTO } from './primitives'
+import { EmailCapture } from './EmailCapture'
+import { LocalTime } from './LocalTime'
 
 const COLUMNS = [
   {
     title: 'Studio',
     links: [
+      { label: 'Problem', href: '#leak' },
       { label: 'What we build', href: '#build' },
       { label: 'Process', href: '#process' },
       { label: 'Work', href: '#proof' },
@@ -17,19 +20,32 @@ const COLUMNS = [
       { label: EMAIL, href: MAILTO },
     ],
   },
-  {
-    title: 'Live work',
-    links: [
-      { label: 'harshithvarma.vercel.app', href: 'https://harshithvarma.vercel.app', external: true },
-      { label: 'manish-chetla.vercel.app', href: 'https://manish-chetla.vercel.app', external: true },
-    ],
-  },
 ]
 
 export function Footer() {
   return (
     <footer className="wrap pt-24 pb-10 sm:pt-32">
-      <div className="grid gap-12 border-b border-rule pb-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+      {/* Contact strip. A smaller second chance for whoever scrolled past the
+          photo panel: an email for the undecided, a call for the ready. */}
+      <div className="flex flex-col gap-6 border-b border-rule pb-12 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <p className="font-serif text-[clamp(28px,3vw,36px)] leading-[1.1] tracking-[-0.015em] text-ink">
+            Still deciding?
+          </p>
+          <p className="mt-1.5 text-[15px] text-ink-2">
+            Leave your email and we will write with one question about your workflow.
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <EmailCapture />
+          <span className="hidden text-[14px] text-ink-3 sm:inline">or</span>
+          <Button href={CALENDLY} external className="h-12 justify-center">
+            Book a call <Arrow />
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid gap-12 py-14 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]">
         <div className="flex flex-col gap-4">
           <a href="#top" className="flex items-baseline gap-1 font-serif text-[30px] leading-none tracking-[-0.02em]">
             Abenor
@@ -44,7 +60,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="grid gap-10 sm:grid-cols-3">
+        <div className="grid grid-cols-2 gap-10">
           {COLUMNS.map((col) => (
             <div key={col.title}>
               <p className="font-mono text-[11px] tracking-[0.14em] text-ink-3 uppercase">{col.title}</p>
@@ -66,9 +82,9 @@ export function Footer() {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-6 text-[13px] text-ink-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-6 text-[13px] text-ink-3">
         <p>© 2026 Abenor</p>
-        <p>IST · UTC+5:30 · Photography from Unsplash</p>
+        <LocalTime />
       </div>
     </footer>
   )
