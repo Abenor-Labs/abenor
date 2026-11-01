@@ -1,76 +1,48 @@
 /* ══════════════════════════════════════════════════════════
-   ABENOR — design tokens (light theme)
+   ABENOR — design tokens
 
-   Single source of truth. The DOM layer reads these as CSS
-   vars; the 3D layer reads the same values via
-   lib/motion/palette.ts. Change here, change everywhere.
+   Editorial direction: a warm off-white ground, near-black
+   ink, one small warm accent. Depth comes from photography
+   and soft layered shadow, never from colour.
 
-   `paper` = base surface (warm cream), `ink` = foreground
-   text (near-black). Every component references roles, so
-   switching the palette means editing THIS file only.
+   Contrast, measured against `paper` (#F7F7F5):
+     ink    #111110  18.4:1
+     ink-2  #555553   7.2:1  body copy
+     ink-3  #6B6B68   5.1:1  captions, mono labels
+     ember  #C2410C   5.0:1  small accent text
+   `ember-bright` (#E5532D) is decoration only: dots, rules,
+   the opening quote mark. Never set text in it.
    ══════════════════════════════════════════════════════════ */
 
 @theme {
-  /* surfaces — lightest to darkest */
-  --color-paper: #F8F6F1;
-  --color-paper-2: #EFEDE8;
-  --color-paper-3: #E4E2DC;
+  --color-paper: #F7F7F5;
+  --color-paper-2: #EFEFEC;
+  --color-card: #FFFFFF;
 
-  /* foreground */
-  /* ink-3 is deliberately not lighter than this: at #6E7180 it measured
-     4.49:1 on paper and missed WCAG AA for the 10px mono labels it is
-     used for. #6A6D7C is 4.75:1 and visually indistinguishable. */
-  --color-ink: #0A0B0F;
-  --color-ink-2: #5A5E6D;
-  --color-ink-3: #6A6D7C;
+  --color-ink: #111110;
+  --color-ink-2: #555553;
+  --color-ink-3: #6B6B68;
 
-  /* structure */
-  --color-rule: #D4D2CC;
-  --color-rule-2: #C0BEB8;
+  --color-rule: rgba(17, 17, 16, 0.09);
 
-  /* accent — deepened for legibility on light */
-  --color-molten: #E8470A;
-  --color-molten-soft: #FF8C40;
-  --color-ice: #2B4FD0;
+  --color-ember: #C2410C;
+  --color-ember-bright: #E5532D;
+  --color-live: #22A55B;
 
-  /* Small-text accent. `molten` is 3.64:1 on paper — fine for the big
-     extrabold headings (large text only needs 3:1), but it fails AA
-     everywhere it is set in 8–17px mono, and it fails again as a button
-     fill under near-white label text. `molten-deep` is 4.98:1 on paper
-     and 5.08:1 under #FFF7F2. Rule of thumb: heading accent → molten,
-     anything you actually have to read → molten-deep. */
-  --color-molten-deep: #C23A05;
+  --font-serif: var(--font-newsreader), 'Palatino Linotype', Palatino, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, monospace;
 
-  /* type */
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
-
-  /* motion
-
-     Curves first. `ease-out-expo` is the entrance/exit curve for everything;
-     `ease-in-out-quart` is for something already on screen that moves. There
-     is deliberately no ease-in token: it starts slow, which delays the exact
-     frame the visitor is looking at, and `ease-out` at 200ms reads faster
-     than `ease-in` at 200ms.
-
-     Then durations, as a scale rather than as numbers typed at each call
-     site. The ceiling for anything a pointer triggers is 300ms — past that a
-     hover stops reading as response and starts reading as lag. Scrubbed
-     scroll work is exempt: the visitor sets its pace, not us. */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-ui: cubic-bezier(0.2, 0, 0, 1);
 
-  --dur-press: 140ms; /* pointer-down feedback */
-  --dur-ui: 150ms; /* hover, colour, small state changes */
-  --dur-panel: 320ms; /* accordions, disclosure, anything with height */
-  --dur-surface: 450ms; /* the paper/ink chrome handover */
-
-  /* layout */
-  --spacing-gut: clamp(18px, 4vw, 64px);
+  --dur-press: 140ms;
+  --dur-ui: 150ms;
+  --dur-panel: 320ms;
 }
 
 :root {
-  --gut: clamp(18px, 4vw, 64px);
-  --max: 1460px;
+  --gut: clamp(16px, 4vw, 48px);
+  --max: 1280px;
   color-scheme: light;
 }

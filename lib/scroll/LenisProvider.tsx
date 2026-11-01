@@ -29,7 +29,9 @@ export function LenisProvider({ children }: { children: ReactNode }) {
     }
 
     if (!reduced) {
-      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1 })
+      // `anchors` hands in-page links to Lenis; a native hash jump would
+      // fight the smoothed position. The offset clears the fixed nav.
+      lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, anchors: { offset: -72 } })
 
       lenis.on('scroll', (e: { velocity: number; direction: number }) => {
         ScrollTrigger.update()

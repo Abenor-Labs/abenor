@@ -1,26 +1,29 @@
 import type { Metadata, Viewport } from 'next'
-import { Bricolage_Grotesque, IBM_Plex_Mono } from 'next/font/google'
+import { Newsreader, Inter, JetBrains_Mono } from 'next/font/google'
 import { LenisProvider } from '@/lib/scroll/LenisProvider'
-import { Preloader } from '@/components/ui/Preloader'
 import { Cursor } from '@/components/ui/Cursor'
+import { Reveals } from '@/components/site/Reveals'
 import './globals.css'
 
-/**
- * next/font downloads and self-hosts these at build time — no request to
- * Google at runtime, no FOUT, and critically: the glyphs are guaranteed
- * present before TitleParticles samples them.
- */
-const bricolage = Bricolage_Grotesque({
+const serif = Newsreader({
   subsets: ['latin'],
+  weight: '400',
+  style: ['normal', 'italic'],
   display: 'swap',
-  variable: '--font-bricolage',
+  variable: '--font-newsreader',
 })
 
-const plexMono = IBM_Plex_Mono({
+const sans = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const mono = JetBrains_Mono({
   subsets: ['latin'],
   weight: ['400', '500'],
   display: 'swap',
-  variable: '--font-plex-mono',
+  variable: '--font-jetbrains',
 })
 
 const SITE = 'https://abenor.vercel.app'
@@ -28,11 +31,11 @@ const SITE = 'https://abenor.vercel.app'
 export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: {
-    default: 'Abenor — We build the software that stops the copy-pasting',
-    template: '%s — Abenor',
+    default: 'Abenor · Software that does the chore for you',
+    template: '%s · Abenor',
   },
   description:
-    'Right now someone in your business is copying data between two tabs. Abenor is a software studio that automates it away: n8n workflows, websites, iOS and Android apps, and the internal tools that replace the spreadsheet.',
+    'Abenor is a software studio. We take the one task still eating your week and turn it into software that runs without you: workflow automation, websites, iOS and Android apps, internal tools.',
   keywords: [
     'n8n automation agency',
     'workflow automation',
@@ -45,31 +48,42 @@ export const metadata: Metadata = {
     type: 'website',
     url: SITE,
     siteName: 'Abenor',
-    title: 'Abenor — We build the software that stops the copy-pasting',
+    title: 'Abenor · Software that does the chore for you',
     description:
-      'Thirty minutes. You describe one job somebody does by hand every week, we say whether it can be automated and what it would take.',
+      'Thirty minutes. Bring the one task that eats the most time, leave knowing whether it is worth fixing.',
   },
   twitter: { card: 'summary_large_image' },
   robots: { index: true, follow: true },
 }
 
 export const viewport: Viewport = {
-  themeColor: '#F8F6F1',
+  themeColor: '#F7F7F5',
   colorScheme: 'light',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${bricolage.variable} ${plexMono.variable}`}>
-      <body className="grain">
+    <html
+      lang="en"
+      className={`${serif.variable} ${sans.variable} ${mono.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        {/* Flags JS before first paint so `.reveal` can start hidden. No JS,
+            no flag, and every section simply renders in place. */}
+        <script
+          dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }}
+        />
+      </head>
+      <body>
         <a
-          href="#title"
-          className="bg-molten-deep text-paper sr-only font-mono text-[12px] tracking-[0.16em] uppercase focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:px-4 focus:py-3"
+          href="#main"
+          className="sr-only rounded-full bg-ink px-4 py-2 text-[14px] text-paper focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100]"
         >
           Skip to content
         </a>
-        <Preloader />
         <Cursor />
+        <Reveals />
         <LenisProvider>{children}</LenisProvider>
       </body>
     </html>

@@ -11,8 +11,6 @@
 html {
   /* Lenis owns scrolling; never let the browser also smooth it */
   scroll-behavior: auto;
-  /* the base colour lives here so body can stay transparent and let the
-     shader backdrop, which sits at a negative z-index, show through */
   background: var(--color-paper);
 }
 
@@ -27,96 +25,38 @@ html.lenis body {
 
 body {
   margin: 0;
-  background: transparent;
+  background: var(--color-paper);
   color: var(--color-ink);
-  font-family: var(--font-mono);
-  font-size: 14px;
-  line-height: 1.55;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
 }
 
 ::selection {
-  background: var(--color-molten);
+  background: var(--color-ink);
   color: var(--color-paper);
 }
 
-/* ── focus: visible, and never suppressed by the custom cursor ── */
 :focus-visible {
-  outline: 2px solid var(--color-molten);
+  outline: 2px solid var(--color-ink);
   outline-offset: 3px;
+  border-radius: 6px;
 }
 
-/* ══ Adaptive chrome ══════════════════════════════════════
-   The nav and the status bar are fixed, so they sit over
-   whatever act happens to be under them. Every act is paper
-   except the close, which floods to ink; without this the
-   last screen of the site is a dark section wearing a cream
-   hat.
-
-   Nav writes `data-surface` on <html> from the active act.
-   Everything fixed reads these four variables instead of a
-   literal color, and the handover is a 450ms cross-fade
-   rather than a cut.
-   ═══════════════════════════════════════════════════════ */
-:root {
-  --chrome-fg: var(--color-ink);
-  --chrome-fg-dim: var(--color-ink-2);
-  --chrome-bg: var(--color-paper);
-  --chrome-bg-2: rgba(239, 237, 232, 0.8);
-  --chrome-rule: var(--color-rule);
-  --chrome-accent: var(--color-molten-deep);
-  --chrome-scrim-1: var(--color-paper);
-  --chrome-scrim-2: color-mix(in srgb, var(--color-paper) 82%, transparent);
-}
-
-[data-surface='ink'] {
-  --chrome-fg: var(--color-paper);
-  --chrome-fg-dim: rgba(248, 246, 241, 0.62);
-  --chrome-bg: var(--color-ink);
-  --chrome-bg-2: rgba(16, 18, 24, 0.82);
-  --chrome-rule: rgba(248, 246, 241, 0.16);
-  /* molten-deep is tuned for contrast on paper and goes muddy on ink;
-     the accent inverts with the surface it sits on */
-  --chrome-accent: var(--color-molten);
-  --chrome-scrim-1: var(--color-ink);
-  --chrome-scrim-2: color-mix(in srgb, var(--color-ink) 82%, transparent);
-}
-
-/* Deliberately NOT a blanket `.chrome *` rule: that sets the `transition`
-   shorthand at the same specificity as Tailwind's own transition utilities and
-   wins on source order, which silently kills the hamburger's transform
-   animation. Chrome elements carry their own `transition-colors` instead. */
-.chrome-t {
-  transition:
-    color var(--dur-surface) var(--ease-out-expo),
-    background-color var(--dur-surface) var(--ease-out-expo),
-    border-color var(--dur-surface) var(--ease-out-expo);
-}
-
-.nav-scrim {
-  background: linear-gradient(
-    180deg,
-    var(--chrome-scrim-1) 0%,
-    var(--chrome-scrim-2) 55%,
-    transparent 100%
-  );
-  transition: background var(--dur-surface) var(--ease-out-expo);
-}
-
-/* Shortened, not removed. A colour cross-fade implies no self-motion, so it
-   is not a vestibular trigger — and cutting it entirely is worse than keeping
-   it: the whole fixed chrome would invert between one frame and the next,
-   which is precisely the jarring change reduced motion exists to prevent. */
-@media (prefers-reduced-motion: reduce) {
-  .chrome-t,
-  .nav-scrim {
-    transition-duration: 150ms !important;
-  }
-}
-
-/* ── layout helpers ──────────────────────────────────────── */
 .wrap {
   width: 100%;
   max-width: var(--max);
@@ -124,46 +64,39 @@ body {
   padding-inline: var(--gut);
 }
 
-/* ── paper grain: the light-theme equivalent of the dark noise ── */
-.grain::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23g)'/%3E%3C/svg%3E");
-}
-
-/* ══ Canvas handover ══════════════════════════════════════
-   The DOM wordmark ships in the server HTML and is what the
-   visitor sees first — it is the LCP element. Once the 3D
-   layer has painted a frame it flags the document, and the
-   DOM mark hands its optical space to the particle mark.
-   No JS, no WebGL, or a slow device: the DOM mark simply
-   stays. Nothing is ever missing.
+/* ══ Surfaces ═════════════════════════════════════════════
+   Shadows for elevation, borders for structure. Every card
+   that floats over a photo uses `.float`; the photo panels
+   themselves carry a 1px pure-black outline at 10% so their
+   edge stays crisp against the paper.
    ═══════════════════════════════════════════════════════ */
-.wordmark-fallback {
-  transition: opacity 700ms var(--ease-out-expo);
+.float {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 1px 2px rgba(0, 0, 0, 0.06),
+    0 12px 32px -8px rgba(0, 0, 0, 0.18),
+    0 32px 64px -24px rgba(0, 0, 0, 0.22);
 }
 
-[data-canvas='ready'] .wordmark-fallback {
-  opacity: 0;
+.float-dark {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+    0 12px 32px -8px rgba(0, 0, 0, 0.35),
+    0 32px 64px -24px rgba(0, 0, 0, 0.4);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  /* keep the readable mark; the particle version never animates in */
-  [data-canvas='ready'] .wordmark-fallback {
-    opacity: 1;
-  }
+.photo-edge {
+  outline: 1px solid oklch(0 0 0 / 0.1);
+  outline-offset: -1px;
 }
 
-/* ══ Custom cursor ════════════════════════════════════════
-   difference blending means one element reads correctly on
-   paper, on ink panels and over the accent, with no
-   per-section logic. Only hides the native cursor once the
-   custom one is actually running.
-   ═══════════════════════════════════════════════════════ */
+.pill-shadow {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.12),
+    0 4px 12px -2px rgba(0, 0, 0, 0.18);
+}
+
+/* ══ Custom cursor ════════════════════════════════════════ */
 .cursor-layer {
   position: fixed;
   inset: 0;
@@ -235,97 +168,28 @@ body {
   }
 }
 
-/* ══ Light-theme depth ════════════════════════════════════
-   The dark build got its drama from glow. On paper that has
-   to come from weight and shadow instead, or everything
-   reads as flat beige.
-   ═══════════════════════════════════════════════════════ */
-.raised {
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.04),
-    0 6px 20px -6px rgba(0, 0, 0, 0.10),
-    0 16px 40px -18px rgba(0, 0, 0, 0.08);
-}
-
-.raised-lg {
-  box-shadow:
-    0 2px 4px rgba(0, 0, 0, 0.04),
-    0 12px 32px -8px rgba(0, 0, 0, 0.12),
-    0 32px 72px -28px rgba(0, 0, 0, 0.14);
-}
-
-.scrollbar-none {
-  scrollbar-width: none;
-}
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-
-@keyframes beat {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.45;
-    transform: scale(0.78);
-  }
-}
-
-/* ══ Arrow nudge ══════════════════════════════════════════
-   Every "→" on the page used to be pushed out by animating
-   the flex `gap` of its link. Gap is a layout property: the
-   browser re-runs layout, paint and composite on every one
-   of those frames, for decoration. A transform on the glyph
-   alone reads identically and never leaves the compositor.
-
-   Gated on a real pointer, because a tap fires a synthetic
-   hover on touch and the arrow would stick out afterwards.
-   ═══════════════════════════════════════════════════════ */
-.arrow {
-  display: inline-block;
-  transition: transform var(--dur-ui) var(--ease-out-expo);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .nudge:hover .arrow {
-    transform: translateX(6px);
-  }
-}
-
-/* Pointer-down feedback. 140ms is at the fast end on purpose: press response
-   is the one moment where any perceptible delay reads as the page being
-   broken rather than as animation.
-
-   Longhands, and the colour properties listed alongside transform, because
-   these rules are unlayered and Tailwind's utilities are not — an unlayered
-   `transition` shorthand here would beat `transition-colors` on the same
-   element whatever its specificity, and silently drop the hover fade. Every
-   element that presses also changes colour, so the class owns both. */
+/* ══ Interaction primitives ═══════════════════════════════ */
 .press {
-  transition-property: transform, color, background-color, border-color;
+  transition-property: transform, color, background-color, box-shadow;
   transition-duration: var(--dur-press), var(--dur-ui), var(--dur-ui), var(--dur-ui);
-  transition-timing-function: var(--ease-out-expo);
+  transition-timing-function: var(--ease-ui);
 }
 
 .press:active {
   transform: scale(0.96);
 }
 
-/* ══ Disclosure ═══════════════════════════════════════════
-   An accordion is the one place height is worth animating —
-   there is no transform that opens a panel without either
-   clipping the answer or scaling the type. This uses the
-   grid trick rather than a measured pixel height: the row
-   goes 0fr → 1fr and the browser resolves the real content
-   height itself, so nothing has to be read from the DOM and
-   nothing breaks when the answer rewraps.
+.arrow {
+  display: inline-block;
+  transition: transform var(--dur-ui) var(--ease-ui);
+}
 
-   Layout work, then, but on one small panel at a time and
-   only while it is opening. That is the sanctioned exception,
-   not licence to animate height elsewhere.
-   ═══════════════════════════════════════════════════════ */
+@media (hover: hover) and (pointer: fine) {
+  .nudge:hover .arrow {
+    transform: translateX(3px);
+  }
+}
+
 .disclosure {
   display: grid;
   grid-template-rows: 0fr;
@@ -340,88 +204,95 @@ body {
   overflow: hidden;
 }
 
-/* ── reveal primitives, driven by GSAP ─────────────────────
-   No `will-change` here. Declared in static CSS it applies to
-   every matching element for the life of the page, which
-   promotes dozens of layers that are idle almost all of that
-   time. GSAP sets it when a tween starts and clears it on
-   complete instead — surgical and temporary, which is the
-   only way the hint is worth paying for. */
-.rv {
-  display: block;
-  overflow: hidden;
-}
-
-.rv > * {
-  display: block;
-  transform: translateY(102%);
-}
-
-.fadeup {
-  opacity: 0;
-  transform: translateY(32px);
-}
-
-/* ══ Reduced motion — tiered, not a kill switch ═══════════
-   The old rule here flattened every duration on the page to
-   0.001ms. That is an over-correction twice over. It removes
-   transitions that exist to stop things teleporting, and it
-   removes colour and opacity fades, which imply no
-   self-motion and were never the problem: the setting is
-   about nausea from apparent movement, not about dislike of
-   animation.
-
-   So motion is sorted into three tiers instead.
-
-   Tier 1, removed: the camera timeline, parallax, the
-   particle wordmark, Lenis (never instantiated — see
-   LenisProvider), and every keyframed loop.
-   Tier 2, softened: reveals and nudges lose their travel and
-   arrive as a short fade.
-   Tier 3, kept: opacity, colour, focus rings.
-
-   0.01ms rather than 0s throughout — a zero-length animation
-   fires no `animationend`, and anything waiting on that
-   event hangs forever.
+/* ══ Reveal ═══════════════════════════════════════════════
+   Elements marked `.reveal` start 16px low and transparent
+   and settle when <Reveals/> sees them. Children of a
+   `[data-stagger]` parent arrive 100ms apart. Without JS the
+   html never gets `.js`, so nothing is ever hidden.
    ═══════════════════════════════════════════════════════ */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(4px);
+  transition:
+    opacity 700ms var(--ease-out-expo),
+    transform 700ms var(--ease-out-expo),
+    filter 700ms var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * 100ms);
+}
+
+.js .reveal.is-in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+/* the hero's floating chat cards: a staged, once-only sequence */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.98);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+.js .stage-in {
+  opacity: 0;
+}
+
+.js .is-in .stage-in,
+.js .stage-in.is-in {
+  animation: rise 800ms var(--ease-out-expo) forwards;
+  animation-delay: calc(var(--i, 0) * 900ms + 200ms);
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.live-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  /* Tier 1 — remove. iteration-count matters as much as duration: without
-     it an infinite spin keeps running at near-zero duration, burning frames
-     to animate nothing. */
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    scroll-behavior: auto !important;
-  }
-
-  /* Tier 2 — soften, globally. A cap rather than a kill: nothing on the page
-     may take longer than a short fade, but every transition still happens, so
-     nothing jumps between states. Individual transforms are neutralised
-     below; this only governs how long anything is allowed to take. */
-  *,
-  *::before,
-  *::after {
     transition-duration: 150ms !important;
   }
 
-  .rv > *,
-  .fadeup {
+  .js .reveal,
+  .js .stage-in {
     transform: none !important;
-    opacity: 1 !important;
+    filter: none !important;
+    transition-delay: 0ms !important;
+    animation-delay: 0ms !important;
   }
 
   .arrow,
   .press:active {
     transform: none !important;
-  }
-
-  /* Tier 3 — keep, shortened. */
-  .arrow,
-  .press,
-  .cursor-ring,
-  .cursor-label {
-    transition-duration: 150ms !important;
   }
 }
