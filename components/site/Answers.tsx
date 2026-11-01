@@ -5,8 +5,8 @@ import { SectionHead } from './primitives'
 
 const QA = [
   {
-    q: 'Two shipped projects and neither was paid. Why would I trust you?',
-    a: 'Because you just read that in our own writing, before we knew you were looking. Ask for the walkthrough of either project on the call. We would rather show unfinished honesty than polished fiction.',
+    q: 'You are a young studio. Why would I trust you with this?',
+    a: 'Because the work is live and you can open it right now. Ask for a walkthrough of either project on the call, and you talk to the person who built it. One workflow and a fixed fee also keep your risk small: if the first piece does not earn its keep, you stop there.',
   },
   {
     q: 'What does it cost?',

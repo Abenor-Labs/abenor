@@ -63,12 +63,12 @@ export function Proof() {
           eyebrow="Receipts"
           title={
             <>
-              Two clients so far.
+              Shipped, handed over,
               <br />
-              <em className="italic">Both unpaid.</em>
+              <em className="italic">still running.</em>
             </>
           }
-          lede="That reads better here than it would during due diligence. Both sites are still live, so open them."
+          lede="Every site we have built is still online. Read what the clients said, then open the work and judge it yourself."
         />
 
         <div
@@ -93,9 +93,6 @@ export function Proof() {
               <span>
                 <span className="font-medium text-ink">{c.name}</span>
                 <span className="text-ink-3"> · {c.role}</span>
-              </span>
-              <span className="rounded-full bg-paper-2 px-2.5 py-1 font-mono text-[10.5px] tracking-[0.12em] text-ember uppercase shadow-[inset_0_0_0_1px_rgba(17,17,16,0.06)]">
-                Unpaid
               </span>
               <a
                 href={`https://${c.site}`}
@@ -163,10 +160,6 @@ export function Proof() {
             </li>
           </ul>
         </div>
-
-        <p className="reveal mt-14 max-w-[40rem] text-[15px] leading-[1.7] text-ink-2">
-          What we charge today gets named on the first call, before any work begins.
-        </p>
       </div>
     </section>
   )
