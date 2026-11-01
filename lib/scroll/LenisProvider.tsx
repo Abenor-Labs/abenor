@@ -5,6 +5,14 @@ import Lenis from 'lenis'
 import { gsap, ScrollTrigger } from './gsap'
 import { setScroll, prefersReducedMotion } from './progress'
 
+let active: Lenis | null = null
+
+/** Scrolls through Lenis when it is running, natively otherwise. */
+export function scrollToY(y: number) {
+  if (active) active.scrollTo(y, { duration: 0.9 })
+  else window.scrollTo({ top: y })
+}
+
 /**
  * Owns scrolling for the whole site.
  *
@@ -32,6 +40,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       // `anchors` hands in-page links to Lenis; a native hash jump would
       // fight the smoothed position. The offset clears the fixed nav.
       lenis = new Lenis({ lerp: 0.09, wheelMultiplier: 1, anchors: { offset: -72 } })
+      active = lenis
 
       lenis.on('scroll', (e: { velocity: number; direction: number }) => {
         ScrollTrigger.update()
@@ -46,6 +55,7 @@ export function LenisProvider({ children }: { children: ReactNode }) {
       return () => {
         gsap.ticker.remove(raf)
         lenis?.destroy()
+        active = null
       }
     }
 

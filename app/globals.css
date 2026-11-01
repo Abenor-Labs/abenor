@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 @import '../styles/tokens.css';
 
+/* Desktop with enough height to hold a pinned, full-viewport section. Below
+   this the pinned layouts fall back to normal flow. Mirrored in Leak.tsx. */
+@custom-variant pin (@media (min-width: 1024px) and (min-height: 720px));
+
 /* ── reset / base ────────────────────────────────────────── */
 *,
 *::before,
